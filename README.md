@@ -46,6 +46,6 @@ You can contribute in two forms:
 
 | Topic | Link | Papers | Contribute |
 |-------|------|--------|------------|
-| Virtual, Augmented, and Mixed-Reality for Human-Robot Interaction | [VAM-HRI](https://vam-hri.github.io/) @ HRI | [Link](https://arxiv.org/abs/2202.11249) \| [Link](https://ieeexplore.ieee.org/document/8673071) | [Contribute](https://github.com/miwalker/survey-visualizer#how-to-contribute) |
+| Virtual, Augmented, and Mixed-Reality <br /> for Human-Robot Interaction | [VAM-HRI](https://vam-hri.github.io/) @ HRI | [Link](https://arxiv.org/abs/2202.11249) \| [Link](https://ieeexplore.ieee.org/document/8673071) | [Contribute](https://github.com/miwalker/survey-visualizer#how-to-contribute) |
 | Explainable AI Planning | [XAIP](http://ibm.biz/xaip-workshop) @ ICAPS | [Link](https://www.ijcai.org/Proceedings/2020/669) \| [Link](https://ojs.aaai.org//index.php/ICAPS/article/view/3463) | `Coming Soon` |
 
