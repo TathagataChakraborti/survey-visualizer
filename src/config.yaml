@@ -1,0 +1,228 @@
+---
+metadata:
+  title_text: 'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction:
+    A Survey and Virtual Design Element Taxonomy'
+  citation_text: "@inproceedings{vam-hri, \n title={{Virtual, Augmented, and Mixed
+    Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
+    Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
+    and Tom \n\t Williams and Daniel Szafir}, \n booktitle={arXiv:2202.11249}, \n
+    year={2022}}"
+  link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
+  primary_link: https://arxiv.org/abs/2202.11249
+  secondary_link: https://ieeexplore.ieee.org/document/8673071
+  info_tile: true
+  info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
+  info_link:
+  - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
+    text: How it started
+  - link: https://vam-hri.github.io/
+    text: How it's going
+default_view: Taxonomy
+min_year: 1984
+views:
+- name: Taxonomy
+  disabled: false
+  default_tab: Taxonomy
+  tabs:
+  - tab_name: Taxonomy
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    root_text: Design Element
+    disabled: false
+    fancy_chart: false
+    input_file:
+      filename: "Cubed-Thao.xlsx"
+      active_worksheet: Cubed - Thao
+    papers_list:
+      key_map:
+        title: 3
+        abstract:
+        authors: 2
+        venue: 1
+        sessions:
+        year: 0
+        keywords:
+      rows:
+        start: 7
+        stop: 184
+        exclude:
+        - 141
+        - 151
+    taxonomy:
+      rows:
+        start: 1
+        stop: 6
+        exclude:
+        - 5
+        - 6
+      columns:
+        start: 69
+        stop: 146
+  - tab_name: Hardware
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: "Cubed-Thao.xlsx"
+      active_worksheet: Cubed - Thao
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 7
+        stop: 184
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 3
+        exclude: []
+      columns:
+        start: 5
+        stop: 18
+  - tab_name: Application Areas
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: "Science Robotics Classifications.xlsx"
+      active_worksheet: Classification
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 4
+        stop: 270
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 3
+        exclude: []
+      columns:
+        start: 5
+        stop: 17
+  - tab_name: IDE Use Cases
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: "Science Robotics Classifications.xlsx"
+      active_worksheet: Classification
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 4
+        stop: 270
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 3
+        exclude: []
+      columns:
+        start: 18
+        stop: 28
+  - tab_name: Paradigm
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: "Cubed-Thao.xlsx"
+      active_worksheet: Cubed - Thao
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 7
+        stop: 184
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 4
+        exclude: []
+      columns:
+        start: 23
+        stop: 34
+  - tab_name: Proximity
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: "Cubed-Thao.xlsx"
+      active_worksheet: Cubed - Thao
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 7
+        stop: 184
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 4
+        exclude: []
+      columns:
+        start: 35
+        stop: 68
+  - tab_name: Non-MRIDE aspects
+    title_text: Taxonomy View of VAM-HRI Interation Design Elements
+    disabled: false
+    fancy_chart: false
+    input_file:
+      filename: "Cubed-Thao.xlsx"
+      active_worksheet: Cubed - Thao
+    papers_list:
+      key_map:
+        title: 3
+        abstract: 3
+        authors: 2
+        venue: 1
+        year: 0
+        keywords:
+      rows:
+        start: 7
+        stop: 184
+        exclude: []
+    taxonomy:
+      rows:
+        start: 1
+        stop: 3
+        exclude: []
+      columns:
+        start: 147
+        stop: 153
+- name: Affinity
+  disabled: false
+  scaleX: 40
+  scaleY: 15
+- name: Network
+  match_threshold: 0.25
+  disabled: false

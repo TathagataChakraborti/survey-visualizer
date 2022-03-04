@@ -1,0 +1,37 @@
+.text-blue {
+  color: #0f62fe;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.sidebar {
+}
+
+.bx--grid--full-width {
+  padding: 0;
+}
+
+.bx--container {
+  padding: 20px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  font-size: smaller;
+}
+
+.bonus-link {
+  box-shadow: none !important;
+  width: fit-content !important;
+}
+
+.bonus-link path {
+  fill: #0f62fe !important;
+}
