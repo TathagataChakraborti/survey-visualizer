@@ -42,10 +42,6 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
 
             parent_candidates = data[-1]
 
-            # print(data[row_number - 2])
-            # print(data[-1])
-            # exit(0)
-
             for parent in parent_candidates:
                 if start_id >= parent["start"] and stop_id <= parent["stop"]:
                     return parent["name"]
@@ -172,8 +168,8 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                             for taxonomic_item in taxonomic_level:
 
                                 if (
-                                    row.index(item) >= taxonomic_item["start"]
-                                    and row.index(item) <= taxonomic_item["stop"]
+                                    row.index(item) + 1 >= taxonomic_item["start"]
+                                    and row.index(item) + 1 <= taxonomic_item["stop"]
                                 ):
 
                                     new_tag_item = {
