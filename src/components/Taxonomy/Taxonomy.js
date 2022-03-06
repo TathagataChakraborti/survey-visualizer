@@ -275,6 +275,11 @@ class Taxonomy extends React.Component {
   tranformData2Tree = (start, stop) => {
     var draw_circlemap = true;
 
+    if (this.state.taxonomy_data.length < stop) {
+      start--;
+      stop--;
+    }
+
     const temp_taxonomy_data = this.state.taxonomy_data.slice(start - 1, stop);
     const new_taxonomoy_data = temp_taxonomy_data[0].map((item, id) => {
       const children = temp_taxonomy_data[1]
@@ -635,6 +640,8 @@ class Taxonomy extends React.Component {
               disabled={tab.disabled}
               onClick={this.switchTabs.bind(this, tab.tab_name)}>
               <div className="tab-content">
+                <h6>{tab.title_text}</h6>
+                <br />
                 {tab.tab_name === this.state.active_tab && (
                   <div>
                     {tab.fancy_chart && (

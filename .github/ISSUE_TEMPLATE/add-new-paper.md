@@ -7,7 +7,9 @@ assignees: miwalker
 
 ---
 
-This issue requests for the addition of a new paper into the survey. Please fill in the paper metadata and the taxonomic classes it belongs to. 
+This issue requests for the addition of a new paper 
+into the survey. Please fill in the paper metadata 
+and the taxonomic classes it belongs to. 
 
 ## Metadata
 

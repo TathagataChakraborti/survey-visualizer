@@ -40,7 +40,11 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
 
         if data:
 
-            parent_candidates = data[row_number - 2]
+            parent_candidates = data[-1]
+
+            # print(data[row_number - 2])
+            # print(data[-1])
+            # exit(0)
 
             for parent in parent_candidates:
                 if start_id >= parent["start"] and stop_id <= parent["stop"]:
@@ -80,7 +84,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                 and row_number <= tab["taxonomy"]["rows"]["stop"]
             ):
 
-                if row_number in tab["taxonomy"]["rows"]["exclude"]:
+                if row_number in tab["taxonomy"]["rows"].get("exclude", []):
                     continue
 
                 row = row[
@@ -116,7 +120,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                                 parent=__compute_parent(
                                     start, stop, row_number, new_taxonomy["taxonomy"]
                                 ),
-                                level=row_number,
+                                level=len(new_taxonomy["taxonomy"]) + 1,
                                 start=start,
                                 stop=stop,
                             )
@@ -136,7 +140,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                 and row_number <= tab["papers_list"]["rows"]["stop"]
             ):
 
-                if row_number in tab["papers_list"]["rows"]["exclude"]:
+                if row_number in tab["papers_list"]["rows"].get("exclude", []):
                     continue
 
                 existing_ids = [item["UID"] for item in new_taxonomy["data"]]
@@ -200,7 +204,7 @@ def getAffinity(config: Dict, taxonomy: Taxonomy = __cache):
     for paper in taxonomy["data"]:
         new_paper: Paper = copy.deepcopy(paper)
 
-        new_paper["abstract"] = paper["title"]
+        new_paper["abstract"] = paper["abstract"] or paper["title"]
         new_paper["authors"] = paper["authors"].replace(",", " | ")
 
         new_paper["keywords"] = paper["keywords"] or " | ".join(

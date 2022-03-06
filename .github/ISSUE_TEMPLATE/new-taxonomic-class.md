@@ -9,12 +9,16 @@ assignees: miwalker
 
 ## Location
 
-Provide the name and location in the taxonomy of the proposed new class. 
+Provide the name and location in the taxonomy 
+of the proposed new class. 
 
 ## Papers
 
-Provide links to a few papers that belong to this class.
+Provide links to a few papers that belong 
+to this class.
 
 ## Description
 
-Provide a detailed description of what this class describes and justification of why the current classification does not capture it.
+Provide a detailed description of what this 
+class describes and justification of why the 
+current classification does not capture it.

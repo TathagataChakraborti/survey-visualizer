@@ -7,7 +7,10 @@ assignees: miwalker
 
 ---
 
-Use this issue if you notice a problem with the data associated with a paper listed in the survey. This might be an issue with the metadata or a disagreement in how it is classified. Please fill in below as applicable.
+Use this issue if you notice a problem with the data 
+associated with a paper listed in the survey. This might 
+be an issue with the metadata or a disagreement in how 
+it is classified. Please fill in below as applicable.
 
 
 ## Metadata
