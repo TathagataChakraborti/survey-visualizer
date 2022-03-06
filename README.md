@@ -2,10 +2,9 @@
 
 [![Carbon](https://img.shields.io/badge/design-carbon-blue)](https://www.carbondesignsystem.com/)
 
-This repository hosts the source code for a generic visualization tool for data from survey papers, for readers to explore on the browser. 
-It accepts as input a formatted spreadsheet and produces several views in terms of hierarchy of concepts, 
+This repository hosts the source code for a generic visualization tool for data from survey papers, for readers to explore on the browser.
+It accepts as input a formatted spreadsheet and produces several views in terms of hierarchy of concepts,
 document concept similarity, and citation network. This is an example: [ibm.biz/vam-hri](http://ibm.biz/vam-hri]).
-
 
 ## Setting up locally
 
@@ -34,18 +33,16 @@ user:~$ yarn
 user:~$ yarn start
 ```
 
-
 ## How to Contribute
 
-You can contribute in two forms: 
+You can contribute in two forms:
 
 1. Directly to this code base for new features, bug fixes, etc. Open an issue [here](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose).
 2. To the surveys that pull from this code base, in the form of new paper entires, updates to the taxonomies, and so on. See below for a list of active forks.
 
 ### Active Forks
 
-| Topic | Link | Papers | Contribute | Community |
-|:------|:-----|:-------|:-----------|:----------|
-| Virtual, Augmented, and Mixed-Reality <br /> for Human-Robot Interaction | [VAM-HRI](https://vam-hri.github.io/) @ HRI | [Link](https://arxiv.org/abs/2202.11249) \| [Link](https://ieeexplore.ieee.org/document/8673071) | [Contribute](https://github.com/miwalker/survey-visualizer#how-to-contribute) | [Slack](https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw) |
-| Explainable AI Planning | [XAIP](http://ibm.biz/xaip-workshop) @ ICAPS | [Link](https://www.ijcai.org/Proceedings/2020/669) \| [Link](https://ojs.aaai.org//index.php/ICAPS/article/view/3463) | `Coming Soon` | [Slack](https://join.slack.com/t/xaip2021/shared_invite/zt-svdiylde-EwqOBkguynR6jKbi_UKDXA) | 
-
+| Topic                                                                    | Link                                         | Papers                                                                                                                | Contribute                                                                    | Community                                                                                   |
+| :----------------------------------------------------------------------- | :------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| Virtual, Augmented, and Mixed-Reality <br /> for Human-Robot Interaction | [VAM-HRI](https://vam-hri.github.io/) @ HRI  | [Link](https://arxiv.org/abs/2202.11249) \| [Link](https://ieeexplore.ieee.org/document/8673071)                      | [Contribute](https://github.com/miwalker/survey-visualizer/issues/new/choose) | [Slack](https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw)  |
+| Explainable AI Planning                                                  | [XAIP](http://ibm.biz/xaip-workshop) @ ICAPS | [Link](https://www.ijcai.org/Proceedings/2020/669) \| [Link](https://ojs.aaai.org//index.php/ICAPS/article/view/3463) | `Coming Soon`                                                                 | [Slack](https://join.slack.com/t/xaip2021/shared_invite/zt-svdiylde-EwqOBkguynR6jKbi_UKDXA) |

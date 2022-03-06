@@ -32,7 +32,7 @@ def __text_transform(text: str) -> str:
 
 def getTaxonomy(config: Dict) -> List[Taxonomy]:
     def __generate_random_id() -> int:
-        return random.randint(1, 2 ** 25)
+        return random.randint(1, 2**25)
 
     def __compute_parent(
         start_id: int, stop_id: int, row_number: int, data: Dict

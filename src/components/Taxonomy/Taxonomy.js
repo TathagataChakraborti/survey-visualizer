@@ -161,12 +161,11 @@ class Taxonomy extends React.Component {
             var new_taxonomoy_layer = [];
 
             taxonomy_layer.forEach(node => {
-
-              if( !getChildren(node, new_paper_data.taxonomy).length )
+              if (!getChildren(node, new_paper_data.taxonomy).length)
                 node.expanded = false;
 
               new_taxonomoy_layer.push(node);
-            })
+            });
 
             // if (taxonomy_level === new_paper_data.taxonomy.length - 1)
             //   new_taxonomoy_layer = new_taxonomoy_layer.map(e => {
@@ -423,10 +422,9 @@ class Taxonomy extends React.Component {
     var depth_hashes = {};
     const nodes = this.state.taxonomy_data.map(
       (taxonomy_layer, taxonomy_level) => {
-
         var current_level = 0;
 
-        return (taxonomy_layer.map((node, i) => {
+        return taxonomy_layer.map((node, i) => {
           var parent_element = null;
 
           if (taxonomy_level > 0)
@@ -478,7 +476,7 @@ class Taxonomy extends React.Component {
               temp_y = cache_nodes.length;
             }
 
-            if ( current_level && temp_y === current_level)
+            if (current_level && temp_y === current_level)
               temp_y = temp_y + taxonomy_layer.indexOf(node);
 
             current_level = temp_y;
@@ -531,12 +529,8 @@ class Taxonomy extends React.Component {
           } else {
             return <span key={i}></span>;
           }
-
-
-
-        }))
+        });
       }
-
     );
 
     const edges = this.state.taxonomy_data
