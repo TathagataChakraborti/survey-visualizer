@@ -10,6 +10,7 @@ metadata:
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
   primary_link: https://arxiv.org/abs/2202.11249
   secondary_link: https://ieeexplore.ieee.org/document/8673071
+  community_link: null
   info_tile: true
   info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
   info_link:

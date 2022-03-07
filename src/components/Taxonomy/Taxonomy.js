@@ -167,12 +167,6 @@ class Taxonomy extends React.Component {
               new_taxonomoy_layer.push(node);
             });
 
-            // if (taxonomy_level === new_paper_data.taxonomy.length - 1)
-            //   new_taxonomoy_layer = new_taxonomoy_layer.map(e => {
-            //     e.expanded = false;
-            //     return e;
-            //   });
-
             return new_taxonomoy_layer;
           }
         ),

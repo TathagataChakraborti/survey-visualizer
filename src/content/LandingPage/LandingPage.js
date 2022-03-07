@@ -1,7 +1,7 @@
 import React from 'react';
 import GitHubButton from 'react-github-btn';
 import { isMobile } from 'react-device-detect';
-import { Document32, LogoGithub32 } from '@carbon/icons-react';
+import { Document32, LogoGithub32, LogoSlack32 } from '@carbon/icons-react';
 import { BasicElement } from '../../components/BasicElement';
 import {
   Button,
@@ -88,6 +88,7 @@ class LandingPage extends React.Component {
                 <ButtonSet stacked>
                   <Button
                     kind="primary"
+                    className="buttonset"
                     size="field"
                     renderIcon={Document32}
                     href={config['metadata']['primary_link']}
@@ -99,6 +100,7 @@ class LandingPage extends React.Component {
                     <>
                       <Button
                         kind="tertiary"
+                        className="buttonset"
                         size="small"
                         renderIcon={Document32}
                         href={config['metadata']['secondary_link']}
@@ -108,19 +110,31 @@ class LandingPage extends React.Component {
                       <br />
                     </>
                   )}
-                  <div>
-                    <Button
-                      kind="tertiary"
-                      renderIcon={LogoGithub32}
-                      size="small"
-                      href={
-                        config['metadata']['link_to_code'] +
-                        '#how-to-contribute'
-                      }
-                      target="_blank">
-                      Contribute
-                    </Button>
-                  </div>
+                  <Button
+                    kind="tertiary"
+                    className="buttonset tertiary-secondary"
+                    renderIcon={LogoGithub32}
+                    size="small"
+                    href={
+                      config['metadata']['link_to_code'] + '#how-to-contribute'
+                    }
+                    target="_blank">
+                    Contribute
+                  </Button>
+                  {config['metadata']['community_link'] && (
+                    <>
+                      <br />
+                      <Button
+                        kind="tertiary"
+                        className="buttonset tertiary-danger"
+                        renderIcon={LogoSlack32}
+                        size="small"
+                        href={config['metadata']['community_link']}
+                        target="_blank">
+                        Community
+                      </Button>
+                    </>
+                  )}
                 </ButtonSet>
               </div>
 

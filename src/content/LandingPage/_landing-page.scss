@@ -35,3 +35,25 @@ a:hover {
 .bonus-link path {
   fill: #0f62fe !important;
 }
+
+.buttonset {
+  box-shadow: none !important;
+}
+
+.tertiary-danger {
+  border-color: red;
+  color: red;
+}
+
+.tertiary-danger:hover {
+  background-color: red;
+}
+
+.tertiary-secondary {
+  border-color: black;
+  color: black;
+}
+
+.tertiary-secondary:hover {
+  background-color: black;
+}
