@@ -1,8 +1,10 @@
 import React from 'react';
+import { CaretUp32, CaretDown32 } from '@carbon/icons-react';
 import {
   Search,
   ToastNotification,
   NumberInput,
+  Button,
 } from 'carbon-components-react';
 import { Paper, hashID } from '../../components/Info';
 
@@ -195,6 +197,20 @@ class BasicElement extends React.Component {
     );
   };
 
+  sortYear = e => {
+    var mode_selector = e.currentTarget.name === 'decreasing' ? -1 : 1;
+    var new_paper_data = this.state.paper_data;
+
+    new_paper_data.sort(function(a, b) {
+      return a.year <= b.year ? -1 * mode_selector : 1 * mode_selector;
+    });
+
+    this.setState({
+      ...this.state,
+      paper_data: new_paper_data,
+    });
+  };
+
   render() {
     return (
       <div className="bx--container">
@@ -340,6 +356,28 @@ class BasicElement extends React.Component {
               )}
               .
             </p>
+            <br />
+
+            <Button
+              onClick={this.sortYear.bind(this)}
+              name="decreasing"
+              kind="ghost"
+              className="navigation-buttons"
+              renderIcon={CaretUp32}
+              iconDescription="Sort down by year"
+              size="sm"
+              hasIconOnly
+            />
+            <Button
+              onClick={this.sortYear.bind(this)}
+              name="increasing"
+              kind="ghost"
+              className="navigation-buttons"
+              renderIcon={CaretDown32}
+              iconDescription="Sort up by year"
+              size="sm"
+              hasIconOnly
+            />
 
             {this.state.paper_data.map((item, id) => (
               <Paper key={id} paper={item} />

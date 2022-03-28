@@ -1,3 +1,3 @@
 # Spreadsheets Repository
 
-Place all your spreadsheets here.
+Sample spreadsheets.

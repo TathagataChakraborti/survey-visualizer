@@ -65,7 +65,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
         path = os.path.abspath(
             os.path.join(
                 os.path.dirname(os.path.realpath(__file__)),
-                f"./data/{tab['input_file']['filename']}",
+                f"../../{tab['input_file']['filename']}",
             )
         )
         wb = load_workbook(path)
@@ -183,6 +183,9 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                 new_paper["tags"] = tags
                 new_taxonomy["data"].append(new_paper)
 
+        if tab["papers_list"].get("shuffle_list", False):
+            random.shuffle(new_taxonomy["data"])
+
         out_data.append(new_taxonomy)
 
         if tab["tab_name"] == config["default_tab"]:
@@ -247,7 +250,10 @@ def getNetwork(config: Dict, taxonomy: Taxonomy = __cache):
         network_data["nodes"].append(paper)
 
     path = os.path.abspath(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), f"./pdfs/")
+        os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            f"./../../{config['files_directory']}/",
+        )
     )
 
     match_threshold = config["match_threshold"]

@@ -78,9 +78,10 @@ tabs:
     disabled: false
     fancy_chart: false
     input_file:
-      filename: 'Cubed-Thao.xlsx'
+      filename: './src/compiler/data/Cubed-Thao.xlsx'
       active_worksheet: Cubed - Thao
     papers_list:
+      shuffle_list: true
       key_map:
         title: 3
         abstract:
@@ -107,15 +108,21 @@ tabs:
         stop: 146
 ```
 
+For each tab in the Taxonomy view, you can provide a link to the spreadsheet (and corresponding active sheet) to read from. 
+The path to the file is relative to the root directory you are running this code from.
+
 The rows and columns (for either of the taxonomy area or the paper list) indicate the start and end of where to read from
 in the spreadsheet, as well as rows / columns to ignore if required.
 For example, we are asking here to read the "Taxonomy" hierarchy from rows 1-6 (but ignore rows 5 and 6)
 and columns 69 to 146, and the rows 7-184 (excluding 141 and 151) for the list of papers.
 The `key_map` entry indicates where (columns) the paper metadata is documented in the spreadsheet (e.g. the title is in column 3).
 
+The `shuffle_list` key, if _True_, will make the paper list appear in randomized order. If disabled, the papers on the visualizer
+appear in the order they are given in the source spreadsheet.
+
 **Fancy Charts**
 
-In case your taxonomy is _only 2 levels deep_, you can also enable other views into it, such as
+You can also enable other views into your taxonomy, such as
 using [tree maps](https://www.carbondesignsystem.com/data-visualization/complex-charts/#tree-maps) and [circle packs](https://www.carbondesignsystem.com/data-visualization/complex-charts/#circle-packs).
 
 ```yaml
@@ -157,6 +164,7 @@ This view is inspired from the [Miniconf](https://github.com/Mini-Conf/Mini-Conf
 
 The final view, shows a citations network between papers included in the survey. This is extracted automatically from the PDFs of the papers
 and is a bit noisy due to varying PDF formats. The extraction is done as a best guess basis (favoring low false negatives with a bit of high false positive).
+You should specify the relative path to the PDFs in the `files_directory` field.
 
 You can change the `match_threshold` to make the best guess more strict. A `0.25` value means that, for all the bits of strings found in the paper
 in the "References" sections, a paper title in the known paper list has to be changed **at most** 25% of itself in order to match, to be considered a potential
@@ -164,6 +172,7 @@ reference (with the lowest match below that threshold taken as the matched refer
 
 ```yaml
 - name: Network
+  files_directory: './src/compiler/pdfs'
   match_threshold: 0.25
   disabled: false
 ```

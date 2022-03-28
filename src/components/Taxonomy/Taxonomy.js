@@ -23,6 +23,8 @@ import {
   LogoGithub32,
   Add16,
   Subtract16,
+  CaretRight32,
+  CaretLeft32,
 } from '@carbon/icons-react';
 import {
   Modal,
@@ -55,8 +57,7 @@ class Taxonomy extends React.Component {
       active_tab: view_config['default_tab'],
       taxonomy_data: [],
       paper_data: [],
-      taxonomy_data_treeform: [],
-      taxonomy_data_circleform: [],
+      taxonomy_data_fancy: [],
       modal: false,
       config: {
         nodeHeight: 50,
@@ -70,6 +71,7 @@ class Taxonomy extends React.Component {
 
           draw_treemap: true,
           draw_circlemap: true,
+          level: 2,
           canvasZoom: {
             enabled: true,
           },
@@ -138,7 +140,7 @@ class Taxonomy extends React.Component {
           years: this.props.years,
         },
         () => {
-          this.tranformData2Tree(2, 3);
+          this.tranformData2Tree();
         }
       );
   }
@@ -178,6 +180,7 @@ class Taxonomy extends React.Component {
       },
       () => {
         this.updateSelectedTab();
+        this.tranformData2Tree();
       }
     );
   }
@@ -266,13 +269,10 @@ class Taxonomy extends React.Component {
     );
   };
 
-  tranformData2Tree = (start, stop) => {
+  tranformData2Tree = e => {
     var draw_circlemap = true;
-
-    if (this.state.taxonomy_data.length < stop) {
-      start--;
-      stop--;
-    }
+    var start = this.state.config.plot_options.level;
+    var stop = this.state.config.plot_options.level + 1;
 
     const temp_taxonomy_data = this.state.taxonomy_data.slice(start - 1, stop);
     const new_taxonomoy_data = temp_taxonomy_data[0].map((item, id) => {
@@ -293,45 +293,36 @@ class Taxonomy extends React.Component {
         children: children,
       };
 
-      if (!children.length) {
-        const num_papers = this.getPapersWithTag(item).length;
-        draw_circlemap = draw_circlemap && Boolean(num_papers);
-
-        new_node['showLabel'] = true;
-        new_node['value'] = num_papers ? num_papers : 0;
-      }
-
       return new_node;
     });
 
-    if (draw_circlemap) {
-      this.setState({
+    this.setState(
+      {
         ...this.state,
-        taxonomy_data_treeform: new_taxonomoy_data,
-        taxonomy_data_circleform: new_taxonomoy_data,
         config: {
           ...this.state.config,
-          slider: 12,
           plot_options: {
             ...this.state.config.plot_options,
-            draw_circlemap: draw_circlemap,
+            draw_treemap: false,
+            draw_circlemap: false,
           },
         },
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        taxonomy_data_treeform: new_taxonomoy_data,
-        config: {
-          ...this.state.config,
-          slider: 16,
-          plot_options: {
-            ...this.state.config.plot_options,
-            draw_circlemap: draw_circlemap,
+      },
+      () => {
+        this.setState({
+          ...this.state,
+          taxonomy_data_fancy: new_taxonomoy_data,
+          config: {
+            ...this.state.config,
+            plot_options: {
+              ...this.state.config.plot_options,
+              draw_treemap: true,
+              draw_circlemap: true,
+            },
           },
-        },
-      });
-    }
+        });
+      }
+    );
   };
 
   getTimeline(e) {
@@ -415,6 +406,31 @@ class Taxonomy extends React.Component {
     } else {
       return Add16;
     }
+  };
+
+  onClimb = e => {
+    var new_level = this.state.config.plot_options.level;
+    var delta = e.currentTarget.name === 'climb-up' ? 1 : -1;
+
+    new_level = new_level + delta;
+    new_level = Math.min(this.state.taxonomy_data.length - 1, new_level);
+    new_level = Math.max(1, new_level);
+
+    this.setState(
+      {
+        ...this.state,
+        config: {
+          ...this.state.config,
+          plot_options: {
+            ...this.state.config.plot_options,
+            level: new_level,
+          },
+        },
+      },
+      () => {
+        this.tranformData2Tree();
+      }
+    );
   };
 
   render() {
@@ -634,21 +650,67 @@ class Taxonomy extends React.Component {
               disabled={tab.disabled}
               onClick={this.switchTabs.bind(this, tab.tab_name)}>
               <div className="tab-content">
-                <h6>{tab.title_text}</h6>
-                <br />
+                {tab.title_text && (
+                  <>
+                    <h6>{tab.title_text}</h6>
+                    <br />
+                  </>
+                )}
                 {tab.tab_name === this.state.active_tab && (
                   <div>
                     {tab.fancy_chart && (
                       <div className="bx--container">
-                        <Slider
-                          hideTextInput
-                          id="slider"
-                          max={16}
-                          min={0}
-                          step={1}
-                          onChange={this.handleSliderChange.bind(this)}
-                          value={this.state.config.slider}
-                        />
+                        <div className="bx--row">
+                          <div style={{ borderRight: '1pt solid silver' }}>
+                            <h6>Relative Zoom</h6>
+
+                            <Slider
+                              hideTextInput
+                              id="slider"
+                              max={16}
+                              min={0}
+                              step={1}
+                              onChange={this.handleSliderChange.bind(this)}
+                              value={this.state.config.slider}
+                            />
+                          </div>
+
+                          <div style={{ marginLeft: '10px' }}>
+                            <div>
+                              <h6 style={{ marginBottom: '5px' }}>
+                                Climb Hierarchy
+                              </h6>
+
+                              <Button
+                                onClick={this.onClimb.bind(this)}
+                                name="climb-down"
+                                kind="ghost"
+                                className="navigation-buttons"
+                                renderIcon={CaretLeft32}
+                                iconDescription="Navigate Up"
+                                size="sm"
+                                disabled={
+                                  this.state.config.plot_options.level === 1
+                                }
+                                hasIconOnly
+                              />
+                              <Button
+                                onClick={this.onClimb.bind(this)}
+                                name="climb-up"
+                                kind="ghost"
+                                className="navigation-buttons"
+                                renderIcon={CaretRight32}
+                                iconDescription="Navigate Down"
+                                size="sm"
+                                disabled={
+                                  this.state.config.plot_options.level ===
+                                  this.state.taxonomy_data.length - 1
+                                }
+                                hasIconOnly
+                              />
+                            </div>
+                          </div>
+                        </div>
 
                         <div className="bx--row">
                           <div
@@ -657,7 +719,7 @@ class Taxonomy extends React.Component {
                             }>
                             {this.state.config.plot_options.draw_treemap && (
                               <TreemapChart
-                                data={this.state.taxonomy_data_treeform}
+                                data={this.state.taxonomy_data_fancy}
                                 options={
                                   this.state.config.plot_options
                                 }></TreemapChart>
@@ -671,7 +733,7 @@ class Taxonomy extends React.Component {
                             }>
                             {this.state.config.plot_options.draw_circlemap && (
                               <CirclePackChart
-                                data={this.state.taxonomy_data_circleform}
+                                data={this.state.taxonomy_data_fancy}
                                 options={this.state.config.plot_options}>
                                 >
                               </CirclePackChart>
