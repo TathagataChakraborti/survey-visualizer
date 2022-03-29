@@ -108,7 +108,7 @@ tabs:
         stop: 146
 ```
 
-For each tab in the Taxonomy view, you can provide a link to the spreadsheet (and corresponding active sheet) to read from. 
+For each tab in the Taxonomy view, you can provide a link to the spreadsheet (and corresponding active sheet) to read from.
 The path to the file is relative to the root directory you are running this code from.
 
 The rows and columns (for either of the taxonomy area or the paper list) indicate the start and end of where to read from

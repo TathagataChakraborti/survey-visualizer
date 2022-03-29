@@ -42,6 +42,8 @@ import {
   Tab,
   Slider,
   Toggle,
+  AccordionItem,
+  Accordion,
 } from 'carbon-components-react';
 
 let config = require('../../config.json');
@@ -68,7 +70,6 @@ class Taxonomy extends React.Component {
         vertical_offset: 0,
         plot_options: {
           title: '',
-
           draw_treemap: true,
           draw_circlemap: true,
           level: 2,
@@ -658,101 +659,112 @@ class Taxonomy extends React.Component {
                 )}
                 {tab.tab_name === this.state.active_tab && (
                   <div>
-                    {tab.fancy_chart && (
-                      <div className="bx--container">
-                        <div className="bx--row">
-                          <div style={{ borderRight: '1pt solid silver' }}>
-                            <h6>Relative Zoom</h6>
+                    <Accordion align="start">
+                      {tab.fancy_chart && (
+                        <AccordionItem
+                          title="Treemap View"
+                          className="full-accordion"
+                          open>
+                          <div className="bx--container">
+                            <div className="bx--row">
+                              <div style={{ borderRight: '1pt solid silver' }}>
+                                <h6>Relative Zoom</h6>
 
-                            <Slider
-                              hideTextInput
-                              id="slider"
-                              max={16}
-                              min={0}
-                              step={1}
-                              onChange={this.handleSliderChange.bind(this)}
-                              value={this.state.config.slider}
-                            />
-                          </div>
+                                <Slider
+                                  hideTextInput
+                                  id="slider"
+                                  max={16}
+                                  min={0}
+                                  step={1}
+                                  onChange={this.handleSliderChange.bind(this)}
+                                  value={this.state.config.slider}
+                                />
+                              </div>
 
-                          <div style={{ marginLeft: '10px' }}>
-                            <div>
-                              <h6 style={{ marginBottom: '5px' }}>
-                                Climb Hierarchy
-                              </h6>
+                              <div style={{ marginLeft: '10px' }}>
+                                <div>
+                                  <h6 style={{ marginBottom: '5px' }}>
+                                    Climb Hierarchy
+                                  </h6>
 
-                              <Button
-                                onClick={this.onClimb.bind(this)}
-                                name="climb-down"
-                                kind="ghost"
-                                className="navigation-buttons"
-                                renderIcon={CaretLeft32}
-                                iconDescription="Navigate Up"
-                                size="sm"
-                                disabled={
-                                  this.state.config.plot_options.level === 1
-                                }
-                                hasIconOnly
-                              />
-                              <Button
-                                onClick={this.onClimb.bind(this)}
-                                name="climb-up"
-                                kind="ghost"
-                                className="navigation-buttons"
-                                renderIcon={CaretRight32}
-                                iconDescription="Navigate Down"
-                                size="sm"
-                                disabled={
-                                  this.state.config.plot_options.level ===
-                                  this.state.taxonomy_data.length - 1
-                                }
-                                hasIconOnly
-                              />
+                                  <Button
+                                    onClick={this.onClimb.bind(this)}
+                                    name="climb-down"
+                                    kind="ghost"
+                                    className="navigation-buttons"
+                                    renderIcon={CaretLeft32}
+                                    iconDescription="Navigate Up"
+                                    size="sm"
+                                    disabled={
+                                      this.state.config.plot_options.level === 1
+                                    }
+                                    hasIconOnly
+                                  />
+                                  <Button
+                                    onClick={this.onClimb.bind(this)}
+                                    name="climb-up"
+                                    kind="ghost"
+                                    className="navigation-buttons"
+                                    renderIcon={CaretRight32}
+                                    iconDescription="Navigate Down"
+                                    size="sm"
+                                    disabled={
+                                      this.state.config.plot_options.level ===
+                                      this.state.taxonomy_data.length - 1
+                                    }
+                                    hasIconOnly
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="bx--row">
+                              <div
+                                className={
+                                  'bx--col-lg-' + this.state.config.slider
+                                }>
+                                {this.state.config.plot_options
+                                  .draw_treemap && (
+                                  <TreemapChart
+                                    data={this.state.taxonomy_data_fancy}
+                                    options={
+                                      this.state.config.plot_options
+                                    }></TreemapChart>
+                                )}
+                              </div>
+
+                              <div
+                                className={
+                                  'bx--col-lg-' +
+                                  (16 - this.state.config.slider).toString()
+                                }>
+                                {this.state.config.plot_options
+                                  .draw_circlemap && (
+                                  <CirclePackChart
+                                    data={this.state.taxonomy_data_fancy}
+                                    options={this.state.config.plot_options}>
+                                    >
+                                  </CirclePackChart>
+                                )}
+                              </div>
                             </div>
                           </div>
+                        </AccordionItem>
+                      )}
+
+                      <AccordionItem
+                        title="Hierarchy View"
+                        className="full-accordion"
+                        open>
+                        <div ref={this.ref}>
+                          <svg height="10000px" width="100%">
+                            {buttons}
+                            {edges}
+                            {nodes}
+                          </svg>
                         </div>
-
-                        <div className="bx--row">
-                          <div
-                            className={
-                              'bx--col-lg-' + this.state.config.slider
-                            }>
-                            {this.state.config.plot_options.draw_treemap && (
-                              <TreemapChart
-                                data={this.state.taxonomy_data_fancy}
-                                options={
-                                  this.state.config.plot_options
-                                }></TreemapChart>
-                            )}
-                          </div>
-
-                          <div
-                            className={
-                              'bx--col-lg-' +
-                              (16 - this.state.config.slider).toString()
-                            }>
-                            {this.state.config.plot_options.draw_circlemap && (
-                              <CirclePackChart
-                                data={this.state.taxonomy_data_fancy}
-                                options={this.state.config.plot_options}>
-                                >
-                              </CirclePackChart>
-                            )}
-                          </div>
-                        </div>
-
-                        <br />
-                        <hr />
-                      </div>
-                    )}
-
-                    <div ref={this.ref}>
-                      <svg height="10000px" width="100%">
-                        {buttons}
-                        {edges}
-                        {nodes}
-                      </svg>
-                    </div>
+                      </AccordionItem>
+                    </Accordion>
 
                     <Modal
                       modalHeading={this.renderParents(this.state.modal)}

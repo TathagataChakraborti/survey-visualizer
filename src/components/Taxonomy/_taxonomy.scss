@@ -31,3 +31,7 @@ node {
   top: 0 !important;
   height: 100%;
 }
+
+.full-accordion > .bx--accordion__content {
+  padding: 0 !important;
+}
