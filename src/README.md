@@ -144,18 +144,14 @@ single class and everything should work fine. Remember to disable the Taxonomy v
 ### Affinity
 
 The affinity tab is meant to provide a view of the papers in the spreadsheet in the space of document similarity.
-Here "document" equates to the paper metadata provided in the spreadsheet. Adjust the scaling factors to ensure that the
-embeddings look just right when the tab loads (the user can zoom and pan later as well).
-
-This view is inspired from the [Miniconf](https://github.com/Mini-Conf/Mini-Conf/tree/master/scripts) repository.
+Here "document" equates to the paper metadata provided in the spreadsheet. This view is inspired from
+the [Miniconf](https://github.com/Mini-Conf/Mini-Conf/tree/master/scripts) repository.
 
 > The tags here (highlighted in red) are derived from the default taxonomy you picked in the previous step.
 
 ```
 - name: Affinity
   disabled: false
-  scaleX: 40
-  scaleY: 15
 ```
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/4764242/156833144-f34bf89b-3a47-4655-b214-ec79756858f6.png">

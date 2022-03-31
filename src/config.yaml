@@ -223,8 +223,6 @@ views:
         stop: 153
 - name: Affinity
   disabled: false
-  scaleX: 40
-  scaleY: 15
 - name: Network
   files_directory: "./src/compiler/pdfs"
   match_threshold: 0.25

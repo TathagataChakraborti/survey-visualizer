@@ -6,8 +6,6 @@ import { PaperInner, Simulate, TagArea } from '../../components/Info';
 import '@carbon/charts/styles.css';
 
 let config = require('../../config.json');
-let view_config = config.views.find(e => e.name === 'Affinity');
-
 let embeddings = require('../../compiler/data/Affinity.json');
 
 let taxonomy_data = require('../../compiler/data/Taxonomy.json');
@@ -15,49 +13,19 @@ let paper_data = taxonomy_data.find(
   e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
 ).data;
 
-const scaleX = view_config['scaleX'];
-const scaleY = view_config['scaleY'];
-
 const ShapeNodeSize = 5;
 const scaleBy = 1.01;
+const fillFactor = 0.8;
 
 class Affinity extends React.Component {
   constructor(props) {
     super(props);
 
-    const offsetX = Math.min(...embeddings.map(e => e.pos[0]));
-    const offsetY = Math.min(...embeddings.map(e => e.pos[1]));
-
-    let new_embeddings = embeddings.map(e => {
-      var new_embedding = e;
-
-      new_embedding.pos[0] = -offsetX + e.pos[0];
-      new_embedding.pos[1] = -offsetY + e.pos[1];
-
-      return new_embedding;
-    });
-
-    this.lastCenter = null;
-    this.lastDist = 0;
-
-    const new_paper_data = paper_data.map(item => {
-      const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
-      var new_item = item;
-
-      new_item['x'] =
-        5 * ShapeNodeSize + this.applyScalingX(scaleX, embedding_item.pos[0]);
-      new_item['y'] =
-        5 * ShapeNodeSize + this.applyScalingY(scaleY, embedding_item.pos[1]);
-
-      new_item.selected = false;
-      return new_item;
-    });
-
     this.ref = React.createRef();
     this.stageRef = React.createRef();
     this.state = {
-      data: new_paper_data,
-      cached_data: new_paper_data,
+      data: paper_data,
+      cached_data: paper_data,
       hoverText: null,
       annotations: [],
       newAnnotation: [],
@@ -73,9 +41,47 @@ class Affinity extends React.Component {
   }
 
   componentDidMount(props) {
+    const stageHeight = this.ref.current.offsetHeight;
+    const stageWidth = this.ref.current.offsetWidth;
+
+    const offsetX = Math.min(...embeddings.map(e => e.pos[0]));
+    const maxX = Math.max(...embeddings.map(e => e.pos[0]));
+
+    const offsetY = Math.min(...embeddings.map(e => e.pos[1]));
+    const maxY = Math.max(...embeddings.map(e => e.pos[1]));
+
+    let new_embeddings = embeddings.map(e => {
+      var new_embedding = e;
+
+      new_embedding.pos[0] =
+        (fillFactor * stageWidth * (-offsetX + e.pos[0])) / (maxX - offsetX);
+      new_embedding.pos[1] =
+        (fillFactor * stageHeight * (-offsetY + e.pos[1])) / (maxY - offsetY);
+
+      return new_embedding;
+    });
+
+    this.lastCenter = null;
+    this.lastDist = 0;
+
+    const new_paper_data = paper_data.map(item => {
+      const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
+      var new_item = item;
+
+      new_item['x'] =
+        5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.pos[0]);
+      new_item['y'] =
+        5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.pos[1]);
+
+      new_item.selected = false;
+      return new_item;
+    });
+
     if (this.ref.current) {
       this.setState({
         ...this.state,
+        data: new_paper_data,
+        cached_data: new_paper_data,
         config: {
           ...this.state.config,
           stageHeight: this.ref.current.offsetHeight,
