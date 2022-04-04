@@ -214,7 +214,7 @@ class Simulate extends React.Component {
       <>
         <div className="bx--col-lg-6">
           <Slider
-            labelText="VAM-HRI through the years"
+            labelText={config['metadata']['acronym'] + ' through the years'}
             hideTextInput
             onChange={this.handleSimulate.bind(this)}
             min={this.state.years.min_val}

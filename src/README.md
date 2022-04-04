@@ -16,6 +16,7 @@ This part is pretty self-explantory
 
 ```yaml
 metadata:
+  acronym: VAM-HRI
   title_text:
     'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction:
     A Survey and Virtual Design Element Taxonomy'
@@ -37,7 +38,8 @@ metadata:
       text: How it's going
 ```
 
-This appears as follows on the left-hand side [example](http://ibm.biz/vam-hri) as a gateway to the survey resources for the particular deployment:
+The `acronym` field appears as the title of the webpage (name of the tab on your browser). The rest of these fields
+appear as follows on the left-hand side [example](http://ibm.biz/vam-hri) as a gateway to the survey resources for the particular deployment:
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/4764242/156827296-eb24127f-d008-4a57-b60f-035f4c009647.png">
 

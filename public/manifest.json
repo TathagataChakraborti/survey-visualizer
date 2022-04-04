@@ -1,6 +1,6 @@
 {
-  "short_name": "vam-hri",
-  "name": "A Taxonomy of VAM-HRI",
+  "short_name": "survey-visualizer",
+  "name": "Survey Visualizer",
   "icons": [
     {
       "src": "favicon.png",
