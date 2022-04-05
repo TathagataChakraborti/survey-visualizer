@@ -128,6 +128,7 @@ def make_method_constraint(bv, vars):
     return And(lits)
 
 def make_constraints(consfile, lookup_dict, all_vars):
+    print("Generating custom constraints...")
     with open(consfile, 'r') as f:
         lines = [l.strip() for l in f.readlines()]
     constraints = []
@@ -149,6 +150,8 @@ def make_constraints(consfile, lookup_dict, all_vars):
 
         for d in descs:
             vars.update(lookup(d, lookup_dict, all_vars))
+
+        print(f"  adding {typ} constraint with {len(vars)} vars")
 
         assert typ in ['atmostone', 'atleastone', 'oneof', 'implies'], f"Unknown constraint type: {typ}"
 
