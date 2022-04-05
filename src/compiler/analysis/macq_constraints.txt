@@ -1,0 +1,7 @@
+; Use the <type>:<description> pattern for custom constraints
+; <description> should be a comma-separated list of feature names
+; <type> can be one of:
+;   - atmostone
+;   - atleastone
+;   - oneof
+atmostone:Rationality
