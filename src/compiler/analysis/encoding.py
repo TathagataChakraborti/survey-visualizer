@@ -37,11 +37,12 @@ def seed(fn):
     seed += "\nfrom encoding import gen_lookup, lookup, make_constraints, make_method_constraint\n\n"
 
     for i in range(feature_start, len(lines[0])):
-        feature_string = ' > '.join([lines[j][i] for j in range(data_start)])
+        feature_string = ' > '.join([lines[j][i].strip() for j in range(data_start)])
         seed += f"x{i-feature_start+1} = Var('{feature_string}')\n"
 
     seed += "\nall_features = [" + ', '.join([f"x{i}" for i in range(1, len(lines[0])-feature_start+1)]) + "]\n\n"
 
+    seed += "\nmethod_map = {\n"
     all_methods = []
     for i in range (data_start, len(lines)):
         slug = lines[i][0].replace('-','_').replace('+','Plus')
@@ -49,19 +50,19 @@ def seed(fn):
         if bv == '':
             print(f"WARNING: Empty line in {fn} at line {i+1} for slug [{slug}].")
             continue
-        all_methods.append(f'm_{slug}')
-        seed += f"m_{slug} = make_method_constraint('{bv}', all_features)\n"
+        all_methods.append(slug)
+        seed += f"  '{slug}': make_method_constraint('{bv}', all_features),\n"
+    seed += "}\n\n"
 
     assert len(all_methods) == len(set(all_methods)), f"Duplicate slug names detected in {fn}."
 
-    seed += f"\nall_methods = [{', '.join(all_methods)}]\n"
     seed += "\nlookup_dict = gen_lookup(all_features)\n"
     seed += f"\ncustom_constraints = make_constraints('{consfile}', lookup_dict, all_features)\n"
-    seed += "avoid_constraint = Or(all_methods).negate()\n"
+    seed += "avoid_constraint = Or(method_map.values()).negate()\n"
 
     seed += "\n# Confirm all the methods satisfy the constraints\n"
-    seed += "for m in all_methods:\n"
-    seed += "    assert solve((m & custom_constraints).to_CNF())\n"
+    seed += "for m in method_map:\n"
+    seed += "    assert solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'\n"
     seed += "\nT = (avoid_constraint & custom_constraints).to_CNF()\n"
     seed += "sol = solve(T)\n"
     seed += "print(','.join([str(int(sol[v.name])) for v in all_features]))\n"
@@ -94,6 +95,7 @@ def seed(fn):
             f.write(';   - atmostone\n')
             f.write(';   - atleastone\n')
             f.write(';   - oneof\n')
+            f.write(';   - implies\n')
 
 
 def gen_lookup(vars):
@@ -125,7 +127,7 @@ def make_method_constraint(bv, vars):
             assert False, f"Unknown literal: {b}"
     return And(lits)
 
-def make_constraints(consfile, lookup_dict, vars):
+def make_constraints(consfile, lookup_dict, all_vars):
     with open(consfile, 'r') as f:
         lines = [l.strip() for l in f.readlines()]
     constraints = []
@@ -135,15 +137,24 @@ def make_constraints(consfile, lookup_dict, vars):
         typ, desc = line.split(':')
 
         descs = [d.strip() for d in desc.split(',')]
+
+        if typ == "implies":
+            assert len(descs) == 2, f"Invalid constraint: {line}"
+            lhs = lookup(descs[0], lookup_dict, all_vars)
+            rhs = lookup(descs[1], lookup_dict, all_vars)
+            assert len(lhs) == 1 and len(rhs) == 1, f"Invalid constraint: {line}"
+            constraints.append(~list(lhs)[0] | list(rhs)[0])
+
         vars = set()
 
         for d in descs:
-            vars.update(lookup(d, lookup_dict, vars))
+            vars.update(lookup(d, lookup_dict, all_vars))
 
-        assert typ in ['atmostone', 'atleastone', 'oneof'], f"Unknown constraint type: {typ}"
+        assert typ in ['atmostone', 'atleastone', 'oneof', 'implies'], f"Unknown constraint type: {typ}"
 
         if typ in ['atleastone', 'oneof']:
             constraints.append(Or(vars))
+
         if typ in ['atmostone', 'oneof']:
             for v1 in vars:
                 for v2 in vars:

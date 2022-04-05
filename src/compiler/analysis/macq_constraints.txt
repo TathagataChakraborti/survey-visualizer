@@ -4,4 +4,7 @@
 ;   - atmostone
 ;   - atleastone
 ;   - oneof
+;   - implies
 atmostone:Rationality
+implies:Uncertainty > Probabilistic,Uncertainty > Non-deterministic
+implies:Uncertainty > Non-deterministic,Uncertainty > Deterministic
