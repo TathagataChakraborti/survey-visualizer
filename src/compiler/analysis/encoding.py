@@ -24,7 +24,7 @@ def seed(fn):
         feature_start += 1
 
     encfile = os.path.basename(fn).split('.')[0] + "_encoded.py"
-    consfile = os.path.basename(fn).split('.')[0] + "_constraints.txt"
+    conffile = os.path.basename(fn).split('.')[0] + "_config.txt"
 
     # Populate all of the empty cells with the previous value
     for row in range(data_start):
@@ -62,7 +62,7 @@ def seed(fn):
     assert len(all_methods) == len(set(all_methods)), f"Duplicate slug names detected in {fn}."
 
     seed += "\nlookup_dict = gen_lookup(all_features)\n"
-    seed += f"\ncustom_constraints = make_constraints('{consfile}', lookup_dict, all_features)\n"
+    seed += f"\ncustom_constraints, preferences = make_constraints('{conffile}', lookup_dict, all_features)\n"
     seed += "avoid_constraint = Or(method_map.values()).negate()\n"
 
     seed += "\n# Confirm all the methods satisfy the constraints\n"
@@ -74,17 +74,18 @@ def seed(fn):
 KC = compile(T).simplify()
 
 sol = {}
-for feature in all_features:
-    if KC.entails(feature):
-        sol[feature] = 1
+for feature in preferences:
+    pref = '~' not in str(feature)
+    if KC.entails(~feature):
+        sol[feature.name] = int(not pref)
         continue
-    KC = KC.condition({feature.name: False}).simplify()
-    sol[feature] = 0
+    KC = KC.condition({feature.name: pref}).simplify()
+    sol[feature.name] = int(pref)
 
-print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x] for x in all_features])))
+print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x.name] for x in all_features])))
 """
 
-    seed += "\nneighbours = get_close_matches(''.join(map(str, [sol[x] for x in all_features])), bv_map.keys())\n"
+    seed += "\nneighbours = get_close_matches(''.join(map(str, [sol[x.name] for x in all_features])), bv_map.keys())\n"
     seed += "\nprint('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')\n"
 
     # Write the seed file if it doesn't exist
@@ -101,21 +102,28 @@ print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x] for x in all_features]))
 
     # Write the constraints file if it doesn't exist
     towrite = True
-    if os.path.exists(consfile):
+    if os.path.exists(conffile):
         # Query user
-        print(f"{consfile} already exists. Overwrite? (y/n)")
+        print(f"{conffile} already exists. Overwrite? (y/n)")
         answer = input()
         if answer != 'y':
             towrite = False
     if towrite:
-        with open(consfile, 'w') as f:
+        with open(conffile, 'w') as f:
+            f.write(';\n')
+            f.write('; Preferences on the default "simple" setting\n')
+            f.write(';\n')
+            for i in range(feature_start, len(lines[0])):
+                feature_string = ' > '.join([lines[j][i].strip() for j in range(data_start)])
+                f.write(f"-({feature_string})\n")
+            f.write('\n\n; Custom constraints\n\n')
             f.write('; Use the <type>:<description> pattern for custom constraints\n')
             f.write('; <description> should be a comma-separated list of feature names\n')
             f.write('; <type> can be one of:\n')
             f.write(';   - atmostone\n')
             f.write(';   - atleastone\n')
             f.write(';   - oneof\n')
-            f.write(';   - implies\n')
+            f.write(';   - implies\n\n')
 
 
 def gen_lookup(vars):
@@ -129,11 +137,17 @@ def gen_lookup(vars):
 
 def lookup(name, lookup_dict, vars):
     toret = None
+    tonegate = False
+    if name[0] == '~':
+        tonegate = True
+        name = name[1:]
     if name in lookup_dict:
         toret = lookup_dict[name]
     else:
         toret = {v for v in vars if name in v.name}
     assert toret, f"Could not find feature {name} in the lookup dictionary."
+    if tonegate:
+        toret = {v.negate() for v in toret}
     return toret
 
 def make_method_constraint(bv, vars):
@@ -152,9 +166,23 @@ def make_constraints(consfile, lookup_dict, all_vars):
     with open(consfile, 'r') as f:
         lines = [l.strip() for l in f.readlines()]
     constraints = []
+    preferences = []
     for line in lines:
         if line == '' or line[0] == ';':
             continue
+
+        if line[0] in ['-','+']:
+            assert '(' == line[1] and ')' == line[-1], f"Invalid preference: {line}"
+            desc = line[2:-1]
+            var = lookup(desc, lookup_dict, all_vars)
+            assert len(var) == 1, f"Multiple features found for {desc}"
+            var = list(var)[0]
+            if line[0] == '-':
+                preferences.append(~var)
+            else:
+                preferences.append(var)
+            continue
+
         typ, desc = line.split(':')
 
         descs = [d.strip() for d in desc.split(',')]
@@ -185,7 +213,7 @@ def make_constraints(consfile, lookup_dict, all_vars):
                         constraints.append(~v1 | ~v2)
 
     print("...done.\n")
-    return And(constraints)
+    return (And(constraints), preferences)
 
 
 
