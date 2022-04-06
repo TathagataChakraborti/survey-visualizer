@@ -1,6 +1,8 @@
 
 from nnf import Var, And, Or
 from nnf.kissat import solve
+from nnf.dsharp import compile
+from difflib import get_close_matches
 
 from encoding import gen_lookup, lookup, make_constraints, make_method_constraint
 
@@ -38,52 +40,55 @@ x30 = Var('Learning Parameters > Data Features > Trace > Cost')
 all_features = [x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28, x29, x30]
 
 
-method_map = {
-  'live': make_method_constraint('001001000001000000001000011100', all_features),
-  'prodigy': make_method_constraint('001000000101000100001011001100', all_features),
-  'observer': make_method_constraint('001001100111000000001011000010', all_features),
-  'expo': make_method_constraint('001001000101000101001111001100', all_features),
-  'hanna': make_method_constraint('001111000101000101001111001100', all_features),
-  'arms': make_method_constraint('001001100110100101001111011010', all_features),
-  'luke': make_method_constraint('001111000101000101001111001100', all_features),
-  'armsj': make_method_constraint('001001100110100101001111011010', all_features),
-  'hanna_luke': make_method_constraint('001111000101000101001111001100', all_features),
-  'slaf': make_method_constraint('001001000100100100000000000100', all_features),
-  'locm': make_method_constraint('001001100110010001001100000100', all_features),
-  'opmaker2': make_method_constraint('001001100110010111101111011100', all_features),
-  'locm2': make_method_constraint('001001100110010001001100000100', all_features),
-  'mbp_plex': make_method_constraint('000000000000000000000000000000', all_features),
-  'kira': make_method_constraint('001001000100101101001111000100', all_features),
-  'aman': make_method_constraint('001001000101000101011100000100', all_features),
-  'tramp': make_method_constraint('001001100110100111101111000100', all_features),
-  'dup': make_method_constraint('000000000000010000001000000100', all_features),
-  'nlocm': make_method_constraint('001001101110010001001100100101', all_features),
-  'lop': make_method_constraint('011001100110010001001100000100', all_features),
-  'stern': make_method_constraint('001000000001000000001000000100', all_features),
-  'cpisa': make_method_constraint('001001100110010111101111011100', all_features),
-  'louga': make_method_constraint('001001100110100101001111001010', all_features),
-  'diego': make_method_constraint('001001000100100101001111011010', all_features),
-  'icarus': make_method_constraint('001001000101000101001100011100', all_features),
-  'fama': make_method_constraint('001001000100100101001111011010', all_features),
-  'amdn': make_method_constraint('001001000100101101001100011100', all_features),
-  'ccn': make_method_constraint('011000001001000000001000100000', all_features),
-  'dam': make_method_constraint('001001100110100110001011011100', all_features),
-  'blai': make_method_constraint('001001000100010000001000000000', all_features),
-  'dup_max': make_method_constraint('000000000000010000001000000100', all_features),
-  'aia': make_method_constraint('001001000101000101001111000100', all_features),
-  'blai_extended': make_method_constraint('001001000100111000001000000000', all_features),
-  'sam': make_method_constraint('001001000101000101001000000100', all_features),
-  'rim': make_method_constraint('001001110110010111101111011100', all_features),
-  'opmaker': make_method_constraint('001001100111000111101111011100', all_features),
-  'olam': make_method_constraint('001001000101000101001111011100', all_features),
-  'dbmps': make_method_constraint('001001110111000111101111011100', all_features),
-  'SAMPlus': make_method_constraint('001111000101000101001000000100', all_features),
-  'konidaris': make_method_constraint('001110001000101000001000101101', all_features),
-  'andersen': make_method_constraint('001110000001001000001000101101', all_features),
-  'konidaris_aaai': make_method_constraint('001000000001000000001000001100', all_features),
-  'konidaris_ijcai': make_method_constraint('001110001001000000001000101101', all_features),
-}
+bvs = [
+    ('live', '001001000001000000001000011100'),
+    ('prodigy', '001000000101000100001011001100'),
+    ('observer', '001001100111000000001011000110'),
+    ('expo', '001001000101000101001111001100'),
+    ('hanna', '001111000101000101001111001100'),
+    ('arms', '001001100110100101001111011110'),
+    ('luke', '001111000101000101001111001100'),
+    ('armsj', '001001100110100101001111011110'),
+    ('hanna_luke', '001111000101000101001111001100'),
+    ('slaf', '001001000100100100000000000100'),
+    ('locm', '001001100110010001001100000100'),
+    ('opmaker2', '001001100110010111101111011100'),
+    ('locm2', '001001100110010001001100000100'),
+    ('kira', '001001000100101101001111000100'),
+    ('aman', '001001000101000101011100000100'),
+    ('tramp', '001001100110100111101111000100'),
+    ('dup', '001000000000010000001000000100'),
+    ('nlocm', '001001101110010001001100100101'),
+    ('lop', '011001100110010001001100000100'),
+    ('stern', '001000000001000000001000000100'),
+    ('cpisa', '001001100110010111101111011100'),
+    ('louga', '001001100110100101001111001110'),
+    ('diego', '001001000100100101001111011110'),
+    ('icarus', '001001000101000101001100011100'),
+    ('fama', '001001000100100101001111011110'),
+    ('amdn', '001001000100101101001100011100'),
+    ('ccn', '011000001000100000001000100111'),
+    ('dam', '001001100110100110001011011100'),
+    ('blai', '001001000100010000001000000100'),
+    ('dup_max', '001000000000010000001000000100'),
+    ('aia', '001001000101000101001111000100'),
+    ('blai_extended', '001001000100111000001000000100'),
+    ('sam', '001001000101000101001000000100'),
+    ('rim', '001001110110010111101111011100'),
+    ('opmaker', '001001100111000111101111011100'),
+    ('olam', '001001000101000101001111011100'),
+    ('dbmps', '001001110111000111101111011100'),
+    ('SAMPlus', '001111000101000101001000000100'),
+    ('konidaris', '001110001000101000001000101101'),
+    ('andersen', '001110000001001000001000101101'),
+    ('konidaris_aaai', '001000000001000000001000001100'),
+    ('konidaris_ijcai', '001110001001000000001000101101'),
+]
 
+
+method_map = {s: make_method_constraint(bv, all_features) for (s,bv) in bvs}
+
+bv_map = {bv: s for (s,bv) in bvs}
 
 lookup_dict = gen_lookup(all_features)
 
@@ -95,5 +100,19 @@ for m in method_map:
     assert solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
 
 T = (avoid_constraint & custom_constraints).to_CNF()
-sol = solve(T)
-print(','.join([str(int(sol[v.name])) for v in all_features]))
+
+KC = compile(T).simplify()
+
+sol = {}
+for feature in all_features:
+    if KC.entails(feature):
+        sol[feature] = 1
+        continue
+    KC = KC.condition({feature.name: False}).simplify()
+    sol[feature] = 0
+
+print("\n\tFound Entry: " + ','.join(map(str, [sol[x] for x in all_features])))
+
+neighbours = get_close_matches(''.join(map(str, [sol[x] for x in all_features])), bv_map.keys())
+
+print('\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\n')

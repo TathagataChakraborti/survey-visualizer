@@ -34,6 +34,8 @@ def seed(fn):
 
     seed  = "\nfrom nnf import Var, And, Or\n"
     seed += "from nnf.kissat import solve\n"
+    seed += "from nnf.dsharp import compile\n"
+    seed += "from difflib import get_close_matches\n"
     seed += "\nfrom encoding import gen_lookup, lookup, make_constraints, make_method_constraint\n\n"
 
     for i in range(feature_start, len(lines[0])):
@@ -42,8 +44,8 @@ def seed(fn):
 
     seed += "\nall_features = [" + ', '.join([f"x{i}" for i in range(1, len(lines[0])-feature_start+1)]) + "]\n\n"
 
-    seed += "\nmethod_map = {\n"
     all_methods = []
+    seed += "\nbvs = [\n"
     for i in range (data_start, len(lines)):
         slug = lines[i][0].replace('-','_').replace('+','Plus')
         bv = ''.join([lines[i][j] for j in range(feature_start, len(lines[i]))])
@@ -51,8 +53,11 @@ def seed(fn):
             print(f"WARNING: Empty line in {fn} at line {i+1} for slug [{slug}].")
             continue
         all_methods.append(slug)
-        seed += f"  '{slug}': make_method_constraint('{bv}', all_features),\n"
-    seed += "}\n\n"
+        seed += f"    ('{slug}', '{bv}'),\n"
+    seed += "]\n\n"
+
+    seed += "\nmethod_map = {s: make_method_constraint(bv, all_features) for (s,bv) in bvs}\n"
+    seed += "\nbv_map = {bv: s for (s,bv) in bvs}\n"
 
     assert len(all_methods) == len(set(all_methods)), f"Duplicate slug names detected in {fn}."
 
@@ -64,8 +69,23 @@ def seed(fn):
     seed += "for m in method_map:\n"
     seed += "    assert solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'\n"
     seed += "\nT = (avoid_constraint & custom_constraints).to_CNF()\n"
-    seed += "sol = solve(T)\n"
-    seed += "print(','.join([str(int(sol[v.name])) for v in all_features]))\n"
+
+    seed += """
+KC = compile(T).simplify()
+
+sol = {}
+for feature in all_features:
+    if KC.entails(feature):
+        sol[feature] = 1
+        continue
+    KC = KC.condition({feature.name: False}).simplify()
+    sol[feature] = 0
+
+print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x] for x in all_features])))
+"""
+
+    seed += "\nneighbours = get_close_matches(''.join(map(str, [sol[x] for x in all_features])), bv_map.keys())\n"
+    seed += "\nprint('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')\n"
 
     # Write the seed file if it doesn't exist
     towrite = True
@@ -128,23 +148,23 @@ def make_method_constraint(bv, vars):
     return And(lits)
 
 def make_constraints(consfile, lookup_dict, all_vars):
-    print("Generating custom constraints...")
+    print("\nGenerating custom constraints...")
     with open(consfile, 'r') as f:
         lines = [l.strip() for l in f.readlines()]
     constraints = []
     for line in lines:
-        if line[0] == ';' or line == '':
+        if line == '' or line[0] == ';':
             continue
         typ, desc = line.split(':')
 
         descs = [d.strip() for d in desc.split(',')]
 
         if typ == "implies":
-            assert len(descs) == 2, f"Invalid constraint: {line}"
-            lhs = lookup(descs[0], lookup_dict, all_vars)
-            rhs = lookup(descs[1], lookup_dict, all_vars)
-            assert len(lhs) == 1 and len(rhs) == 1, f"Invalid constraint: {line}"
-            constraints.append(~list(lhs)[0] | list(rhs)[0])
+            for i in range(len(descs)-1):
+                lhs = lookup(descs[i], lookup_dict, all_vars)
+                rhs = lookup(descs[i+1], lookup_dict, all_vars)
+                assert len(lhs) == 1 and len(rhs) == 1, f"Invalid constraint: {line}"
+                constraints.append(~list(lhs)[0] | list(rhs)[0])
 
         vars = set()
 
@@ -164,6 +184,7 @@ def make_constraints(consfile, lookup_dict, all_vars):
                     if v1 != v2:
                         constraints.append(~v1 | ~v2)
 
+    print("...done.\n")
     return And(constraints)
 
 

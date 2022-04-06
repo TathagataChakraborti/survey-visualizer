@@ -5,6 +5,16 @@
 ;   - atleastone
 ;   - oneof
 ;   - implies
+
 atmostone:Rationality
-implies:Uncertainty > Probabilistic,Uncertainty > Non-deterministic
-implies:Uncertainty > Non-deterministic,Uncertainty > Deterministic
+
+implies:Uncertainty > Probabilistic,Uncertainty > Non-deterministic,Uncertainty > Deterministic
+atleastone:Uncertainty > Probabilistic,Uncertainty > Non-deterministic,Uncertainty > Deterministic
+
+implies:Trace > Partial,Trace > Full
+atleastone:Trace > Partial,Trace > Full
+
+implies:Actions > Typing,Actions > Parameterized
+implies:Predicates > Parameters Typed,Predicates > Parameterized
+implies:Predicate Information > Typing,Predicate Information > Parameterized
+implies:Action Information > Typing,Action Information > Parameterized
