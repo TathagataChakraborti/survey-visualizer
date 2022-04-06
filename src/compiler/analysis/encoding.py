@@ -83,10 +83,20 @@ for feature in preferences:
     sol[feature.name] = int(pref)
 
 print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x.name] for x in all_features])))
-"""
 
-    seed += "\nneighbours = get_close_matches(''.join(map(str, [sol[x.name] for x in all_features])), bv_map.keys())\n"
-    seed += "\nprint('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')\n"
+bv = ''.join(map(str, [sol[x.name] for x in all_features]))
+neighbours = get_close_matches(bv, bv_map.keys())
+
+print('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')
+
+for n in neighbours:
+    print(f'\\n\\t[{bv_map[n]}]')
+    for i in range(len(bv)):
+        if bv[i] != n[i]:
+            print(f'\\t - {all_features[i].name} made {str(bv[i] == "1")}')
+
+print('\\n\\n')
+"""
 
     # Write the seed file if it doesn't exist
     towrite = True
