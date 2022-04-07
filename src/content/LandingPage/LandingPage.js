@@ -26,7 +26,6 @@ let config = require('../../config.json');
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
-    this.shouldBlockNavigation = true;
     this.state = {
       view: config['default_view'],
     };
@@ -153,7 +152,10 @@ class LandingPage extends React.Component {
                           title="See also"
                           onClick={e => {
                             window.scrollTo({
-                              top: e.currentTarget.offsetHeight > 150 ? 0 : 500,
+                              top:
+                                e.currentTarget.offsetHeight > e.pageY / 4
+                                  ? 0
+                                  : e.pageY / 2,
                               behavior: 'smooth',
                             });
                           }}>
@@ -236,7 +238,10 @@ class LandingPage extends React.Component {
                   />
                 </div>
               ) : (
-                <BasicElement props={this.state.view} />
+                <BasicElement
+                  props={this.state.view}
+                  logChange={this.logChange.bind(this)}
+                />
               )}
             </div>
           </div>

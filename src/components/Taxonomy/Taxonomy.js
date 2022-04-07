@@ -636,265 +636,261 @@ class Taxonomy extends React.Component {
         }
       });
 
-    return (
-      <div>
-        <Tabs
-          scrollIntoView={false}
-          selected={view_config.tabs
-            .map(tab => view_config.default_tab === tab.tab_name)
-            .indexOf(true)}>
-          {view_config.tabs.map((tab, id) => (
-            <Tab
-              key={id}
-              id={tab.tab_name}
-              label={tab.tab_name}
-              disabled={tab.disabled}
-              onClick={this.switchTabs.bind(this, tab.tab_name)}>
-              <div className="tab-content">
-                {tab.title_text && (
-                  <>
-                    <h6>{tab.title_text}</h6>
-                    <br />
-                  </>
-                )}
-                {tab.tab_name === this.state.active_tab && (
-                  <div>
-                    <Accordion align="start">
-                      {tab.fancy_chart && (
-                        <AccordionItem
-                          title="Treemap View"
-                          className="full-accordion"
-                          open>
-                          <div className="bx--container">
-                            <div className="bx--row">
-                              <div style={{ borderRight: '1pt solid silver' }}>
-                                <h6>Relative Zoom</h6>
+    const taxonomy_area = view_config.tabs.map((tab, id) => (
+      <div className="tab-content">
+        {tab.title_text && (
+          <>
+            <h6>{tab.title_text}</h6>
+            <br />
+          </>
+        )}
+        {tab.tab_name === this.state.active_tab && (
+          <div>
+            <Accordion align="start">
+              {tab.fancy_chart && (
+                <AccordionItem
+                  title="Treemap View"
+                  className="full-accordion"
+                  open>
+                  <div className="bx--container">
+                    <div className="bx--row">
+                      <div style={{ borderRight: '1pt solid silver' }}>
+                        <h6>Relative Zoom</h6>
 
-                                <Slider
-                                  hideTextInput
-                                  id="slider"
-                                  max={16}
-                                  min={0}
-                                  step={1}
-                                  onChange={this.handleSliderChange.bind(this)}
-                                  value={this.state.config.slider}
-                                />
-                              </div>
+                        <Slider
+                          hideTextInput
+                          id="slider"
+                          max={16}
+                          min={0}
+                          step={1}
+                          onChange={this.handleSliderChange.bind(this)}
+                          value={this.state.config.slider}
+                        />
+                      </div>
 
-                              <div style={{ marginLeft: '10px' }}>
-                                <div>
-                                  <h6 style={{ marginBottom: '5px' }}>
-                                    Climb Hierarchy
-                                  </h6>
+                      <div style={{ marginLeft: '10px' }}>
+                        <div>
+                          <h6 style={{ marginBottom: '5px' }}>
+                            Climb Hierarchy
+                          </h6>
 
-                                  <Button
-                                    onClick={this.onClimb.bind(this)}
-                                    name="climb-down"
-                                    kind="ghost"
-                                    className="navigation-buttons"
-                                    renderIcon={CaretLeft32}
-                                    iconDescription="Navigate Up"
-                                    size="sm"
-                                    disabled={
-                                      this.state.config.plot_options.level === 1
-                                    }
-                                    hasIconOnly
-                                  />
-                                  <Button
-                                    onClick={this.onClimb.bind(this)}
-                                    name="climb-up"
-                                    kind="ghost"
-                                    className="navigation-buttons"
-                                    renderIcon={CaretRight32}
-                                    iconDescription="Navigate Down"
-                                    size="sm"
-                                    disabled={
-                                      this.state.config.plot_options.level ===
-                                      this.state.taxonomy_data.length - 1
-                                    }
-                                    hasIconOnly
-                                  />
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="bx--row">
-                              <div
-                                className={
-                                  'bx--col-lg-' + this.state.config.slider
-                                }>
-                                {this.state.config.plot_options
-                                  .draw_treemap && (
-                                  <TreemapChart
-                                    data={this.state.taxonomy_data_fancy}
-                                    options={
-                                      this.state.config.plot_options
-                                    }></TreemapChart>
-                                )}
-                              </div>
-
-                              <div
-                                className={
-                                  'bx--col-lg-' +
-                                  (16 - this.state.config.slider).toString()
-                                }>
-                                {this.state.config.plot_options
-                                  .draw_circlemap && (
-                                  <CirclePackChart
-                                    data={this.state.taxonomy_data_fancy}
-                                    options={this.state.config.plot_options}>
-                                    >
-                                  </CirclePackChart>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </AccordionItem>
-                      )}
-
-                      <AccordionItem
-                        title="Hierarchy View"
-                        className="full-accordion"
-                        open>
-                        <div ref={this.ref}>
-                          <svg height="10000px" width="100%">
-                            {buttons}
-                            {edges}
-                            {nodes}
-                          </svg>
-                        </div>
-                      </AccordionItem>
-                    </Accordion>
-
-                    <Modal
-                      modalHeading={this.renderParents(this.state.modal)}
-                      modalLabel="Taxonomy View of VAM-HRI Interation Design Elements"
-                      passiveModal
-                      hasScrollingContent
-                      open={Boolean(this.state.modal)}
-                      onRequestClose={this.onClickModalClose.bind(this)}
-                      size="lg"
-                      aria-label=""
-                      style={{ height: '100%' }}>
-                      <div className="bx--container">
-                        <div className="bx--row">
-                          <div className="bx--col-lg-10">
-                            {this.state.modal && (
-                              <>
-                                <h4>
-                                  <span style={{ color: 'gray' }}>
-                                    Category:{' '}
-                                  </span>{' '}
-                                  {this.state.modal.name}
-                                </h4>
-                                <hr />
-                                {this.state.modal.abstract && (
-                                  <>
-                                    <p>{this.state.modal.abstract}</p>
-                                    <br />
-                                    <br />
-                                  </>
-                                )}
-                              </>
-                            )}
-
-                            {getChildren(
-                              this.state.modal,
-                              this.state.taxonomy_data
-                            ).length > 0 && (
-                              <>
-                                Children:{' '}
-                                {getChildren(
-                                  this.state.modal,
-                                  this.state.taxonomy_data
-                                ).map((child, i) => (
-                                  <span key={i}>
-                                    {i > 0 && ' | '}
-                                    <Link
-                                      onClick={this.onClickModalNode.bind(
-                                        this,
-                                        child
-                                      )}>
-                                      {child.name}
-                                    </Link>
-                                  </span>
-                                ))}
-                              </>
-                            )}
-
-                            <br />
-                            <br />
-
-                            <Button
-                              style={{ marginRight: '10px' }}
-                              kind="primary"
-                              size="field"
-                              renderIcon={Document32}
-                              iconDescription="Add"
-                              href={config['metadata']['primary_link']}
-                              target="_blank">
-                              Read More
-                            </Button>
-
-                            <Button
-                              kind="tertiary"
-                              renderIcon={LogoGithub32}
-                              size="field"
-                              href={
-                                config['metadata']['link_to_code'] +
-                                '#how-to-contribute'
-                              }
-                              target="_blank">
-                              Contribute
-                            </Button>
-                            <br />
-                            <br />
-
-                            <StructuredListWrapper>
-                              <StructuredListHead>
-                                <StructuredListRow>
-                                  <StructuredListCell head>
-                                    Papers in this Category
-                                  </StructuredListCell>
-                                </StructuredListRow>
-                              </StructuredListHead>
-                              <StructuredListBody>
-                                {this.state.paper_data
-                                  .filter(
-                                    paper =>
-                                      paper['tags']
-                                        .map(e => hashID(e))
-                                        .indexOf(hashID(this.state.modal)) > -1
-                                  )
-                                  .map(item => (
-                                    <StructuredListRow key={item.UID}>
-                                      <StructuredListCell>
-                                        <PaperInner paper={item} />
-                                      </StructuredListCell>
-                                      <StructuredListCell></StructuredListCell>
-                                    </StructuredListRow>
-                                  ))}
-                              </StructuredListBody>
-                            </StructuredListWrapper>
-                          </div>
-                          <div className="bx--col-lg-6">
-                            {this.state.modal && (
-                              <SimpleBarChart
-                                data={this.getTimeline()}
-                                options={
-                                  this.state.config.modal_timeline
-                                }></SimpleBarChart>
-                            )}
-                          </div>
+                          <Button
+                            onClick={this.onClimb.bind(this)}
+                            name="climb-down"
+                            kind="ghost"
+                            className="navigation-buttons"
+                            renderIcon={CaretLeft32}
+                            iconDescription="Navigate Up"
+                            size="sm"
+                            disabled={
+                              this.state.config.plot_options.level === 1
+                            }
+                            hasIconOnly
+                          />
+                          <Button
+                            onClick={this.onClimb.bind(this)}
+                            name="climb-up"
+                            kind="ghost"
+                            className="navigation-buttons"
+                            renderIcon={CaretRight32}
+                            iconDescription="Navigate Down"
+                            size="sm"
+                            disabled={
+                              this.state.config.plot_options.level ===
+                              this.state.taxonomy_data.length - 1
+                            }
+                            hasIconOnly
+                          />
                         </div>
                       </div>
-                    </Modal>
+                    </div>
+
+                    <div className="bx--row">
+                      <div className={'bx--col-lg-' + this.state.config.slider}>
+                        {this.state.config.plot_options.draw_treemap && (
+                          <TreemapChart
+                            data={this.state.taxonomy_data_fancy}
+                            options={
+                              this.state.config.plot_options
+                            }></TreemapChart>
+                        )}
+                      </div>
+
+                      <div
+                        className={
+                          'bx--col-lg-' +
+                          (16 - this.state.config.slider).toString()
+                        }>
+                        {this.state.config.plot_options.draw_circlemap && (
+                          <CirclePackChart
+                            data={this.state.taxonomy_data_fancy}
+                            options={this.state.config.plot_options}>
+                            >
+                          </CirclePackChart>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                )}
+                </AccordionItem>
+              )}
+
+              <AccordionItem
+                title="Hierarchy View"
+                className="full-accordion"
+                open>
+                <div ref={this.ref}>
+                  <svg height="10000px" width="100%">
+                    {buttons}
+                    {edges}
+                    {nodes}
+                  </svg>
+                </div>
+              </AccordionItem>
+            </Accordion>
+
+            <Modal
+              modalHeading={this.renderParents(this.state.modal)}
+              modalLabel="Taxonomy View of VAM-HRI Interation Design Elements"
+              passiveModal
+              hasScrollingContent
+              open={Boolean(this.state.modal)}
+              onRequestClose={this.onClickModalClose.bind(this)}
+              size="lg"
+              aria-label=""
+              style={{ height: '100%' }}>
+              <div className="bx--container">
+                <div className="bx--row">
+                  <div className="bx--col-lg-10">
+                    {this.state.modal && (
+                      <>
+                        <h4>
+                          <span style={{ color: 'gray' }}>Category: </span>{' '}
+                          {this.state.modal.name}
+                        </h4>
+                        <hr />
+                        {this.state.modal.abstract && (
+                          <>
+                            <p>{this.state.modal.abstract}</p>
+                            <br />
+                            <br />
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    {getChildren(this.state.modal, this.state.taxonomy_data)
+                      .length > 0 && (
+                      <>
+                        Children:{' '}
+                        {getChildren(
+                          this.state.modal,
+                          this.state.taxonomy_data
+                        ).map((child, i) => (
+                          <span key={i}>
+                            {i > 0 && ' | '}
+                            <Link
+                              onClick={this.onClickModalNode.bind(this, child)}>
+                              {child.name}
+                            </Link>
+                          </span>
+                        ))}
+                      </>
+                    )}
+
+                    <br />
+                    <br />
+
+                    <Button
+                      style={{ marginRight: '10px' }}
+                      kind="primary"
+                      size="field"
+                      renderIcon={Document32}
+                      iconDescription="Add"
+                      href={config['metadata']['primary_link']}
+                      target="_blank">
+                      Read More
+                    </Button>
+
+                    <Button
+                      kind="tertiary"
+                      renderIcon={LogoGithub32}
+                      size="field"
+                      href={
+                        config['metadata']['link_to_code'] +
+                        '#how-to-contribute'
+                      }
+                      target="_blank">
+                      Contribute
+                    </Button>
+                    <br />
+                    <br />
+
+                    <StructuredListWrapper>
+                      <StructuredListHead>
+                        <StructuredListRow>
+                          <StructuredListCell head>
+                            Papers in this Category
+                          </StructuredListCell>
+                        </StructuredListRow>
+                      </StructuredListHead>
+                      <StructuredListBody>
+                        {this.state.paper_data
+                          .filter(
+                            paper =>
+                              paper['tags']
+                                .map(e => hashID(e))
+                                .indexOf(hashID(this.state.modal)) > -1
+                          )
+                          .map(item => (
+                            <StructuredListRow key={item.UID}>
+                              <StructuredListCell>
+                                <PaperInner paper={item} />
+                              </StructuredListCell>
+                              <StructuredListCell></StructuredListCell>
+                            </StructuredListRow>
+                          ))}
+                      </StructuredListBody>
+                    </StructuredListWrapper>
+                  </div>
+                  <div className="bx--col-lg-6">
+                    {this.state.modal && (
+                      <SimpleBarChart
+                        data={this.getTimeline()}
+                        options={
+                          this.state.config.modal_timeline
+                        }></SimpleBarChart>
+                    )}
+                  </div>
+                </div>
               </div>
-            </Tab>
-          ))}
-        </Tabs>
+            </Modal>
+          </div>
+        )}
+      </div>
+    ));
+
+    return (
+      <div>
+        {view_config.tabs.length === 1 && <>{taxonomy_area[0]}</>}
+
+        {view_config.tabs.length > 1 && (
+          <Tabs
+            scrollIntoView={false}
+            selected={view_config.tabs
+              .map(tab => view_config.default_tab === tab.tab_name)
+              .indexOf(true)}>
+            {view_config.tabs.map((tab, id) => (
+              <Tab
+                key={id}
+                id={tab.tab_name}
+                label={tab.tab_name}
+                disabled={tab.disabled}
+                onClick={this.switchTabs.bind(this, tab.tab_name)}>
+                {taxonomy_area[id]}
+              </Tab>
+            ))}
+          </Tabs>
+        )}
       </div>
     );
   }

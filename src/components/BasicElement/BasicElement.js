@@ -11,11 +11,13 @@ import { Paper, hashID } from '../../components/Info';
 import { Affinity } from '../Affinity';
 import { Network } from '../Network';
 import { Taxonomy } from '../Taxonomy';
+import { Insights } from '../Insights';
 
 const components = {
   Taxonomy: Taxonomy,
   Network: Network,
   Affinity: Affinity,
+  Insights: Insights,
 };
 
 let config = require('../../config.json');
@@ -378,6 +380,12 @@ class BasicElement extends React.Component {
               size="sm"
               hasIconOnly
             />
+            <Button
+              kind="secondary"
+              size="sm"
+              onClick={this.props.logChange.bind(this, { name: 'Insights' })}>
+              Insights
+            </Button>
 
             {this.state.paper_data.map((item, id) => (
               <Paper key={id} paper={item} />

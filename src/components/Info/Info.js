@@ -98,7 +98,9 @@ const PaperInner = props => (
     {props.paper.year}){' '}
     {props.paper.link && (
       <Link className="hover-cursor" href={props.paper.link} target="_blank">
-        <Download16 />
+        <span className="download-icon">
+          <Download16 />
+        </span>
       </Link>
     )}
   </p>
