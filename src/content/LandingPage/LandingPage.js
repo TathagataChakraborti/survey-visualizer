@@ -1,7 +1,12 @@
 import React from 'react';
 import GitHubButton from 'react-github-btn';
 import { isMobile } from 'react-device-detect';
-import { Document32, LogoGithub32, LogoSlack32 } from '@carbon/icons-react';
+import {
+  Document32,
+  LogoGithub32,
+  LogoSlack32,
+  Add32,
+} from '@carbon/icons-react';
 import { BasicElement } from '../../components/BasicElement';
 import {
   Button,
@@ -12,6 +17,8 @@ import {
   Link,
   ToastNotification,
   Tile,
+  Accordion,
+  AccordionItem,
 } from 'carbon-components-react';
 
 let config = require('../../config.json');
@@ -96,14 +103,14 @@ class LandingPage extends React.Component {
                     Read
                   </Button>
                   <br />
-                  {config['metadata']['secondary_link'] && (
+                  {config['metadata']['secondary_links'].length === 1 && (
                     <>
                       <Button
                         kind="tertiary"
                         className="buttonset"
                         size="small"
                         renderIcon={Document32}
-                        href={config['metadata']['secondary_link']}
+                        href={config['metadata']['secondary_links'][0]['link']}
                         target="_blank">
                         See Also
                       </Button>
@@ -121,9 +128,9 @@ class LandingPage extends React.Component {
                     target="_blank">
                     Contribute
                   </Button>
+                  <br />
                   {config['metadata']['community_link'] && (
                     <>
-                      <br />
                       <Button
                         kind="tertiary"
                         className="buttonset tertiary-danger"
@@ -133,45 +140,87 @@ class LandingPage extends React.Component {
                         target="_blank">
                         Community
                       </Button>
+                      <br />
                     </>
+                  )}
+                  {config['metadata']['secondary_links'].length > 1 && (
+                    <div
+                      className="bx--col-lg-8"
+                      style={{ padding: 0, margin: 0 }}>
+                      <Accordion align="start">
+                        <AccordionItem
+                          className="see-also-accordion"
+                          title="See also"
+                          onClick={e => {
+                            window.scrollTo({
+                              top: e.currentTarget.offsetHeight > 150 ? 0 : 500,
+                              behavior: 'smooth',
+                            });
+                          }}>
+                          <ButtonSet stacked>
+                            <br />
+                            <br />
+                            {config['metadata']['secondary_links'].map(
+                              (item, i) => (
+                                <div key={i}>
+                                  <Button
+                                    target="_blank"
+                                    href={item.link}
+                                    kind="ghost"
+                                    renderIcon={Add32}>
+                                    {item.name}
+                                  </Button>
+                                  <br />
+                                  <br />
+                                </div>
+                              )
+                            )}
+                          </ButtonSet>
+                        </AccordionItem>
+                      </Accordion>
+                    </div>
                   )}
                 </ButtonSet>
               </div>
 
-              <div className="footer">
-                <div className="bx--row">
-                  <div className="bx--col-lg-16">
-                    <div className="bx--container">
-                      <p
-                        style={{
-                          fontSize: 'small',
-                          marginBottom: '10px',
-                          maxWidth: '75%',
-                        }}>
-                        Follow us on GitHub. Your love keeps us going!{' '}
-                        <span role="img" aria-label="hugging face">
-                          &#129303;
-                        </span>
-                      </p>
+              {!isMobile && (
+                <div className="footer">
+                  <div className="bx--row">
+                    <div className="bx--col-lg-16">
+                      <div className="bx--container">
+                        <p
+                          style={{
+                            fontSize: 'small',
+                            marginBottom: '10px',
+                            maxWidth: '75%',
+                          }}>
+                          Follow us on GitHub. Your love keeps us going!{' '}
+                          <span role="img" aria-label="hugging face">
+                            &#129303;
+                          </span>
+                        </p>
 
-                      <GitHubButton
-                        href={config['metadata']['link_to_code']}
-                        data-size="small"
-                        data-show-count="true"
-                        aria-label="Star survey-visualizer on GitHub">
-                        Star
-                      </GitHubButton>
-                    </div>
+                        <GitHubButton
+                          href={config['metadata']['link_to_code']}
+                          data-size="small"
+                          data-show-count="true"
+                          aria-label="Star survey-visualizer on GitHub">
+                          Star
+                        </GitHubButton>
+                      </div>
 
-                    <div className="bx--container">
-                      App built by{' '}
-                      <Link href="https://twitter.com/tchakra2" target="_blank">
-                        tchakra2
-                      </Link>
+                      <div className="bx--container">
+                        App built by{' '}
+                        <Link
+                          href="https://twitter.com/tchakra2"
+                          target="_blank">
+                          tchakra2
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="bx--col-lg-12">
               {isMobile ? (
