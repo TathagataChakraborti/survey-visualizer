@@ -1,9 +1,73 @@
 
-import argparse, csv, os
+import argparse, csv, os, json
 
-from nnf import And, Or
+from nnf import And, Or, dimacs
 
 USAGE = """\n\n\tUsage: ./encoding.py [--seed <csv file>]\n"""
+
+
+CUSTOM_PYTHON = """
+method_map = {s: make_method_constraint(bv, all_features) for (s,bv) in bvs}
+bv_map = {bv: s for (s,bv) in bvs}
+lookup_dict = gen_lookup(all_features)
+custom_constraints, preferences = make_constraints('SLUG_config.txt', lookup_dict, all_features)
+avoid_constraint = Or(method_map.values()).negate()
+
+def compile():
+    # Confirm all the methods satisfy the constraints
+    for m in method_map:
+        assert kissat.solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
+
+    T = (avoid_constraint & custom_constraints).to_CNF()
+
+    return dsharp.compile(T).simplify()
+
+
+def find_new_paper(theory, varmap):
+    sol = {}
+    for feature in preferences:
+        pref = '~' not in str(feature)
+        var = varmap['var2label'][feature.name]
+        lit = Var(var)
+        if not pref:
+            lit = lit.negate()
+        if theory.entails(~lit):
+            sol[var] = int(not pref)
+            continue
+        theory = theory.condition({var: pref}).simplify()
+        sol[var] = int(pref)
+
+    print("\\n\\tFound Entry: " + ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features])))
+
+    bv = ''.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))
+    neighbours = get_close_matches(bv, bv_map.keys())
+
+    print('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')
+
+    for n in neighbours:
+        print(f'\\n\\t[{bv_map[n]}]')
+        for i in range(len(bv)):
+            if bv[i] != n[i]:
+                print(f'\\t - {all_features[i].name} made {str(bv[i] == "1")}')
+
+    print('\\n\\n')
+
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print(USAGE)
+        exit(1)
+
+    if sys.argv[1] == 'compile':
+        KC = compile()
+        save_theory(KC, 'SLUG.nnf', 'SLUGvars.json')
+
+    elif sys.argv[1] == 'find':
+        theory, varmap = load_theory('SLUG.nnf', 'SLUGvars.json')
+        find_new_paper(theory, varmap)
+
+"""
 
 def seed(fn):
 
@@ -23,8 +87,9 @@ def seed(fn):
     while lines[1][feature_start] == '':
         feature_start += 1
 
-    encfile = os.path.basename(fn).split('.')[0] + "_encoded.py"
-    conffile = os.path.basename(fn).split('.')[0] + "_config.txt"
+    SLUG = os.path.basename(fn).split('.')[0]
+    encfile = SLUG + "_encoded.py"
+    conffile = SLUG + "_config.txt"
 
     # Populate all of the empty cells with the previous value
     for row in range(data_start):
@@ -32,11 +97,10 @@ def seed(fn):
             if lines[row][col] == '':
                 lines[row][col] = lines[row][col-1]
 
-    seed  = "\nfrom nnf import Var, And, Or\n"
-    seed += "from nnf.kissat import solve\n"
-    seed += "from nnf.dsharp import compile\n"
+    seed  = "\nimport sys\n\nfrom nnf import Var, Or, dsharp, kissat\n"
     seed += "from difflib import get_close_matches\n"
-    seed += "\nfrom encoding import gen_lookup, lookup, make_constraints, make_method_constraint\n\n"
+    seed += "\nfrom encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory\n\n"
+    seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find]\n\"\"\"\n\n"
 
     for i in range(feature_start, len(lines[0])):
         feature_string = ' > '.join([lines[j][i].strip() for j in range(data_start)])
@@ -56,47 +120,9 @@ def seed(fn):
         seed += f"    ('{slug}', '{bv}'),\n"
     seed += "]\n\n"
 
-    seed += "\nmethod_map = {s: make_method_constraint(bv, all_features) for (s,bv) in bvs}\n"
-    seed += "\nbv_map = {bv: s for (s,bv) in bvs}\n"
-
     assert len(all_methods) == len(set(all_methods)), f"Duplicate slug names detected in {fn}."
 
-    seed += "\nlookup_dict = gen_lookup(all_features)\n"
-    seed += f"\ncustom_constraints, preferences = make_constraints('{conffile}', lookup_dict, all_features)\n"
-    seed += "avoid_constraint = Or(method_map.values()).negate()\n"
-
-    seed += "\n# Confirm all the methods satisfy the constraints\n"
-    seed += "for m in method_map:\n"
-    seed += "    assert solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'\n"
-    seed += "\nT = (avoid_constraint & custom_constraints).to_CNF()\n"
-
-    seed += """
-KC = compile(T).simplify()
-
-sol = {}
-for feature in preferences:
-    pref = '~' not in str(feature)
-    if KC.entails(~feature):
-        sol[feature.name] = int(not pref)
-        continue
-    KC = KC.condition({feature.name: pref}).simplify()
-    sol[feature.name] = int(pref)
-
-print("\\n\\tFound Entry: " + ','.join(map(str, [sol[x.name] for x in all_features])))
-
-bv = ''.join(map(str, [sol[x.name] for x in all_features]))
-neighbours = get_close_matches(bv, bv_map.keys())
-
-print('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')
-
-for n in neighbours:
-    print(f'\\n\\t[{bv_map[n]}]')
-    for i in range(len(bv)):
-        if bv[i] != n[i]:
-            print(f'\\t - {all_features[i].name} made {str(bv[i] == "1")}')
-
-print('\\n\\n')
-"""
+    seed += CUSTOM_PYTHON.replace('SLUG', SLUG)
 
     # Write the seed file if it doesn't exist
     towrite = True
@@ -224,6 +250,25 @@ def make_constraints(consfile, lookup_dict, all_vars):
 
     print("...done.\n")
     return (And(constraints), preferences)
+
+def save_theory(KC, thfile, varfile):
+    print("Saving theory...")
+    var_labels = {v: i+1 for i, v in enumerate(KC.vars())}
+    reversed_var_labels = {i: v for v, i in var_labels.items()}
+    with open(thfile, 'w') as f:
+        dimacs.dump(KC, f, var_labels=var_labels)
+    with open(varfile, 'w') as f:
+        json.dump({'var2label': var_labels, 'label2var': reversed_var_labels}, f, indent=2)
+    print("...done.\n")
+
+def load_theory(thfile, varfile):
+    print("Loading theory...")
+    with open(thfile, 'r') as f:
+        th = dimacs.load(f)
+    with open(varfile, 'r') as f:
+        var_labels = json.load(f)
+    print("...done.\n")
+    return (th, var_labels)
 
 
 

@@ -1,10 +1,14 @@
 
-from nnf import Var, And, Or
-from nnf.kissat import solve
-from nnf.dsharp import compile
+import sys
+
+from nnf import Var, Or, dsharp, kissat
 from difflib import get_close_matches
 
-from encoding import gen_lookup, lookup, make_constraints, make_method_constraint
+from encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory
+
+USAGE = """
+    python3 macq_encoded.py [compile|find]
+"""
 
 x1 = Var('Learning Parameters > Agent Features > Rationality > Causally Rational')
 x2 = Var('Learning Parameters > Agent Features > Rationality > Optimally Rational')
@@ -87,42 +91,62 @@ bvs = [
 
 
 method_map = {s: make_method_constraint(bv, all_features) for (s,bv) in bvs}
-
 bv_map = {bv: s for (s,bv) in bvs}
-
 lookup_dict = gen_lookup(all_features)
-
 custom_constraints, preferences = make_constraints('macq_config.txt', lookup_dict, all_features)
 avoid_constraint = Or(method_map.values()).negate()
 
-# Confirm all the methods satisfy the constraints
-for m in method_map:
-    assert solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
+def compile():
+    # Confirm all the methods satisfy the constraints
+    for m in method_map:
+        assert kissat.solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
 
-T = (avoid_constraint & custom_constraints).to_CNF()
+    T = (avoid_constraint & custom_constraints).to_CNF()
 
-KC = compile(T).simplify()
+    return dsharp.compile(T).simplify()
 
-sol = {}
-for feature in preferences:
-    pref = '~' not in str(feature)
-    if KC.entails(~feature):
-        sol[feature.name] = int(not pref)
-        continue
-    KC = KC.condition({feature.name: pref}).simplify()
-    sol[feature.name] = int(pref)
 
-print("\n\tFound Entry: " + ','.join(map(str, [sol[x.name] for x in all_features])))
+def find_new_paper(theory, varmap):
+    sol = {}
+    for feature in preferences:
+        pref = '~' not in str(feature)
+        var = varmap['var2label'][feature.name]
+        lit = Var(var)
+        if not pref:
+            lit = lit.negate()
+        if theory.entails(~lit):
+            sol[var] = int(not pref)
+            continue
+        theory = theory.condition({var: pref}).simplify()
+        sol[var] = int(pref)
 
-bv = ''.join(map(str, [sol[x.name] for x in all_features]))
-neighbours = get_close_matches(bv, bv_map.keys())
+    print("\n\tFound Entry: " + ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features])))
 
-print('\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\n')
+    bv = ''.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))
+    neighbours = get_close_matches(bv, bv_map.keys())
 
-for n in neighbours:
-    print(f'\n\t[{bv_map[n]}]')
-    for i in range(len(bv)):
-        if bv[i] != n[i]:
-            print(f'\t - {all_features[i].name} made {str(bv[i] == "1")}')
+    print('\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\n')
 
-print('\n\n')
+    for n in neighbours:
+        print(f'\n\t[{bv_map[n]}]')
+        for i in range(len(bv)):
+            if bv[i] != n[i]:
+                print(f'\t - {all_features[i].name} made {str(bv[i] == "1")}')
+
+    print('\n\n')
+
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print(USAGE)
+        exit(1)
+
+    if sys.argv[1] == 'compile':
+        KC = compile()
+        save_theory(KC, 'macq.nnf', 'macqvars.json')
+
+    elif sys.argv[1] == 'find':
+        theory, varmap = load_theory('macq.nnf', 'macqvars.json')
+        find_new_paper(theory, varmap)
+
