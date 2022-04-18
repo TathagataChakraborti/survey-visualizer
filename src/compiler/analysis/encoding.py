@@ -77,6 +77,17 @@ def find_k_new_papers(k, fcode):
         all_papers.append(data)
     return all_papers
 
+def server(port):
+    from flask import Flask, jsonify, request
+    app = Flask(__name__)
+
+    @app.route('/findpapers', methods=['POST'])
+    def example():
+        data = request.json
+        caller = str(request.remote_addr).replace('.', '_')
+        return jsonify(find_k_new_papers(data['k'], caller))
+
+    app.run(port=port)
 
 
 if __name__ == '__main__':
@@ -92,6 +103,10 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'find-k':
         k = int(sys.argv[2])
         find_k_new_papers(k, '')
+
+    elif sys.argv[1] == 'server':
+        port = int(sys.argv[2])
+        server(port)
 
     else:
         print(USAGE)
@@ -129,7 +144,7 @@ def seed(fn):
     seed  = "\nimport random, sys\n\nfrom nnf import Var, Or, dsharp, kissat\n"
     seed += "from difflib import get_close_matches\n"
     seed += "\nfrom encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory\n\n"
-    seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find|find-k]\n\"\"\"\n\n"
+    seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find|find-k|server]\n\"\"\"\n\n"
 
     for i in range(feature_start, len(lines[0])):
         feature_string = ' > '.join([lines[j][i].strip() for j in range(data_start)])

@@ -7,7 +7,7 @@ from difflib import get_close_matches
 from encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory
 
 USAGE = """
-    python3 macq_encoded.py [compile|find|find-k]
+    python3 macq_encoded.py [compile|find|find-k|server]
 """
 
 x1 = Var('Learning Parameters > Agent Features > Rationality > Causally Rational')
@@ -160,6 +160,17 @@ def find_k_new_papers(k, fcode):
         all_papers.append(data)
     return all_papers
 
+def server(port):
+    from flask import Flask, jsonify, request
+    app = Flask(__name__)
+
+    @app.route('/findpapers', methods=['POST'])
+    def example():
+        data = request.json
+        caller = str(request.remote_addr).replace('.', '_')
+        return jsonify(find_k_new_papers(data['k'], caller))
+
+    app.run(port=port)
 
 
 if __name__ == '__main__':
@@ -174,7 +185,11 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'find-k':
         k = int(sys.argv[2])
-        all_papers = find_k_new_papers(k, '')
+        find_k_new_papers(k, '')
+
+    elif sys.argv[1] == 'server':
+        port = int(sys.argv[2])
+        server(port)
 
     else:
         print(USAGE)
