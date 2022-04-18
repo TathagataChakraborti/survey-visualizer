@@ -7,7 +7,7 @@ from difflib import get_close_matches
 from encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory
 
 USAGE = """
-    python3 macq_encoded.py [compile|find]
+    python3 macq_encoded.py [compile|find|find-k]
 """
 
 x1 = Var('Learning Parameters > Agent Features > Rationality > Causally Rational')
@@ -141,7 +141,7 @@ def find_new_paper(theory, varmap):
         print(f'\n\t[{bv_map[n]}]')
         for i in range(len(bv)):
             if bv[i] != n[i]:
-                data['neighbours'][bv_map[n]][all_features[i].name] = str(bv[i] == "1")
+                data['neighbours'][bv_map[n]][all_features[i].name] = (bv[i] == "1")
                 print(f'\t - {all_features[i].name} made {str(bv[i] == "1")}')
 
     print('\n\n')
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'find-k':
         k = int(sys.argv[2])
-        find_k_new_papers(k, '')
+        all_papers = find_k_new_papers(k, '')
 
     else:
         print(USAGE)

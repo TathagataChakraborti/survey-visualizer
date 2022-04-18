@@ -58,7 +58,7 @@ def find_new_paper(theory, varmap):
         print(f'\\n\\t[{bv_map[n]}]')
         for i in range(len(bv)):
             if bv[i] != n[i]:
-                data['neighbours'][bv_map[n]][all_features[i].name] = str(bv[i] == "1")
+                data['neighbours'][bv_map[n]][all_features[i].name] = (bv[i] == "1")
                 print(f'\\t - {all_features[i].name} made {str(bv[i] == "1")}')
 
     print('\\n\\n')
@@ -129,7 +129,7 @@ def seed(fn):
     seed  = "\nimport random, sys\n\nfrom nnf import Var, Or, dsharp, kissat\n"
     seed += "from difflib import get_close_matches\n"
     seed += "\nfrom encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory\n\n"
-    seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find]\n\"\"\"\n\n"
+    seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find|find-k]\n\"\"\"\n\n"
 
     for i in range(feature_start, len(lines[0])):
         feature_string = ' > '.join([lines[j][i].strip() for j in range(data_start)])
