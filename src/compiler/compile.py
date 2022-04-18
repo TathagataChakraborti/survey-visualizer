@@ -23,6 +23,7 @@ import re
 __cache: Dict = {}
 __insights_file = "./src/components/Insights/data/new_paper.json"
 
+
 def __text_transform(text: str) -> str:
     text = text.replace("\n", " ").replace("-", "").lower()
     text = " ".join(text.split())
@@ -62,12 +63,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
             taxonomy=list(),
         )
 
-        path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                f"../../{tab['input_file']['filename']}",
-            )
-        )
+        path = os.path.abspath(tab["input_file"]["filename"])
         wb = load_workbook(path)
         sheet = wb[tab["input_file"]["active_worksheet"]]
 
@@ -249,13 +245,7 @@ def getNetwork(config: Dict, taxonomy: Taxonomy = __cache):
     for paper in taxonomy["data"]:
         network_data["nodes"].append(paper)
 
-    path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(os.path.realpath(__file__)),
-            f"./../../{config['files_directory']}/",
-        )
-    )
-
+    path = os.path.abspath(config["files_directory"])
     match_threshold = config["match_threshold"]
     columns_per_page = [2, 1]
 
@@ -377,6 +367,7 @@ def getNetwork(config: Dict, taxonomy: Taxonomy = __cache):
 
     return network_data
 
+
 def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
 
     if not taxonomy:
@@ -389,10 +380,7 @@ def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
         for tag_train in new_paper_data:
             new_tags = new_tags.union(tag_train.split(" > "))
 
-    new_paper = Paper(
-            UID = 0,
-            tags = [{"name": tag} for tag in new_tags]
-        )           
+    new_paper = Paper(UID=0, tags=[{"name": tag} for tag in new_tags])
 
     new_paper_list = copy.deepcopy(taxonomy["data"])
     new_paper_list.append(new_paper)
@@ -401,10 +389,7 @@ def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
     print("Loading Transformer Model...")
     model = SentenceTransformer("allenai-specter")
     papers = [
-        "[SEP]".join(
-            [tag["name"] for tag in paper["tags"]]
-        )
-        for paper in new_paper_list
+        "[SEP]".join([tag["name"] for tag in paper["tags"]]) for paper in new_paper_list
     ]
 
     embeddings = model.encode(papers, convert_to_tensor=True)
@@ -440,18 +425,20 @@ if __name__ == "__main__":
     open(config_out, "w").write(json.dumps(config, indent=4))
 
     for view in config["views"]:
-        if not view["disabled"]:
-
-            view_name = view["name"]
-            out_file = os.path.abspath(
-                os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    f"./data/{view_name}.json",
-                )
+        view_name = view["name"]
+        out_file = os.path.abspath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                f"./data/{view_name}.json",
             )
+        )
 
+        if not view["disabled"]:
             print(f"Generating {view_name} view...")
             output = eval(f"get{view_name}({view})")
 
-            print(f"Writing {out_file}...")
-            open(out_file, "w").write(json.dumps(output, indent=4))
+        else:
+            output = __cache
+
+        print(f"Writing {out_file}...")
+        open(out_file, "w").write(json.dumps(output, indent=4))
