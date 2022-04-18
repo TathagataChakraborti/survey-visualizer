@@ -1,5 +1,5 @@
 
-import sys
+import random, sys
 
 from nnf import Var, Or, dsharp, kissat
 from difflib import get_close_matches
@@ -96,18 +96,25 @@ lookup_dict = gen_lookup(all_features)
 custom_constraints, preferences = make_constraints('macq_config.txt', lookup_dict, all_features)
 avoid_constraint = Or(method_map.values()).negate()
 
-def compile():
+def compile(extra_constraints=[]):
     # Confirm all the methods satisfy the constraints
     for m in method_map:
         assert kissat.solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
 
-    T = (avoid_constraint & custom_constraints).to_CNF()
+    all_constraints = avoid_constraint & custom_constraints
+    if extra_constraints:
+        all_constraints = all_constraints & Or([make_method_constraint(bv.replace(',',''), all_features) for bv in extra_constraints]).negate()
+    T = (all_constraints).to_CNF()
 
     return dsharp.compile(T).simplify()
 
 
 def find_new_paper(theory, varmap):
     sol = {}
+
+    # Comment out if you want deterministic results
+    random.shuffle(preferences)
+
     for feature in preferences:
         pref = '~' not in str(feature)
         var = varmap['var2label'][feature.name]
@@ -120,10 +127,13 @@ def find_new_paper(theory, varmap):
         theory = theory.condition({var: pref}).simplify()
         sol[var] = int(pref)
 
-    print("\n\tFound Entry: " + ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features])))
+    data = {'entry': ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))}
+    print("\n\tFound Entry: " + data['entry'])
 
     bv = ''.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))
     neighbours = get_close_matches(bv, bv_map.keys())
+
+    data['neighbours'] = {bv_map[n]: {} for n in neighbours}
 
     print('\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\n')
 
@@ -131,16 +141,28 @@ def find_new_paper(theory, varmap):
         print(f'\n\t[{bv_map[n]}]')
         for i in range(len(bv)):
             if bv[i] != n[i]:
+                data['neighbours'][bv_map[n]][all_features[i].name] = str(bv[i] == "1")
                 print(f'\t - {all_features[i].name} made {str(bv[i] == "1")}')
 
     print('\n\n')
 
+    return data
+
+def find_k_new_papers(k, fcode):
+    avoid = []
+    all_papers = []
+    for _ in range(k):
+        KC = compile(avoid)
+        save_theory(KC, f'macq-{fcode}.nnf', f'macqvars-{fcode}.json')
+        theory, varmap = load_theory(f'macq-{fcode}.nnf', f'macqvars-{fcode}.json')
+        data = find_new_paper(theory, varmap)
+        avoid.append(data['entry'])
+        all_papers.append(data)
+    return all_papers
+
+
 
 if __name__ == '__main__':
-
-    if len(sys.argv) != 2:
-        print(USAGE)
-        exit(1)
 
     if sys.argv[1] == 'compile':
         KC = compile()
@@ -149,4 +171,11 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'find':
         theory, varmap = load_theory('macq.nnf', 'macqvars.json')
         find_new_paper(theory, varmap)
+
+    elif sys.argv[1] == 'find-k':
+        k = int(sys.argv[2])
+        find_k_new_papers(k, '')
+
+    else:
+        print(USAGE)
 

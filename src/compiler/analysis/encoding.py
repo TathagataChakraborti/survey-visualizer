@@ -13,18 +13,25 @@ lookup_dict = gen_lookup(all_features)
 custom_constraints, preferences = make_constraints('SLUG_config.txt', lookup_dict, all_features)
 avoid_constraint = Or(method_map.values()).negate()
 
-def compile():
+def compile(extra_constraints=[]):
     # Confirm all the methods satisfy the constraints
     for m in method_map:
         assert kissat.solve((method_map[m] & custom_constraints).to_CNF()), f'Custom constraints contradict method {m}'
 
-    T = (avoid_constraint & custom_constraints).to_CNF()
+    all_constraints = avoid_constraint & custom_constraints
+    if extra_constraints:
+        all_constraints = all_constraints & Or([make_method_constraint(bv.replace(',',''), all_features) for bv in extra_constraints]).negate()
+    T = (all_constraints).to_CNF()
 
     return dsharp.compile(T).simplify()
 
 
 def find_new_paper(theory, varmap):
     sol = {}
+
+    # Comment out if you want deterministic results
+    random.shuffle(preferences)
+
     for feature in preferences:
         pref = '~' not in str(feature)
         var = varmap['var2label'][feature.name]
@@ -37,10 +44,13 @@ def find_new_paper(theory, varmap):
         theory = theory.condition({var: pref}).simplify()
         sol[var] = int(pref)
 
-    print("\\n\\tFound Entry: " + ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features])))
+    data = {'entry': ','.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))}
+    print("\\n\\tFound Entry: " + data['entry'])
 
     bv = ''.join(map(str, [sol[varmap['var2label'][x.name]] for x in all_features]))
     neighbours = get_close_matches(bv, bv_map.keys())
+
+    data['neighbours'] = {bv_map[n]: {} for n in neighbours}
 
     print('\\t Neighbours: ' + ', '.join([bv_map[n] for n in neighbours]) + '\\n')
 
@@ -48,16 +58,28 @@ def find_new_paper(theory, varmap):
         print(f'\\n\\t[{bv_map[n]}]')
         for i in range(len(bv)):
             if bv[i] != n[i]:
+                data['neighbours'][bv_map[n]][all_features[i].name] = str(bv[i] == "1")
                 print(f'\\t - {all_features[i].name} made {str(bv[i] == "1")}')
 
     print('\\n\\n')
 
+    return data
+
+def find_k_new_papers(k, fcode):
+    avoid = []
+    all_papers = []
+    for _ in range(k):
+        KC = compile(avoid)
+        save_theory(KC, f'macq-{fcode}.nnf', f'macqvars-{fcode}.json')
+        theory, varmap = load_theory(f'macq-{fcode}.nnf', f'macqvars-{fcode}.json')
+        data = find_new_paper(theory, varmap)
+        avoid.append(data['entry'])
+        all_papers.append(data)
+    return all_papers
+
+
 
 if __name__ == '__main__':
-
-    if len(sys.argv) != 2:
-        print(USAGE)
-        exit(1)
 
     if sys.argv[1] == 'compile':
         KC = compile()
@@ -66,6 +88,13 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'find':
         theory, varmap = load_theory('SLUG.nnf', 'SLUGvars.json')
         find_new_paper(theory, varmap)
+
+    elif sys.argv[1] == 'find-k':
+        k = int(sys.argv[2])
+        find_k_new_papers(k, '')
+
+    else:
+        print(USAGE)
 
 """
 
@@ -97,7 +126,7 @@ def seed(fn):
             if lines[row][col] == '':
                 lines[row][col] = lines[row][col-1]
 
-    seed  = "\nimport sys\n\nfrom nnf import Var, Or, dsharp, kissat\n"
+    seed  = "\nimport random, sys\n\nfrom nnf import Var, Or, dsharp, kissat\n"
     seed += "from difflib import get_close_matches\n"
     seed += "\nfrom encoding import gen_lookup, make_constraints, make_method_constraint, save_theory, load_theory\n\n"
     seed += f"USAGE = \"\"\"\n    python3 {SLUG}_encoded.py [compile|find]\n\"\"\"\n\n"
@@ -251,14 +280,18 @@ def make_constraints(consfile, lookup_dict, all_vars):
     print("...done.\n")
     return (And(constraints), preferences)
 
-def save_theory(KC, thfile, varfile):
-    print("Saving theory...")
+def generate_varmap(KC):
     var_labels = {v: i+1 for i, v in enumerate(KC.vars())}
     reversed_var_labels = {i: v for v, i in var_labels.items()}
+    return {'var2label': var_labels, 'label2var': reversed_var_labels}
+
+def save_theory(KC, thfile, varfile):
+    print("Saving theory...")
+    varmap = generate_varmap(KC)
     with open(thfile, 'w') as f:
-        dimacs.dump(KC, f, var_labels=var_labels)
+        dimacs.dump(KC, f, var_labels=varmap['var2label'])
     with open(varfile, 'w') as f:
-        json.dump({'var2label': var_labels, 'label2var': reversed_var_labels}, f, indent=2)
+        json.dump(varmap, f, indent=2)
     print("...done.\n")
 
 def load_theory(thfile, varfile):
