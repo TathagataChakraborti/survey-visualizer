@@ -28,7 +28,9 @@ metadata:
     year={2022}}"
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
   primary_link: https://arxiv.org/abs/2202.11249
-  secondary_link: https://ieeexplore.ieee.org/document/8673071
+  secondary_links:
+    - name: The Reality-Virtuality Interaction Cube
+      link: https://ieeexplore.ieee.org/document/8673071
   info_tile: true
   info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
   info_link:
@@ -42,6 +44,9 @@ The `acronym` field appears as the title of the webpage (name of the tab on your
 appear as follows on the left-hand side [[example](http://ibm.biz/vam-hri)] as a gateway to the survey resources for the particular deployment:
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/4764242/156827296-eb24127f-d008-4a57-b60f-035f4c009647.png">
+
+The primary link should point to the survey paper this deployment is built upon. You can have more than one secondary link,
+pointing to other papers, or links, that may be of interest.
 
 ## Views
 
