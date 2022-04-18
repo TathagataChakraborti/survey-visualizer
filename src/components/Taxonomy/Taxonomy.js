@@ -50,6 +50,8 @@ let config = require('../../config.json');
 let view_config = config.views.filter(view => view.name === 'Taxonomy')[0];
 let data = require('../../compiler/data/Taxonomy.json');
 
+let fancy_chart_default_level = 2;
+
 class Taxonomy extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +74,7 @@ class Taxonomy extends React.Component {
           title: '',
           draw_treemap: true,
           draw_circlemap: true,
-          level: 2,
+          level: fancy_chart_default_level,
           canvasZoom: {
             enabled: true,
           },
@@ -155,28 +157,38 @@ class Taxonomy extends React.Component {
       tab => tab.tab_name === tab_name
     )[0];
 
+    const new_taxonomoy_data = new_paper_data.taxonomy.map(
+      (taxonomy_layer, taxonomy_level) => {
+        var new_taxonomoy_layer = [];
+
+        taxonomy_layer.forEach(node => {
+          if (!getChildren(node, new_paper_data.taxonomy).length)
+            node.expanded = false;
+
+          new_taxonomoy_layer.push(node);
+        });
+
+        return new_taxonomoy_layer;
+      }
+    );
+
+    const fancy_chart_level = tab_config.fancy_chart_default_level
+      ? tab_config.fancy_chart_default_level
+      : Math.min(fancy_chart_default_level, new_taxonomoy_data.length - 1);
+
     this.setState(
       {
         ...this.state,
         active_tab: tab_name,
-        taxonomy_data: new_paper_data.taxonomy.map(
-          (taxonomy_layer, taxonomy_level) => {
-            var new_taxonomoy_layer = [];
-
-            taxonomy_layer.forEach(node => {
-              if (!getChildren(node, new_paper_data.taxonomy).length)
-                node.expanded = false;
-
-              new_taxonomoy_layer.push(node);
-            });
-
-            return new_taxonomoy_layer;
-          }
-        ),
+        taxonomy_data: new_taxonomoy_data,
         paper_data: new_paper_data.data,
         config: {
           ...this.state.config,
           vertical_offset: tab_config.taxonomy.columns.start,
+          plot_options: {
+            ...this.state.config.plot_options,
+            level: fancy_chart_level,
+          },
         },
       },
       () => {

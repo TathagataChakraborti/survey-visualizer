@@ -33,6 +33,7 @@ views:
     root_text: Design Element
     disabled: false
     fancy_chart: false
+    fancy_chart_default_level: 2
     input_file:
       filename: "./src/compiler/data/Cubed-Thao.xlsx"
       active_worksheet: Cubed - Thao
