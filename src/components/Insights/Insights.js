@@ -14,16 +14,18 @@ import {
   StructuredListCell,
   Breadcrumb,
   BreadcrumbItem,
+  MultiSelect,
+  NumberInput,
+  Button,
+  Pagination,
+  Tile,
 } from 'carbon-components-react';
 
 import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
 import Edge from '@carbon/charts-react/diagrams/Edge';
 
 let config = require('../../config.json');
-
 let embeddings = require('../../compiler/data/Insights.json');
-let static_imagination = require('./data/new_paper.json');
-
 let taxonomy_data = require('../../compiler/data/Taxonomy.json');
 let paper_data = taxonomy_data.find(
   e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
@@ -31,21 +33,34 @@ let paper_data = taxonomy_data.find(
 
 const ShapeNodeSize = 10;
 const SpecialShapeNodeSize = 20;
-const fillFactor = 0.7;
+const fillFactor = 0.75;
+const maxImagination = 5;
 
-class Insights extends React.Component {
+class Insight extends React.Component {
   constructor(props) {
     super(props);
     this.ref = React.createRef();
     this.state = {
-      view: config['default_view'],
-      imagination: static_imagination,
-      paper_data: [],
-      new_paper: null,
+      paper_data: paper_data,
+      imagination: props.data,
     };
   }
 
-  componentDidMount(props) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.data !== prevProps.data)
+      this.setState(
+        {
+          ...this.state,
+          paper_data: this.props.paper_data,
+          imagination: this.props.data,
+        },
+        () => {
+          this.componentDidMount();
+        }
+      );
+  }
+
+  componentDidMount() {
     const stageHeight = this.ref.current.offsetHeight;
     const stageWidth = this.ref.current.offsetWidth;
 
@@ -202,6 +217,142 @@ class Insights extends React.Component {
 
     return (
       <>
+        <div className="bx--col-lg-16">
+          <br />
+          <div className="bx--row" style={{ width: '75%' }}>
+            <Tile>
+              <p style={{ fontSize: 'inherit' }}>
+                This is a paper, described in terms of the tags in this
+                taxonomy, that does not exist yet! It is shown below in{' '}
+                <span style={{ color: 'green' }}>green</span> in{' '}
+                <em>"tag space"</em>.
+              </p>
+            </Tile>
+          </div>
+          <br />
+
+          {this.state.imagination.key_map.map((item, idx) => {
+            const new_item = item.split(' > ');
+            const render_item = new_item.map((tag, i) => (
+              <div key={i}>
+                <Tag
+                  size="sm"
+                  type={i === new_item.length - 1 ? 'green' : 'gray'}
+                  title={tag}>
+                  {tag}
+                </Tag>
+                {i !== new_item.length - 1 && (
+                  <ArrowRight16 className="label-connector" />
+                )}
+              </div>
+            ));
+
+            return (
+              <div key={idx} className="bx--row">
+                {render_item}
+              </div>
+            );
+          })}
+          <div ref={this.ref} style={{ height: '30vh' }}>
+            <svg height="100%" width="100%">
+              {edges}
+              {nodes}
+              {special_node}
+            </svg>
+          </div>
+        </div>
+
+        <StructuredListWrapper ariaLabel="Neighboring Papers">
+          <StructuredListHead>
+            <StructuredListRow>
+              <StructuredListCell head>Neighboring Papers</StructuredListCell>
+            </StructuredListRow>
+          </StructuredListHead>
+          <StructuredListBody>
+            <StructuredListRow>
+              <StructuredListCell>
+                To get to this new paper, our AI thinks you should be looking at
+                the following papers known to our system as the state of the art
+                that immediately makes the new work possible. Each paper is
+                tagged with features that need relaxation or extension to get to
+                the new paper.
+                {this.state.paper_data.length > 0 && (
+                  <StructuredListBody>
+                    {this.state.imagination.neighbors.map((paper, idx) => (
+                      <StructuredListRow
+                        key={idx}
+                        className={
+                          idx === this.state.imagination.neighbors.length - 1
+                            ? 'no-bottom-border'
+                            : ''
+                        }>
+                        <StructuredListCell
+                          className={Boolean(paper.selected) ? 'text-blue' : ''}
+                          style={{ width: '20%' }}>
+                          <PaperInner
+                            paper={
+                              this.state.paper_data.filter((p, i) => {
+                                return p.UID === paper.UID;
+                              })[0]
+                            }
+                          />
+                        </StructuredListCell>
+                        <StructuredListCell style={{ width: '80%' }}>
+                          {paper.transforms.map((t, i) => {
+                            const key_split = t.key.split(' > ');
+                            const render_keys = key_split.map((t_item, ti) => (
+                              <BreadcrumbItem
+                                key={ti}
+                                isCurrentPage={!paper.selected}>
+                                {t_item}
+                              </BreadcrumbItem>
+                            ));
+
+                            return (
+                              <Breadcrumb
+                                style={{ marginBottom: '5px' }}
+                                key={i}
+                                noTrailingSlash>
+                                {render_keys}
+                                <BreadcrumbItem>
+                                  {t.value ? (
+                                    <span className="text-blue">True</span>
+                                  ) : (
+                                    <span style={{ color: 'red' }}>False</span>
+                                  )}
+                                </BreadcrumbItem>
+                              </Breadcrumb>
+                            );
+                          })}
+                        </StructuredListCell>
+                      </StructuredListRow>
+                    ))}
+                  </StructuredListBody>
+                )}
+              </StructuredListCell>
+            </StructuredListRow>
+          </StructuredListBody>
+        </StructuredListWrapper>
+      </>
+    );
+  }
+}
+
+class Insights extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: config['default_view'],
+      paper_data: [],
+      pageID: 1,
+      pageMAX: 1,
+      new_papers: [],
+    };
+  }
+
+  render() {
+    return (
+      <>
         <div
           className="bx--grid bx--grid--full-width"
           style={{
@@ -217,8 +368,22 @@ class Insights extends React.Component {
                 title="Coming soon!"
               />
             </AccordionItem>
-            <AccordionItem title="What are topics that have the least number of papers?"></AccordionItem>
-            <AccordionItem title="What are most popular topics?"></AccordionItem>
+            <AccordionItem title="What are topics that have the least number of papers?">
+              <InlineNotification
+                lowContrast
+                hideCloseButton
+                kind="error"
+                title="Coming soon!"
+              />
+            </AccordionItem>
+            <AccordionItem title="What are most popular topics?">
+              <InlineNotification
+                lowContrast
+                hideCloseButton
+                kind="error"
+                title="Coming soon!"
+              />
+            </AccordionItem>
             <AccordionItem title="Search papers using tags">
               <p>
                 You can search papers interactively using tags in the{' '}
@@ -229,186 +394,169 @@ class Insights extends React.Component {
               className="whats-next"
               title={<>What should I work on next?! &#129299;</>}
               open>
-              <StructuredListWrapper ariaLabel="New Paper">
-                <StructuredListHead>
-                  <StructuredListRow>
-                    <StructuredListCell head>
-                      New Paper Features
-                    </StructuredListCell>
-                  </StructuredListRow>
-                </StructuredListHead>
-                <StructuredListBody>
-                  <StructuredListRow className="no-bottom-border">
-                    <StructuredListCell>
-                      This is a paper, described in terms of the tags in this
-                      taxonomy, that does not exist yet! It is shown below in{' '}
-                      <span style={{ color: 'green' }}>green</span> in{' '}
-                      <em>"tag space"</em>.
-                      <br />
-                      <br />
-                      {this.state.imagination.key_map.map((item, idx) => {
-                        const new_item = item.split(' > ');
-                        const render_item = new_item.map((tag, i) => (
-                          <div key={i}>
-                            <Tag
-                              size="sm"
-                              type={
-                                i === new_item.length - 1 ? 'green' : 'gray'
-                              }
-                              title={tag}>
-                              {tag}
-                            </Tag>
-                            {i !== new_item.length - 1 && (
-                              <ArrowRight16 className="label-connector" />
-                            )}
-                          </div>
-                        ));
+              <p style={{ fontSize: 'inherit' }}>
+                In her{' '}
+                <Link
+                  href="https://ojs.aaai.org/index.php/aimagazine/article/view/18149"
+                  target="_blank">
+                  AAAI 2020 presidential address
+                </Link>
+                , Yolanda Gil asked:{' '}
+                <em>"Will AI write the scientific papers of the future?"</em> to
+                put into context the outsized impact that AI is beginning to
+                have on the scientific process. This section builds on this
+                theme and uses an AI constraint solver to imagine new papers yet
+                unwritten. Learn more about it{' '}
+                <Link href="" target="_blank">
+                  here
+                </Link>
+                .
+              </p>
 
+              <br />
+              <br />
+
+              <MultiSelect
+                helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
+                id="multiselect-paper"
+                itemToString={function noRefCheck() {}}
+                items={[
+                  {
+                    id: 'downshift-1-item-0',
+                    text: 'Option 1',
+                  },
+                  {
+                    id: 'downshift-1-item-1',
+                    text: 'Option 2',
+                  },
+                  {
+                    id: 'downshift-1-item-4',
+                    text:
+                      'An example option that is really long to show what should be done to handle long text',
+                  },
+                  {
+                    disabled: true,
+                    id: 'downshift-1-item-2',
+                    text: 'Option 3 - a disabled item',
+                  },
+                  {
+                    id: 'downshift-1-item-3',
+                    text: 'Option 4',
+                  },
+                  {
+                    id: 'downshift-1-item-5',
+                    text: 'Option 5',
+                  },
+                ]}
+                label="List of papers"
+                titleText="Select list of papers you want to focus on"
+              />
+
+              <br />
+              <br />
+
+              <MultiSelect
+                helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
+                id="multiselect-tags"
+                itemToString={function noRefCheck() {}}
+                items={[
+                  {
+                    id: 'downshift-1-item-0',
+                    text: 'Option 1',
+                  },
+                  {
+                    id: 'downshift-1-item-1',
+                    text: 'Option 2',
+                  },
+                  {
+                    id: 'downshift-1-item-4',
+                    text:
+                      'An example option that is really long to show what should be done to handle long text',
+                  },
+                  {
+                    disabled: true,
+                    id: 'downshift-1-item-2',
+                    text: 'Option 3 - a disabled item',
+                  },
+                  {
+                    id: 'downshift-1-item-3',
+                    text: 'Option 4',
+                  },
+                  {
+                    id: 'downshift-1-item-5',
+                    text: 'Option 5',
+                  },
+                ]}
+                label="List of tags"
+                titleText="Select list of tags you want to focus on"
+              />
+
+              <br />
+              <br />
+
+              <div className="bx--row">
+                <div className="bx--col-lg-4">
+                  <NumberInput
+                    helperText="Number of papers to imagine"
+                    id="num-papers"
+                    invalidText="Number is not valid"
+                    max={maxImagination}
+                    min={1}
+                    step={1}
+                    value={1}
+                  />
+                </div>
+                <div className="bx--col-lg-4">
+                  <Button kind="primary" size="field">
+                    What's Next
+                  </Button>
+                </div>
+              </div>
+
+              {this.state.new_papers.length > 0 && (
+                <div>
+                  <br />
+                  <br />
+
+                  <Pagination
+                    backwardText="Previous paper"
+                    forwardText="Next paper"
+                    itemsPerPageText="Papers per page:"
+                    page={1}
+                    pageSize={1}
+                    pageSizes={[
+                      ...Array(this.state.new_papers.length).keys(),
+                    ].map(i => i + 1)}
+                    size="md"
+                    totalItems={this.state.new_papers.length}
+                    onChange={e => {
+                      this.setState({
+                        ...this.state,
+                        pageID: e.page,
+                        pageMAX: e.pageSize,
+                      });
+                    }}
+                  />
+
+                  {[...Array(this.state.new_papers.length).keys()].map(
+                    (item, idx) => {
+                      if (
+                        idx >= (this.state.pageID - 1) * this.state.pageMAX &&
+                        idx < this.state.pageID * this.state.pageMAX
+                      )
                         return (
-                          <div key={idx} className="bx--row">
-                            {render_item}
-                          </div>
+                          <Insight
+                            paper_data={this.state.paper_data}
+                            data={this.state.new_papers[idx]}
+                          />
                         );
-                      })}
-                      <div ref={this.ref} style={{ height: '30vh' }}>
-                        <svg height="100%" width="100%">
-                          {edges}
-                          {nodes}
-                          {special_node}
-                        </svg>
-                      </div>
-                    </StructuredListCell>
-                  </StructuredListRow>
-                </StructuredListBody>
-              </StructuredListWrapper>
+                    }
+                  )}
+                </div>
+              )}
 
-              <StructuredListWrapper ariaLabel="Neighboring Papers">
-                <StructuredListHead>
-                  <StructuredListRow>
-                    <StructuredListCell head>
-                      Neighboring Papers
-                    </StructuredListCell>
-                  </StructuredListRow>
-                </StructuredListHead>
-                <StructuredListBody>
-                  <StructuredListRow>
-                    <StructuredListCell>
-                      To get to this new paper, our AI thinks you should be
-                      looking at the following papers known to our system as the
-                      state of the art that immediately makes the new work
-                      possible. Each paper is tagged with features that need
-                      relaxation or extension to get to the new paper.
-                      {this.state.paper_data.length > 0 && (
-                        <StructuredListBody>
-                          {this.state.imagination.neighbors.map(
-                            (paper, idx) => (
-                              <StructuredListRow
-                                key={idx}
-                                className={
-                                  idx ===
-                                  this.state.imagination.neighbors.length - 1
-                                    ? 'no-bottom-border'
-                                    : ''
-                                }>
-                                <StructuredListCell
-                                  className={
-                                    Boolean(paper.selected) ? 'text-blue' : ''
-                                  }
-                                  style={{ width: '20%' }}>
-                                  <PaperInner
-                                    paper={
-                                      this.state.paper_data.filter((p, i) => {
-                                        return p.UID === paper.UID;
-                                      })[0]
-                                    }
-                                  />
-                                </StructuredListCell>
-                                <StructuredListCell style={{ width: '80%' }}>
-                                  {paper.transforms.map((t, i) => {
-                                    const key_split = t.key.split(' > ');
-                                    const render_keys = key_split.map(
-                                      (t_item, ti) => (
-                                        <BreadcrumbItem
-                                          key={ti}
-                                          isCurrentPage={!paper.selected}>
-                                          {t_item}
-                                        </BreadcrumbItem>
-                                      )
-                                    );
-
-                                    return (
-                                      <Breadcrumb
-                                        style={{ marginBottom: '5px' }}
-                                        key={i}
-                                        noTrailingSlash>
-                                        {render_keys}
-                                        <BreadcrumbItem>
-                                          {t.value ? (
-                                            <span className="text-blue">
-                                              True
-                                            </span>
-                                          ) : (
-                                            <span style={{ color: 'red' }}>
-                                              False
-                                            </span>
-                                          )}
-                                        </BreadcrumbItem>
-                                      </Breadcrumb>
-                                    );
-                                  })}
-                                </StructuredListCell>
-                              </StructuredListRow>
-                            )
-                          )}
-                        </StructuredListBody>
-                      )}
-                    </StructuredListCell>
-                  </StructuredListRow>
-                </StructuredListBody>
-              </StructuredListWrapper>
-
-              <InlineNotification
-                lowContrast
-                kind="info"
-                subtitle={
-                  <span>
-                    In her{' '}
-                    <Link
-                      href="https://ojs.aaai.org/index.php/aimagazine/article/view/18149"
-                      target="_blank">
-                      AAAI 2020 presidential address
-                    </Link>
-                    , Yolanda Gil posed this question as an exploration of the
-                    outsized impact AI is beginning to have on the scientific
-                    process. This section builds on this theme and uses an AI
-                    constraint solver to imagine new papers yet unwritten. Learn
-                    more about it{' '}
-                    <Link href="" target="_blank">
-                      here
-                    </Link>
-                    .
-                  </span>
-                }
-                title="Will AI write the scientific papers of the future?"
-              />
-
-              <InlineNotification
-                lowContrast
-                kind="success"
-                subtitle={
-                  <span>
-                    We are currently working on making this section more
-                    interactive so you can query the AI with parameters (like
-                    existing papers and tags) to get more streamlined
-                    suggestions.{' '}
-                    <Link href={config.metadata.link_to_code} target="_blank">
-                      Stay tuned
-                    </Link>
-                    ! &#129303;
-                  </span>
-                }
-                title="Work in Progress"
-              />
+              <br />
+              <br />
             </AccordionItem>
           </Accordion>
         </div>

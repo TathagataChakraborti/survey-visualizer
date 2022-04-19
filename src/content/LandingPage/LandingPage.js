@@ -145,7 +145,7 @@ class LandingPage extends React.Component {
                   {config['metadata']['secondary_links'].length > 1 && (
                     <div
                       className="bx--col-lg-8"
-                      style={{ padding: 0, margin: 0 }}>
+                      style={{ padding: 0, margin: 0, maxWidth: '12.25rem' }}>
                       <Accordion align="start">
                         <AccordionItem
                           className="see-also-accordion"
@@ -186,7 +186,12 @@ class LandingPage extends React.Component {
               </div>
 
               {!isMobile && (
-                <div className="footer">
+                <div
+                  className="footer"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.9)',
+                    zIndex: '999',
+                  }}>
                   <div className="bx--row">
                     <div className="bx--col-lg-16">
                       <div className="bx--container">
