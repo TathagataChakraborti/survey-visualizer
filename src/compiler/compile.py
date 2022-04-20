@@ -21,7 +21,6 @@ import os
 import re
 
 __cache: Dict = {}
-__insights_file = "./src/components/Insights/data/new_paper.json"
 
 
 def __text_transform(text: str) -> str:
@@ -369,41 +368,41 @@ def getNetwork(config: Dict, taxonomy: Taxonomy = __cache):
 
 
 def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
+    return None
 
-    if not taxonomy:
-        taxonomy = __cache
+    # if not taxonomy:
+    #     taxonomy = __cache
 
-    with open(__insights_file) as f:
-        new_paper_data = json.loads(f.read())["key_map"]
-        new_tags = set()
+    # with open(__insights_file) as f:
+    #     new_paper_data = json.loads(f.read())["key_map"]
+    #     new_tags = set()
 
-        for tag_train in new_paper_data:
-            new_tags = new_tags.union(tag_train.split(" > "))
+    #     for tag_train in new_paper_data:
+    #         new_tags = new_tags.union(tag_train.split(" > "))
 
-    new_paper = Paper(UID=0, tags=[{"name": tag} for tag in new_tags])
+    # new_paper = Paper(UID=0, tags=[{"name": tag} for tag in new_tags])
 
-    new_paper_list = copy.deepcopy(taxonomy["data"])
-    new_paper_list.append(new_paper)
+    # new_paper_list = copy.deepcopy(taxonomy["data"])
+    # new_paper_list.append(new_paper)
 
-    # Referece: https://github.com/Mini-Conf/Mini-Conf/tree/master/scripts
-    print("Loading Transformer Model...")
-    model = SentenceTransformer("allenai-specter")
-    papers = [
-        "[SEP]".join([tag["name"] for tag in paper["tags"]]) for paper in new_paper_list
-    ]
+    # # Referece: https://github.com/Mini-Conf/Mini-Conf/tree/master/scripts
+    # print("Loading Transformer Model...")
+    # model = SentenceTransformer("allenai-specter")
+    # papers = [
+    #     "[SEP]".join([tag["name"] for tag in paper["tags"]]) for paper in new_paper_list
+    # ]
 
-    embeddings = model.encode(papers, convert_to_tensor=True)
+    # embeddings = model.encode(papers, convert_to_tensor=True)
 
-    print("Generating Transforms...")
-    transform = sklearn.manifold.TSNE(n_components=2).fit_transform(
-        embeddings.cpu().numpy()
-    )
+    # print("Generating Transforms...")
+    # transform = sklearn.manifold.TSNE(n_components=2).fit_transform(
+    #     embeddings.cpu().numpy()
+    # )
 
-    out_data = []
-    for i, row in enumerate(new_paper_list):
-        out_data.append({"id": row["UID"], "pos": transform[i].tolist()})
+    # out_data = []
+    # for i, row in enumerate(new_paper_list):
+    #     out_data.append({"id": row["UID"], "pos": transform[i].tolist()})
 
-    return out_data
 
 
 if __name__ == "__main__":

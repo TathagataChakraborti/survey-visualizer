@@ -19,17 +19,45 @@ import {
   Button,
   Pagination,
   Tile,
+  Loading,
+  ToastNotification,
 } from 'carbon-components-react';
 
 import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
 import Edge from '@carbon/charts-react/diagrams/Edge';
 
 let config = require('../../config.json');
-let embeddings = require('../../compiler/data/Insights.json');
-let taxonomy_data = require('../../compiler/data/Taxonomy.json');
-let paper_data = taxonomy_data.find(
+let taxonomy = require('../../compiler/data/Taxonomy.json');
+taxonomy = taxonomy.find(
   e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
-).data;
+);
+
+let paper_data = taxonomy.data;
+let taxonomy_data = taxonomy.taxonomy;
+let tag_labels = [];
+
+taxonomy_data.forEach((taxonomy_level, level) => {
+  taxonomy_level.forEach((taxonomy_item, idx) => {
+    var new_item = [];
+
+    if (taxonomy_item.parent) {
+      tag_labels.forEach((known_item, i) => {
+        if (taxonomy_item.parent === known_item[known_item.length - 1]) {
+          var new_item = known_item.map(e => e);
+          new_item.push(taxonomy_item.name);
+          tag_labels.push(new_item);
+        }
+      });
+    } else {
+      new_item.push(taxonomy_item.name);
+      tag_labels.push(new_item);
+    }
+  });
+});
+
+tag_labels = tag_labels.map((item, i) => {
+  return { id: i, text: item.join(' > ') };
+});
 
 const ShapeNodeSize = 10;
 const SpecialShapeNodeSize = 20;
@@ -61,57 +89,45 @@ class Insight extends React.Component {
   }
 
   componentDidMount() {
-    const stageHeight = this.ref.current.offsetHeight;
-    const stageWidth = this.ref.current.offsetWidth;
-
-    const offsetX = Math.min(...embeddings.map(e => e.pos[0]));
-    const maxX = Math.max(...embeddings.map(e => e.pos[0]));
-
-    const offsetY = Math.min(...embeddings.map(e => e.pos[1]));
-    const maxY = Math.max(...embeddings.map(e => e.pos[1]));
-
-    let new_embeddings = embeddings.map(e => {
-      var new_embedding = e;
-
-      new_embedding.pos[0] =
-        (fillFactor * stageWidth * (-offsetX + e.pos[0])) / (maxX - offsetX);
-      new_embedding.pos[1] =
-        (fillFactor * stageHeight * (-offsetY + e.pos[1])) / (maxY - offsetY);
-
-      return new_embedding;
-    });
-
-    this.lastCenter = null;
-    this.lastDist = 0;
-
-    const new_paper_data = paper_data.map(item => {
-      const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
-      var new_item = item;
-
-      new_item['x'] =
-        5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.pos[0]);
-      new_item['y'] =
-        5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.pos[1]);
-
-      new_item.selected = false;
-      return new_item;
-    });
-
-    var new_paper = { UID: 0 };
-    var new_paper_embedding = new_embeddings.filter(e => e.id === 0)[0];
-
-    new_paper['x'] =
-      5 * ShapeNodeSize + this.applyScalingX(1, new_paper_embedding.pos[0]);
-    new_paper['y'] =
-      5 * ShapeNodeSize + this.applyScalingY(1, new_paper_embedding.pos[1]);
-
-    if (this.ref.current) {
-      this.setState({
-        ...this.state,
-        paper_data: new_paper_data,
-        new_paper: new_paper,
-      });
-    }
+    // const stageHeight = this.ref.current.offsetHeight;
+    // const stageWidth = this.ref.current.offsetWidth;
+    // const offsetX = Math.min(...embeddings.map(e => e.pos[0]));
+    // const maxX = Math.max(...embeddings.map(e => e.pos[0]));
+    // const offsetY = Math.min(...embeddings.map(e => e.pos[1]));
+    // const maxY = Math.max(...embeddings.map(e => e.pos[1]));
+    // let new_embeddings = embeddings.map(e => {
+    //   var new_embedding = e;
+    //   new_embedding.pos[0] =
+    //     (fillFactor * stageWidth * (-offsetX + e.pos[0])) / (maxX - offsetX);
+    //   new_embedding.pos[1] =
+    //     (fillFactor * stageHeight * (-offsetY + e.pos[1])) / (maxY - offsetY);
+    //   return new_embedding;
+    // });
+    // this.lastCenter = null;
+    // this.lastDist = 0;
+    // const new_paper_data = paper_data.map(item => {
+    //   const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
+    //   var new_item = item;
+    //   new_item['x'] =
+    //     5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.pos[0]);
+    //   new_item['y'] =
+    //     5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.pos[1]);
+    //   new_item.selected = false;
+    //   return new_item;
+    // });
+    // var new_paper = { UID: 0 };
+    // var new_paper_embedding = new_embeddings.filter(e => e.id === 0)[0];
+    // new_paper['x'] =
+    //   5 * ShapeNodeSize + this.applyScalingX(1, new_paper_embedding.pos[0]);
+    // new_paper['y'] =
+    //   5 * ShapeNodeSize + this.applyScalingY(1, new_paper_embedding.pos[1]);
+    // if (this.ref.current) {
+    //   this.setState({
+    //     ...this.state,
+    //     paper_data: new_paper_data,
+    //     new_paper: new_paper,
+    //   });
+    // }
   }
 
   applyScalingX(scale, x) {
@@ -343,11 +359,202 @@ class Insights extends React.Component {
     super(props);
     this.state = {
       view: config['default_view'],
-      paper_data: [],
+      paper_data: paper_data,
+      taxonomy_data: taxonomy_data,
       pageID: 1,
       pageMAX: 1,
       new_papers: [],
+      selected_papers: [],
+      selected_tags: [],
+      num_papers: 1,
+      loading: false,
+      error: false,
     };
+
+    this.updateSelectedTab();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.props !== prevProps.props)
+      this.setState({
+        ...this.state,
+        paper_data: this.props.props,
+      });
+  }
+
+  changeNumePapers = e => {
+    this.setState({
+      ...this.state,
+      num_papers: e.imaginaryTarget.value,
+    });
+  };
+
+  logPaperSelection = e => {
+    this.setState({
+      ...this.state,
+      selected_papers: e.map(item => item.id),
+    });
+  };
+
+  logTagSelection = e => {
+    this.setState({
+      ...this.state,
+      selected_tags: e.map(item => item.text),
+    });
+  };
+
+  updateSelectedTab(e) {
+    this.props.updateSelectedTab(this.state.paper_data, []);
+  }
+
+  imaginePapers(e) {
+    this.setState(
+      {
+        ...this.state,
+        loading: true,
+        error: false,
+        new_papers: [],
+      },
+      () => {
+        const temp_paper_data = this.state.paper_data.map((paper, i) => {
+          var new_paper = JSON.parse(JSON.stringify(paper));
+          var tag_chain = [];
+
+          new_paper.tags.forEach(tag => {
+            var temp_c = [];
+            if (tag.parent) temp_c = [tag.parent];
+
+            temp_c.push(tag.name);
+            var temp_c_for_check = temp_c.join(' > ');
+
+            tag_labels.forEach(reference => {
+              if (reference.text.endsWith(temp_c_for_check)) {
+                tag_chain.push(reference.text);
+                return false;
+              }
+            });
+          });
+
+          new_paper['tag_chain'] = tag_chain;
+          return new_paper;
+        });
+
+        const payload = {
+          paper_data: temp_paper_data,
+          selected_papers: this.state.selected_papers.length
+            ? this.state.selected_papers
+            : this.state.paper_data.map(i => i.UID),
+          selected_tags: this.state.selected_tags.length
+            ? this.state.selected_tags
+            : tag_labels,
+          num_papers: this.state.num_papers,
+          domain: config.metadata.acronym,
+        };
+
+        console.log(666, payload);
+
+        fetch(config.link_to_server, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            data: payload,
+          }),
+        })
+          .then(result => result.json())
+          .then(data => {
+            // RETURN FORMAT //
+            const new_papers = [
+              {
+                key_map: [
+                  'Learning Parameters > Model Features > Uncertainty > Deterministic',
+                  'Learning Parameters > Data Features > Fluent Observability > Fully Observable',
+                  'Learning Parameters > Data Features > Action Information > Action Labels Known',
+                  'Learning Parameters > Data Features > Trace > Full',
+                  'Learning Parameters > Data Features > Trace > Cost',
+                ],
+                neighbors: [
+                  {
+                    UID: 25,
+                    transforms: [
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Trace > Cost',
+                        value: true,
+                      },
+                    ],
+                  },
+                  {
+                    UID: 47,
+                    transforms: [
+                      {
+                        key:
+                          'Learning Parameters > Data Features > State Information > Init Access',
+                        value: false,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Trace > Cost',
+                        value: true,
+                      },
+                    ],
+                  },
+                  {
+                    UID: 37,
+                    transforms: [
+                      {
+                        key:
+                          'Learning Parameters > Model Features > Actions > Parameterized',
+                        value: false,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Model Features > Predicates > Parameterized',
+                        value: false,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Fluent Observability > Fully Observable',
+                        value: true,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Fluent Observability > Unobservable',
+                        value: false,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Fluent Observability > Noise',
+                        value: false,
+                      },
+                      {
+                        key:
+                          'Learning Parameters > Data Features > Trace > Cost',
+                        value: true,
+                      },
+                    ],
+                  },
+                ],
+              },
+            ];
+
+            this.setState({
+              ...this.state,
+              new_papers: new_papers,
+              loading: false,
+            });
+          })
+          .catch(data => {
+            this.setState({
+              ...this.state,
+              loading: false,
+              error: true,
+            });
+          });
+      }
+    );
   }
 
   render() {
@@ -419,37 +626,21 @@ class Insights extends React.Component {
               <MultiSelect
                 helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
                 id="multiselect-paper"
-                itemToString={function noRefCheck() {}}
-                items={[
-                  {
-                    id: 'downshift-1-item-0',
-                    text: 'Option 1',
-                  },
-                  {
-                    id: 'downshift-1-item-1',
-                    text: 'Option 2',
-                  },
-                  {
-                    id: 'downshift-1-item-4',
-                    text:
-                      'An example option that is really long to show what should be done to handle long text',
-                  },
-                  {
-                    disabled: true,
-                    id: 'downshift-1-item-2',
-                    text: 'Option 3 - a disabled item',
-                  },
-                  {
-                    id: 'downshift-1-item-3',
-                    text: 'Option 4',
-                  },
-                  {
-                    id: 'downshift-1-item-5',
-                    text: 'Option 5',
-                  },
-                ]}
+                itemToString={item => (item ? item.text : '')}
+                items={this.state.paper_data.map((paper, i) => {
+                  return { id: i, text: paper.title + ' by ' + paper.authors };
+                })}
                 label="List of papers"
-                titleText="Select list of papers you want to focus on"
+                titleText={
+                  <>
+                    <span style={{ color: 'red' }}>Optional</span> Select list
+                    of papers you want to focus on
+                  </>
+                }
+                initialSelectedItems={this.state.selected_papers}
+                onChange={value => {
+                  this.logPaperSelection(value.selectedItems);
+                }}
               />
 
               <br />
@@ -458,37 +649,19 @@ class Insights extends React.Component {
               <MultiSelect
                 helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
                 id="multiselect-tags"
-                itemToString={function noRefCheck() {}}
-                items={[
-                  {
-                    id: 'downshift-1-item-0',
-                    text: 'Option 1',
-                  },
-                  {
-                    id: 'downshift-1-item-1',
-                    text: 'Option 2',
-                  },
-                  {
-                    id: 'downshift-1-item-4',
-                    text:
-                      'An example option that is really long to show what should be done to handle long text',
-                  },
-                  {
-                    disabled: true,
-                    id: 'downshift-1-item-2',
-                    text: 'Option 3 - a disabled item',
-                  },
-                  {
-                    id: 'downshift-1-item-3',
-                    text: 'Option 4',
-                  },
-                  {
-                    id: 'downshift-1-item-5',
-                    text: 'Option 5',
-                  },
-                ]}
+                itemToString={item => (item ? item.text : '')}
+                items={tag_labels}
                 label="List of tags"
-                titleText="Select list of tags you want to focus on"
+                titleText={
+                  <>
+                    <span style={{ color: 'red' }}>Optional</span> Select list
+                    of tags you want to focus on
+                  </>
+                }
+                initialSelectedItems={this.state.selected_tags}
+                onChange={value => {
+                  this.logTagSelection(value.selectedItems);
+                }}
               />
 
               <br />
@@ -497,21 +670,63 @@ class Insights extends React.Component {
               <div className="bx--row">
                 <div className="bx--col-lg-4">
                   <NumberInput
-                    helperText="Number of papers to imagine"
+                    helperText={
+                      <>
+                        <span style={{ color: 'red' }}>Optional</span> Number of
+                        papers
+                      </>
+                    }
                     id="num-papers"
                     invalidText="Number is not valid"
                     max={maxImagination}
                     min={1}
                     step={1}
-                    value={1}
+                    value={this.state.num_papers}
+                    onChange={this.changeNumePapers.bind(this)}
                   />
                 </div>
                 <div className="bx--col-lg-4">
-                  <Button kind="primary" size="field">
+                  <Button
+                    kind="primary"
+                    size="field"
+                    onClick={this.imaginePapers.bind(this)}>
                     What's Next
                   </Button>
                 </div>
               </div>
+
+              {this.state.loading && (
+                <div style={{ padding: '50px' }}>
+                  <Loading
+                    style={{ margin: '0 auto' }}
+                    description="Active loading indicator"
+                    withOverlay={false}
+                  />
+                </div>
+              )}
+
+              {this.state.error && (
+                <>
+                  <br />
+                  <br />
+                  <ToastNotification
+                    lowContrast
+                    subtitle={
+                      <span>
+                        There was an error contacting the server. Please report
+                        a bug{' '}
+                        <Link
+                          href={config['metadata']['link_to_code'] + '/issues'}
+                          target="_blank">
+                          here
+                        </Link>
+                        .
+                      </span>
+                    }
+                    title="ERROR"
+                  />
+                </>
+              )}
 
               {this.state.new_papers.length > 0 && (
                 <div>
@@ -546,6 +761,7 @@ class Insights extends React.Component {
                       )
                         return (
                           <Insight
+                            key={idx}
                             paper_data={this.state.paper_data}
                             data={this.state.new_papers[idx]}
                           />
