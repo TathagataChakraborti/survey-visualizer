@@ -21,6 +21,7 @@ import {
   Tile,
   Loading,
   ToastNotification,
+  InlineLoading,
 } from 'carbon-components-react';
 
 import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
@@ -71,6 +72,9 @@ class Insight extends React.Component {
     this.state = {
       paper_data: paper_data,
       imagination: props.data,
+      loading: false,
+      error: false,
+      rendered: false,
     };
   }
 
@@ -89,45 +93,91 @@ class Insight extends React.Component {
   }
 
   componentDidMount() {
-    // const stageHeight = this.ref.current.offsetHeight;
-    // const stageWidth = this.ref.current.offsetWidth;
-    // const offsetX = Math.min(...embeddings.map(e => e.pos[0]));
-    // const maxX = Math.max(...embeddings.map(e => e.pos[0]));
-    // const offsetY = Math.min(...embeddings.map(e => e.pos[1]));
-    // const maxY = Math.max(...embeddings.map(e => e.pos[1]));
-    // let new_embeddings = embeddings.map(e => {
-    //   var new_embedding = e;
-    //   new_embedding.pos[0] =
-    //     (fillFactor * stageWidth * (-offsetX + e.pos[0])) / (maxX - offsetX);
-    //   new_embedding.pos[1] =
-    //     (fillFactor * stageHeight * (-offsetY + e.pos[1])) / (maxY - offsetY);
-    //   return new_embedding;
-    // });
-    // this.lastCenter = null;
-    // this.lastDist = 0;
-    // const new_paper_data = paper_data.map(item => {
-    //   const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
-    //   var new_item = item;
-    //   new_item['x'] =
-    //     5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.pos[0]);
-    //   new_item['y'] =
-    //     5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.pos[1]);
-    //   new_item.selected = false;
-    //   return new_item;
-    // });
-    // var new_paper = { UID: 0 };
-    // var new_paper_embedding = new_embeddings.filter(e => e.id === 0)[0];
-    // new_paper['x'] =
-    //   5 * ShapeNodeSize + this.applyScalingX(1, new_paper_embedding.pos[0]);
-    // new_paper['y'] =
-    //   5 * ShapeNodeSize + this.applyScalingY(1, new_paper_embedding.pos[1]);
-    // if (this.ref.current) {
-    //   this.setState({
-    //     ...this.state,
-    //     paper_data: new_paper_data,
-    //     new_paper: new_paper,
-    //   });
-    // }
+    this.setState(
+      {
+        ...this.state,
+        loading: true,
+      },
+      () => {
+        fetch(config.link_to_server + '/embeddings', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify(this.state),
+        })
+          .then(result => result.json())
+          .then(data => {
+            console.log(1, data);
+            const embeddings = Object.keys(data).map(e => {
+              const item = data[e];
+              return { _id: e, x: item.x, y: item.y };
+            });
+            console.log(2, embeddings);
+
+            const stageHeight = this.ref.current.offsetHeight;
+            const stageWidth = this.ref.current.offsetWidth;
+
+            const offsetX = Math.min(...embeddings.map(e => e.x));
+            const maxX = Math.max(...embeddings.map(e => e.x));
+            const offsetY = Math.min(...embeddings.map(e => e.y));
+            const maxY = Math.max(...embeddings.map(e => e.y));
+
+            let new_embeddings = embeddings.map(e => {
+              var new_embedding = e;
+              new_embedding.x =
+                (fillFactor * stageWidth * (-offsetX + e.x)) / (maxX - offsetX);
+              new_embedding.y =
+                (fillFactor * stageHeight * (-offsetY + e.y)) /
+                (maxY - offsetY);
+              return new_embedding;
+            });
+
+            // this.lastCenter = null;
+            // this.lastDist = 0;
+
+            const new_paper_data = paper_data.map(item => {
+              const embedding_item = new_embeddings.filter(
+                e => e._id === item.UID
+              )[0];
+              var new_item = item;
+              new_item['x'] =
+                5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.x);
+              new_item['y'] =
+                5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.y);
+              new_item.selected = false;
+              return new_item;
+            });
+
+            var new_paper = { UID: 0 };
+            var new_paper_embedding = new_embeddings.filter(
+              e => e._id === 0
+            )[0];
+
+            new_paper['x'] =
+              5 * ShapeNodeSize + this.applyScalingX(1, new_paper_embedding.x);
+            new_paper['y'] =
+              5 * ShapeNodeSize + this.applyScalingY(1, new_paper_embedding.y);
+
+            this.setState({
+              ...this.state,
+              paper_data: new_paper_data,
+              new_paper: new_paper,
+              loading: false,
+              rendered: true,
+            });
+          })
+          .catch(data => {
+            this.setState({
+              ...this.state,
+              loading: false,
+              error: true,
+            });
+          });
+      }
+    );
   }
 
   applyScalingX(scale, x) {
@@ -163,74 +213,76 @@ class Insight extends React.Component {
   }
 
   render() {
-    const nodes = this.state.paper_data.map((paper, idx) => (
-      <foreignObject
-        key={idx}
-        style={{ overflow: 'visible' }}
-        transform={`translate(${paper.x}, ${paper.y})`}>
-        <ShapeNode
-          id={paper.UID}
-          size={ShapeNodeSize}
-          onClick={this.selectNode.bind(this, paper.UID)}
-          renderIcon={<DotMark16 />}
-          className={
-            this.state.imagination.neighbors
-              .map(p => p.UID)
-              .indexOf(paper.UID) > -1
-              ? 'selected-circle'
-              : 'unselected-circle'
-          }
-        />
-      </foreignObject>
-    ));
-
     let special_node = null;
     let edges = [];
+    let nodes = [];
 
-    if (this.state.new_paper) {
-      special_node = (
+    if (this.state.rendered) {
+      nodes = this.state.paper_data.map((paper, idx) => (
         <foreignObject
-          key={0}
+          key={idx}
           style={{ overflow: 'visible' }}
-          transform={`translate(${this.state.new_paper.x}, ${this.state.new_paper.y})`}>
+          transform={`translate(${paper.x}, ${paper.y})`}>
           <ShapeNode
-            id={0}
-            size={SpecialShapeNodeSize}
-            onClick={this.selectNode.bind(this, this.state.new_paper.UID)}
+            id={paper.UID}
+            size={ShapeNodeSize}
+            onClick={this.selectNode.bind(this, paper.UID)}
             renderIcon={<DotMark16 />}
-            className="special-circle"
+            className={
+              this.state.imagination.neighbors
+                .map(p => p.UID)
+                .indexOf(paper.UID) > -1
+                ? 'selected-circle'
+                : 'unselected-circle'
+            }
           />
         </foreignObject>
-      );
+      ));
 
-      edges = this.state.paper_data
-        .filter(
-          paper =>
-            this.state.imagination.neighbors
-              .map(p => p.UID)
-              .indexOf(paper.UID) > -1
-        )
-        .map((paper, i) => {
-          var source = JSON.parse(JSON.stringify(paper));
-          var target = JSON.parse(JSON.stringify(this.state.new_paper));
-
-          source.x = source.x + ShapeNodeSize / 2;
-          source.y = source.y + ShapeNodeSize / 2;
-
-          target.x = target.x + SpecialShapeNodeSize / 2;
-          target.y = target.y + SpecialShapeNodeSize / 2;
-
-          return (
-            <Edge
-              key={`link_${i}`}
-              source={source}
-              target={target}
-              variant="dash-md"
+      if (this.state.imagination) {
+        special_node = (
+          <foreignObject
+            key={0}
+            style={{ overflow: 'visible' }}
+            transform={`translate(${this.state.imagination.x}, ${this.state.imagination.y})`}>
+            <ShapeNode
+              id={0}
+              size={SpecialShapeNodeSize}
+              onClick={this.selectNode.bind(this, this.state.imagination.UID)}
+              renderIcon={<DotMark16 />}
+              className="special-circle"
             />
-          );
-        });
-    }
+          </foreignObject>
+        );
 
+        edges = this.state.paper_data
+          .filter(
+            paper =>
+              this.state.imagination.neighbors
+                .map(p => p.UID)
+                .indexOf(paper.UID) > -1
+          )
+          .map((paper, i) => {
+            var source = JSON.parse(JSON.stringify(paper));
+            var target = JSON.parse(JSON.stringify(this.state.imagination));
+
+            source.x = source.x + ShapeNodeSize / 2;
+            source.y = source.y + ShapeNodeSize / 2;
+
+            target.x = target.x + SpecialShapeNodeSize / 2;
+            target.y = target.y + SpecialShapeNodeSize / 2;
+
+            return (
+              <Edge
+                key={`link_${i}`}
+                source={source}
+                target={target}
+                variant="dash-md"
+              />
+            );
+          });
+      }
+    }
     return (
       <>
         <div className="bx--col-lg-16">
@@ -269,12 +321,46 @@ class Insight extends React.Component {
               </div>
             );
           })}
-          <div ref={this.ref} style={{ height: '30vh' }}>
-            <svg height="100%" width="100%">
-              {edges}
-              {nodes}
-              {special_node}
-            </svg>
+          <br />
+          <br />
+
+          {this.state.loading && (
+            <InlineLoading description="Loading new paper embeddings..." />
+          )}
+
+          {this.state.error && (
+            <>
+              <br />
+              <br />
+              <ToastNotification
+                lowContrast
+                subtitle={
+                  <span>
+                    There was an error rendering the new paper embedding. Please
+                    report a bug{' '}
+                    <Link
+                      href={config['metadata']['link_to_code'] + '/issues'}
+                      target="_blank">
+                      here
+                    </Link>
+                    .
+                  </span>
+                }
+                title="ERROR"
+              />
+            </>
+          )}
+
+          <div ref={this.ref}>
+            {!this.state.loading && !this.state.error && (
+              <div style={{ height: '30vh' }}>
+                <svg height="100%" width="100%">
+                  {edges}
+                  {nodes}
+                  {special_node}
+                </svg>
+              </div>
+            )}
           </div>
         </div>
 
@@ -451,98 +537,20 @@ class Insights extends React.Component {
           domain: config.metadata.acronym,
         };
 
-        console.log(666, payload);
-
-        fetch(config.link_to_server, {
+        fetch(config.link_to_server + '/imagine', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
           },
-          body: JSON.stringify({
-            data: payload,
-          }),
+          body: JSON.stringify(payload),
         })
           .then(result => result.json())
           .then(data => {
-            // RETURN FORMAT //
-            const new_papers = [
-              {
-                key_map: [
-                  'Learning Parameters > Model Features > Uncertainty > Deterministic',
-                  'Learning Parameters > Data Features > Fluent Observability > Fully Observable',
-                  'Learning Parameters > Data Features > Action Information > Action Labels Known',
-                  'Learning Parameters > Data Features > Trace > Full',
-                  'Learning Parameters > Data Features > Trace > Cost',
-                ],
-                neighbors: [
-                  {
-                    UID: 25,
-                    transforms: [
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Trace > Cost',
-                        value: true,
-                      },
-                    ],
-                  },
-                  {
-                    UID: 47,
-                    transforms: [
-                      {
-                        key:
-                          'Learning Parameters > Data Features > State Information > Init Access',
-                        value: false,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Trace > Cost',
-                        value: true,
-                      },
-                    ],
-                  },
-                  {
-                    UID: 37,
-                    transforms: [
-                      {
-                        key:
-                          'Learning Parameters > Model Features > Actions > Parameterized',
-                        value: false,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Model Features > Predicates > Parameterized',
-                        value: false,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Fluent Observability > Fully Observable',
-                        value: true,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Fluent Observability > Unobservable',
-                        value: false,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Fluent Observability > Noise',
-                        value: false,
-                      },
-                      {
-                        key:
-                          'Learning Parameters > Data Features > Trace > Cost',
-                        value: true,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ];
-
             this.setState({
               ...this.state,
-              new_papers: new_papers,
+              new_papers: data,
               loading: false,
             });
           })

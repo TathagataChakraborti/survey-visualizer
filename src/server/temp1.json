@@ -1,0 +1,100 @@
+[
+  {
+    "entry": "0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0",
+    "neighbours": {
+      "stern": {
+        "Learning Parameters > Data Features > Predicate Information > Parameterized": true
+      },
+      "konidaris_aaai": {
+        "Learning Parameters > Data Features > Predicate Information > Parameterized": true,
+        "Learning Parameters > Data Features > State Information > Init Access": false
+      },
+      "blai_extended": {
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Model Features > Predicates > Parameterized": false,
+        "Learning Parameters > Data Features > Fluent Observability > Fully Observable": true,
+        "Learning Parameters > Data Features > Fluent Observability > Unobservable": false,
+        "Learning Parameters > Data Features > Fluent Observability > Noise": false,
+        "Learning Parameters > Data Features > Predicate Information > Parameterized": true
+      }
+    }
+  },
+  {
+    "entry": "0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0",
+    "neighbours": {
+      "stern": {
+        "Learning Parameters > Model Features > Predicates > Parameterized": true
+      },
+      "sam": {
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Data Features > Predicate Information > Parameterized": false,
+        "Learning Parameters > Data Features > Action Information > Parameterized": false
+      },
+      "blai": {
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Data Features > Fluent Observability > Fully Observable": true,
+        "Learning Parameters > Data Features > Fluent Observability > Unobservable": false
+      }
+    }
+  },
+  {
+    "entry": "0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0",
+    "neighbours": {
+      "konidaris_aaai": {
+        "Learning Parameters > Data Features > Action Information > Partial Effects": true,
+        "Learning Parameters > Data Features > State Information > Init Access": false
+      },
+      "stern": {
+        "Learning Parameters > Data Features > Action Information > Partial Effects": true
+      },
+      "live": {
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Data Features > Action Information > Partial Effects": true,
+        "Learning Parameters > Data Features > State Information > Goal Access": false,
+        "Learning Parameters > Data Features > State Information > Init Access": false
+      }
+    }
+  },
+  {
+    "entry": "0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0",
+    "neighbours": {
+      "konidaris_aaai": {
+        "Learning Parameters > Data Features > State Information > Init Access": false,
+        "Learning Parameters > Data Features > Trace > Partial": true
+      },
+      "stern": {
+        "Learning Parameters > Data Features > Trace > Partial": true
+      },
+      "live": {
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Data Features > State Information > Goal Access": false,
+        "Learning Parameters > Data Features > State Information > Init Access": false,
+        "Learning Parameters > Data Features > Trace > Partial": true
+      }
+    }
+  },
+  {
+    "entry": "0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0",
+    "neighbours": {
+      "stern": {
+        "Learning Parameters > Model Features > Actions > Cost": true
+      },
+      "ccn": {
+        "Learning Parameters > Agent Features > Rationality > Optimally Rational": false,
+        "Learning Parameters > Data Features > Fluent Observability > Partially Observable": false,
+        "Learning Parameters > Data Features > Action Information > Cost": false,
+        "Learning Parameters > Data Features > Trace > Partial": false,
+        "Learning Parameters > Data Features > Trace > Cost": false
+      },
+      "SAMPlus": {
+        "Learning Parameters > Model Features > Uncertainty > Non-deterministic": false,
+        "Learning Parameters > Model Features > Uncertainty > Probabilistic": false,
+        "Learning Parameters > Model Features > Actions > Parameterized": false,
+        "Learning Parameters > Model Features > Actions > Cost": true,
+        "Learning Parameters > Model Features > Predicates > Parameterized": false,
+        "Learning Parameters > Data Features > Predicate Information > Parameterized": false,
+        "Learning Parameters > Data Features > Action Information > Parameterized": false
+      }
+    }
+  }
+]

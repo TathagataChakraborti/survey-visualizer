@@ -404,7 +404,6 @@ def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
     #     out_data.append({"id": row["UID"], "pos": transform[i].tolist()})
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compile survey data.")
     parser.add_argument("--file", type=str, help="Path to YAML config file.")
