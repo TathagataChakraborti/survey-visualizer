@@ -109,13 +109,14 @@ class Insight extends React.Component {
           body: JSON.stringify(this.state),
         })
           .then(result => result.json())
-          .then(data => {
-            console.log(1, data);
-            const embeddings = Object.keys(data).map(e => {
-              const item = data[e];
-              return { _id: e, x: item.x, y: item.y };
+          .then(embeddings => {
+            embeddings = Object.keys(embeddings).map(e => {
+              return {
+                _id: parseInt(e),
+                x: embeddings[e].x,
+                y: embeddings[e].y,
+              };
             });
-            console.log(2, embeddings);
 
             const stageHeight = this.ref.current.offsetHeight;
             const stageWidth = this.ref.current.offsetWidth;
@@ -134,9 +135,6 @@ class Insight extends React.Component {
                 (maxY - offsetY);
               return new_embedding;
             });
-
-            // this.lastCenter = null;
-            // this.lastDist = 0;
 
             const new_paper_data = paper_data.map(item => {
               const embedding_item = new_embeddings.filter(
@@ -239,16 +237,16 @@ class Insight extends React.Component {
         </foreignObject>
       ));
 
-      if (this.state.imagination) {
+      if (this.state.new_paper) {
         special_node = (
           <foreignObject
             key={0}
             style={{ overflow: 'visible' }}
-            transform={`translate(${this.state.imagination.x}, ${this.state.imagination.y})`}>
+            transform={`translate(${this.state.new_paper.x}, ${this.state.new_paper.y})`}>
             <ShapeNode
               id={0}
               size={SpecialShapeNodeSize}
-              onClick={this.selectNode.bind(this, this.state.imagination.UID)}
+              onClick={this.selectNode.bind(this, this.state.new_paper.UID)}
               renderIcon={<DotMark16 />}
               className="special-circle"
             />
@@ -264,7 +262,7 @@ class Insight extends React.Component {
           )
           .map((paper, i) => {
             var source = JSON.parse(JSON.stringify(paper));
-            var target = JSON.parse(JSON.stringify(this.state.imagination));
+            var target = JSON.parse(JSON.stringify(this.state.new_paper));
 
             source.x = source.x + ShapeNodeSize / 2;
             source.y = source.y + ShapeNodeSize / 2;
@@ -351,15 +349,13 @@ class Insight extends React.Component {
             </>
           )}
 
-          <div ref={this.ref}>
+          <div ref={this.ref} style={{ height: '30vh' }}>
             {!this.state.loading && !this.state.error && (
-              <div style={{ height: '30vh' }}>
-                <svg height="100%" width="100%">
-                  {edges}
-                  {nodes}
-                  {special_node}
-                </svg>
-              </div>
+              <svg height="100%" width="100%">
+                {edges}
+                {nodes}
+                {special_node}
+              </svg>
             )}
           </div>
         </div>

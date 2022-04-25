@@ -30,7 +30,7 @@ def hello_world():
     return "<p>Survey Visualizer</p>"
 
 
-@app.route("/embeddings", methods=["POST"])
+@app.route("/embeddings", methods=["GET", "POST"])
 def embeddings() -> List[Embedding]:
     def handle_decimals(obj):
         # Lambda will automatically serialize decimals so we need
@@ -63,10 +63,11 @@ def embeddings() -> List[Embedding]:
 
     out_data = dict()
     for i, row in enumerate(paper_list):
-        out_data[row["UID"]] = {
-            "x": transform[i].tolist()[0],
-            "y": transform[i].tolist()[1],
-        }
+        out_data[row["UID"]] = Embedding(
+            _id=row["UID"],
+            x=transform[i].tolist()[0],
+            y=transform[i].tolist()[1],
+        )
 
     return jsonify(out_data)
 
