@@ -2,11 +2,14 @@ FROM python:3
 
 WORKDIR /PROJECT
 
-RUN pip install flask
-RUN pip install nnf
 
 COPY dsharp /bin/dsharp
 COPY . .
+
+RUN pip install -r requirements.txt
 RUN rm dsharp
 
 CMD /bin/bash
+
+ENTRYPOINT [ "python" ]
+CMD [ "server.py" ]

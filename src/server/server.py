@@ -30,7 +30,7 @@ def hello_world():
     return "<p>Survey Visualizer</p>"
 
 
-@app.route("/embeddings", methods=["GET", "POST"])
+@app.route("/embeddings", methods=["POST"])
 def embeddings() -> List[Embedding]:
     def handle_decimals(obj):
         # Lambda will automatically serialize decimals so we need
@@ -88,4 +88,4 @@ def imagine() -> NewPaperData:
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=int(os.getenv("PORT", 1234)))
+    app.run(debug=True, port=int(os.getenv("PORT", 1234)), host="0.0.0.0")
