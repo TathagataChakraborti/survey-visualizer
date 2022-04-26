@@ -5,7 +5,6 @@ from sentence_transformers import SentenceTransformer
 from typing import Dict, TypedDict
 
 from schemas import *
-from macq_encoded import find_k_new_papers as macq_find_k_new_papers
 
 # from vam_hri_encoded import find_k_new_papers as vam_hri_find_k_new_papers
 # from xaip_encoded import find_k_new_papers as xaip_find_k_new_papers
@@ -13,6 +12,7 @@ from macq_encoded import find_k_new_papers as macq_find_k_new_papers
 import os
 import json
 import decimal
+import importlib
 
 import sklearn.manifold
 import torch
@@ -79,12 +79,38 @@ def imagine() -> NewPaperData:
     data: RequestData = json.loads(request.get_data().decode("utf-8"))
 
     domain = Domain.map_to_value(data["domain"])
-    evaluate = f"{domain}_find_k_new_papers({data['num_papers']}, '')"
+    caller = str(request["remote_addr"]).replace(".", "_")
 
-    # imagine = eval(evaluate)
-    # TO BE REPLACED BY ACTUAL CALL
-    imagine = json.loads(open("temp.json").read())
-    return json.dumps(imagine)
+    approach2uid = {}
+    for paper in data["paper_data"]:
+        approach2uid[paper["slug"]] = int(paper["UID"])
+
+    imagine = importlib.import_module(f"{domain}_encoded")
+    result = imagine.find_k_new_papers(data["num_papers"], caller)
+
+    new_result = []
+
+    for res in result:
+        keymap = []
+        for (i, digit) in enumerate(res["entry"].split(',')):
+            if digit == "1":
+                keymap.append(imagine.all_features[i].name)
+        new_neighbours = []
+        for n in res["neighbours"]:
+            new_neighbours.append({"UID": approach2uid[n], "transforms": []})
+            for f in res["neighbours"][n]:
+                new_neighbours[-1]["transforms"].append({"key": f, "value": res["neighbours"][n][f]})
+        new_result.append(
+            {
+                "key_map": keymap,
+                "neighbours": new_neighbours,
+            }
+        )
+
+
+    # imagine = json.loads(open("temp.json").read())
+
+    return json.dumps(new_result)
 
 
 if __name__ == "__main__":
