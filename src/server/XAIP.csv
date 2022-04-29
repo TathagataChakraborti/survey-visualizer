@@ -1,6 +1,6 @@
-Slug,Year,Venue,Authors,Titles,Explanation,,,,,,,,,,,Evaluation,Problem Setting,,,,,,,,,Interpretable Behavioral Measures,,,Overview/Position Paper,
-,,,,,Artifact being explained,,,,Explanation Objective,,Explanation Property,,,Abstraction,Addresses Vocabulary Mismatch,User Study,Deterministic Dynamics,OverSubscription Setting,Temporal/Numeric,Stochastic Dynamics,Motion Planning,HTN,Qualitative Non-Determinism,Partial Observability,Reinforcement Learning,Explicability,Legibility,Predictability,Explanation,Interpretable Behavioral
-,,,,,Algorithmic,Model Reconciliation,Inferential Reconciliation,Plans,Process,Preference,Social,Contrastive,Selective,,,,,,,,,,,,,,,,,
+Slug,Year,Venue,Authors,Titles,Explanation,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,Artifact being explained,,,,Explanation Objective,,Explanation Property,,,,,Evaluation,Problem Setting,,,,,,,,,Interpretable Behavioral Measures,,,Overview/Position Paper,
+,,,,,Algorithmic,Model Reconciliation,Inferential Reconciliation,Plans,Process,Preference,Social,Contrastive,Selective,Abstraction,Addresses Vocabulary Mismatch,User Study,Deterministic Dynamics,OverSubscription Setting,Temporal/Numeric,Stochastic Dynamics,Motion Planning,HTN,Qualitative Non-Determinism,Partial Observability,Reinforcement Learning,Explicability,Legibility,Predictability,Explanation,Interpretable Behavioral
 xaip1,2017,IJCAI,"Chakraborti, Tathagata and Sreedharan, Sarath and Zhang, Yu and Kambhampati, Subbarao",Plan Explanations as Model Reconciliation: Moving Beyond Explanation as Soliloquy,,1,,,,1,1,1,1,,,,1,,,,,,,,,,,,,
 xaip2,2022,AIJ,"Chakraborti, Tathagata and Sreedharan, Sarath and Kambhampati, Subbarao",Foundations of explanations as model reconciliation,,1,,,,1,1,1,1,,,1,1,,,,,,,,,,,,,
 xaip3,2012,ICAPS,"Seegebarth, Bastian and Muller, Felix and Schattenberg, Bernd and Biundo, Susanne",Making hybrid plans more clear to human users-a formal approach for generating sound explanations,,,1,,,1,,,1,1,,,1,,,,,1,,,,,,,,
