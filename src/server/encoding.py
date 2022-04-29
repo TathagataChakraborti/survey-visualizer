@@ -159,7 +159,13 @@ def seed(fn):
     seed += "\nbvs = [\n"
     for i in range(data_start, len(lines)):
         slug = lines[i][0].replace("-", "_").replace("+", "Plus")
-        bv = "".join([lines[i][j] for j in range(feature_start, len(lines[i]))])
+        symbol = {
+            "": "0",
+            "0": "0",
+            "x": "1",
+            "1": "1"
+        }
+        bv = "".join([symbol[lines[i][j]] for j in range(feature_start, len(lines[i]))])
         if bv == "":
             print(f"WARNING: Empty line in {fn} at line {i+1} for slug [{slug}].")
             continue
