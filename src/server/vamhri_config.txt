@@ -1,0 +1,78 @@
+;
+; Preferences on the default "simple" setting
+;
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Visualization Robots)
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Simulated Robots)
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Robot Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Entities > Control Objects > Panels & Buttons)
+-(Virtual Design Element (VDE) > Virtual Entities > Control Objects > 3D Controllers)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Agents)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Objects)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Environments)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Object Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Environment Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Alterations > Superficial > Cosmetic Alterations)
+-(Virtual Design Element (VDE) > Virtual Alterations > Superficial > Special Effect Alterations)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Body Extensions)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Body Diminishments)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Form Transformations)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > Internal > Internal Reading)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > Internal > Internal Readiness)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > External > Robot Pose)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > External > Robot Location)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Purviews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Numerical Readings)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Images & Videos)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor 3D Data)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > Sensed Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > Robot Inherent Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > User-Defined Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Labels)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Attributes)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Locations)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Appearances)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Headings)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Waypoints)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Callouts)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Spatial Previews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Trajectories)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Alteration Previews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Command Options & Validity)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Status)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Instructions)
+-(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > N/A)
+-(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Direct Manipulation)
+-(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Environment Markup)
+-(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Digital Twins)
+-(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > N/A)
+-(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Direct HMD Teleoperation)
+-(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Virtual Control Room)
+-(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Cyber-Physical)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Navigation)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Manipulation)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Robot Training)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Human Training)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Debugging)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Prototyping)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Social Interactions)
+-(Robot Functionalities > Robot Comprehension Visualizations > Task > Swarm Supervision)
+-(Domains > Robot Comprehension Visualizations > Task > Collaborative Robots)
+-(Domains > Robot Comprehension Visualizations > Task > Customer Service Robots)
+-(Domains > Robot Comprehension Visualizations > Task > Learning)
+-(Domains > Robot Comprehension Visualizations > Task > Entertainment)
+-(Domains > Robot Comprehension Visualizations > Task > Healthcare & Therapy)
+-(Domains > Robot Comprehension Visualizations > Task > Service Robots)
+-(Domains > Robot Comprehension Visualizations > Task > Self-Driving Cars)
+-(Domains > Robot Comprehension Visualizations > Task > Remotely Operated Robots)
+
+
+; Custom constraints
+
+; Use the <type>:<description> pattern for custom constraints
+; <description> should be a comma-separated list of feature names
+; <type> can be one of:
+;   - atmostone
+;   - atleastone
+;   - oneof
+;   - implies
+
