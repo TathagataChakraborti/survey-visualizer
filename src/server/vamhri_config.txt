@@ -40,30 +40,6 @@
 -(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Command Options & Validity)
 -(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Status)
 -(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Instructions)
--(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > N/A)
--(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Direct Manipulation)
--(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Environment Markup)
--(VAM 3D Command Sequencing Paradigm > Robot Comprehension Visualizations > Task > Digital Twins)
--(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > N/A)
--(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Direct HMD Teleoperation)
--(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Virtual Control Room)
--(Remote Robot Teleoperation HMD Interface Telepresence Paradigm > Robot Comprehension Visualizations > Task > Cyber-Physical)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Navigation)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Manipulation)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Robot Training)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Human Training)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Debugging)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Prototyping)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Social Interactions)
--(Robot Functionalities > Robot Comprehension Visualizations > Task > Swarm Supervision)
--(Domains > Robot Comprehension Visualizations > Task > Collaborative Robots)
--(Domains > Robot Comprehension Visualizations > Task > Customer Service Robots)
--(Domains > Robot Comprehension Visualizations > Task > Learning)
--(Domains > Robot Comprehension Visualizations > Task > Entertainment)
--(Domains > Robot Comprehension Visualizations > Task > Healthcare & Therapy)
--(Domains > Robot Comprehension Visualizations > Task > Service Robots)
--(Domains > Robot Comprehension Visualizations > Task > Self-Driving Cars)
--(Domains > Robot Comprehension Visualizations > Task > Remotely Operated Robots)
 
 
 ; Custom constraints
@@ -76,3 +52,5 @@
 ;   - oneof
 ;   - implies
 
+;atmostone: Virtual Design Element (VDE) > Virtual Entities > Robots > Simulated Robots,Virtual Design Element (VDE) > Virtual Entities > Robots > Robot Digital Twins
+atmostone: Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Environments,Virtual Design Element (VDE) > Virtual Entities > Environmental > Environment Digital Twins

@@ -163,6 +163,8 @@ def compile(extra_constraints=[]):
         )
     T = (all_constraints).to_CNF()
 
+    # print(f"\n\n\tPapers to be written: {dsharp.compile(T, smooth=True).model_count()}\n\n")
+
     return dsharp.compile(T).simplify()
 
 
@@ -249,7 +251,10 @@ if __name__ == "__main__":
 
     elif sys.argv[1] == "find-k":
         k = int(sys.argv[2])
+        import time
+        tstart = time.time()
         find_k_new_papers(k, "")
+        print(f"\n\n\tTime taken: {time.time() - tstart}\n\n")
 
     elif sys.argv[1] == "server":
         port = int(sys.argv[2])

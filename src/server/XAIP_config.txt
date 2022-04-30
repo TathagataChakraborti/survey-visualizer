@@ -39,9 +39,4 @@
 ;   - oneof
 ;   - implies
 
-implies: Explanation > Artifact being explained > Model Reconciliation,Explanation > Explanation Property > Social
-implies: Explanation > Explanation Property > Addresses Vocabulary Mismatch,Explanation > Explanation Property > Social
-implies: Explanation > Explanation Property > Abstraction,Explanation > Artifact being explained > Inferential Reconciliation
 implies: Explanation > Problem Setting > HTN,Explanation > Problem Setting > Deterministic Dynamics
-atleastone: Explanation > Problem Setting > Deterministic Dynamics,Explanation > Problem Setting > OverSubscription Setting,Explanation > Problem Setting > Temporal/Numeric,Explanation > Problem Setting > Stochastic Dynamics,Explanation > Problem Setting > Motion Planning,Explanation > Problem Setting > HTN,Explanation > Problem Setting > Qualitative Non-Determinism,Explanation > Problem Setting > Partial Observability,Explanation > Problem Setting > Reinforcement Learning
-atmostone: Explanation > Problem Setting > Qualitative Non-Determinism,Explanation > Problem Setting > Stochastic Dynamics,Explanation > Problem Setting > Deterministic Dynamics
