@@ -4,7 +4,7 @@ from typing import List, Union, Dict, TypedDict
 
 class Domain(enum.Enum):
     MACQ = "macq"
-    VAMHRI = "vam_hri"
+    VAMHRI = "vamhri"
     XAIP = "xaip"
 
     @classmethod
@@ -17,6 +17,7 @@ class Domain(enum.Enum):
 
 class Paper(TypedDict):
     UID: int
+    slug: str
     title: str
     abstract: str
     authors: Union[str, List[str]]
@@ -52,12 +53,13 @@ class NewPaperData(TypedDict):
     neighbors: List[Neighbor]
 
 
-class EmbeddingRequest(TypedDict):
-    paper_data: List[Paper]
-    imagination: NewPaperData
-
-
 class Embedding(TypedDict):
-    _id: int
+    UID: int
     x: float
     y: float
+
+
+class EmbeddingRequest(TypedDict):
+    paper_data: List[Paper]
+    embeddings: List[Embedding]
+    imagination: NewPaperData

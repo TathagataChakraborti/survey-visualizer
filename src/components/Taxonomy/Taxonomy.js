@@ -827,10 +827,7 @@ class Taxonomy extends React.Component {
                       kind="tertiary"
                       renderIcon={LogoGithub32}
                       size="field"
-                      href={
-                        config['metadata']['link_to_code'] +
-                        '#how-to-contribute'
-                      }
+                      href={config['metadata']['link_to_contribute']}
                       target="_blank">
                       Contribute
                     </Button>

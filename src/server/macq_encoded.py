@@ -252,6 +252,7 @@ if __name__ == "__main__":
     elif sys.argv[1] == "find-k":
         k = int(sys.argv[2])
         import time
+
         tstart = time.time()
         find_k_new_papers(k, "")
         print(f"\n\n\tTime taken: {time.time() - tstart}\n\n")

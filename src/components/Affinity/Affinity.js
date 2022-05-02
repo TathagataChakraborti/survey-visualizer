@@ -65,7 +65,7 @@ class Affinity extends React.Component {
     this.lastDist = 0;
 
     const new_paper_data = paper_data.map(item => {
-      const embedding_item = new_embeddings.filter(e => e.id === item.UID)[0];
+      const embedding_item = new_embeddings.filter(e => e.UID === item.UID)[0];
       var new_item = item;
 
       new_item['x'] =

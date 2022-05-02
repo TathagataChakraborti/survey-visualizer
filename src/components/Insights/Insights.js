@@ -28,6 +28,7 @@ import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
 import Edge from '@carbon/charts-react/diagrams/Edge';
 
 let config = require('../../config.json');
+let embeddings = require('../../compiler/data/Insights.json');
 let taxonomy = require('../../compiler/data/Taxonomy.json');
 taxonomy = taxonomy.find(
   e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
@@ -70,6 +71,7 @@ class Insight extends React.Component {
     super(props);
     this.ref = React.createRef();
     this.state = {
+      embeddings: embeddings,
       paper_data: paper_data,
       imagination: props.data,
       loading: false,
@@ -110,14 +112,6 @@ class Insight extends React.Component {
         })
           .then(result => result.json())
           .then(embeddings => {
-            embeddings = Object.keys(embeddings).map(e => {
-              return {
-                _id: parseInt(e),
-                x: embeddings[e].x,
-                y: embeddings[e].y,
-              };
-            });
-
             const stageHeight = this.ref.current.offsetHeight;
             const stageWidth = this.ref.current.offsetWidth;
 
@@ -138,7 +132,7 @@ class Insight extends React.Component {
 
             const new_paper_data = paper_data.map(item => {
               const embedding_item = new_embeddings.filter(
-                e => e._id === item.UID
+                e => e.UID === item.UID
               )[0];
               var new_item = item;
               new_item['x'] =
@@ -151,7 +145,7 @@ class Insight extends React.Component {
 
             var new_paper = { UID: 0 };
             var new_paper_embedding = new_embeddings.filter(
-              e => e._id === 0
+              e => e.UID === 0
             )[0];
 
             new_paper['x'] =

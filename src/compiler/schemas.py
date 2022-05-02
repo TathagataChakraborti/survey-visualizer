@@ -3,6 +3,7 @@ from typing import List, Union, Dict, TypedDict
 
 class Paper(TypedDict):
     UID: int
+    slug: str
     title: str
     abstract: str
     authors: Union[str, List[str]]
@@ -44,3 +45,9 @@ class Network(TypedDict):
     nodes: List[Node]
     links: List[Link]
     group_map: Dict
+
+
+class Embedding(TypedDict):
+    UID: int
+    x: float
+    y: float

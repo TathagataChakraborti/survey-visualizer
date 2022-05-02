@@ -20,7 +20,8 @@ import csv
 import os
 import re
 
-__cache: Dict = {}
+__cache: Dict = dict()
+__embeddings: List[Embedding] = list()
 
 
 def __text_transform(text: str) -> str:
@@ -49,7 +50,6 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
         return None
 
     global __cache
-
     out_data = list()
 
     for tab in config["tabs"]:
@@ -63,7 +63,7 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
         )
 
         path = os.path.abspath(tab["input_file"]["filename"])
-        wb = load_workbook(path)
+        wb = load_workbook(path, data_only=True)
         sheet = wb[tab["input_file"]["active_worksheet"]]
 
         row_number = 0
@@ -154,8 +154,13 @@ def getTaxonomy(config: Dict) -> List[Taxonomy]:
                     else:
                         new_paper[key] = None
 
-                tags = list()
+                if "year" in key_map:
+                    new_paper["year"] = int(new_paper["year"])
 
+                if "slug" not in key_map:
+                    new_paper["slug"] = f"paper-{new_id}"
+
+                tags = list()
                 for item in row:
                     if item.value:
 
@@ -194,17 +199,19 @@ def getAffinity(config: Dict, taxonomy: Taxonomy = __cache):
     if not taxonomy:
         taxonomy = __cache
 
+    global __embeddings
+
     new_paper_list = list()
     for paper in taxonomy["data"]:
         new_paper: Paper = copy.deepcopy(paper)
 
-        new_paper["abstract"] = paper["abstract"] or paper["title"]
+        new_paper["abstract"] = paper.get("abstract") or paper["title"]
         new_paper["authors"] = paper["authors"].replace(",", " | ")
 
-        new_paper["keywords"] = paper["keywords"] or " | ".join(
-            [tag["name"] for tag in paper["tags"]]
+        new_paper["keywords"] = paper.get("keywords") or " | ".join(
+            [tag["name"] for tag in paper.get("tags", [])]
         )
-        new_paper["sessions"] = paper["sessions"] or paper["venue"]
+        new_paper["sessions"] = paper.get("sessions") or paper.get("venue")
 
         new_paper_list.append(new_paper)
 
@@ -229,8 +236,9 @@ def getAffinity(config: Dict, taxonomy: Taxonomy = __cache):
 
     out_data = []
     for i, row in enumerate(new_paper_list):
-        out_data.append({"id": row["UID"], "pos": transform[i].tolist()})
+        out_data.append({"UID": row["UID"], "pos": transform[i].tolist()})
 
+    __embeddings = out_data
     return out_data
 
 
@@ -368,40 +376,10 @@ def getNetwork(config: Dict, taxonomy: Taxonomy = __cache):
 
 
 def getInsights(config: Dict, taxonomy: Taxonomy = __cache):
-    return None
-
-    # if not taxonomy:
-    #     taxonomy = __cache
-
-    # with open(__insights_file) as f:
-    #     new_paper_data = json.loads(f.read())["key_map"]
-    #     new_tags = set()
-
-    #     for tag_train in new_paper_data:
-    #         new_tags = new_tags.union(tag_train.split(" > "))
-
-    # new_paper = Paper(UID=0, tags=[{"name": tag} for tag in new_tags])
-
-    # new_paper_list = copy.deepcopy(taxonomy["data"])
-    # new_paper_list.append(new_paper)
-
-    # # Referece: https://github.com/Mini-Conf/Mini-Conf/tree/master/scripts
-    # print("Loading Transformer Model...")
-    # model = SentenceTransformer("allenai-specter")
-    # papers = [
-    #     "[SEP]".join([tag["name"] for tag in paper["tags"]]) for paper in new_paper_list
-    # ]
-
-    # embeddings = model.encode(papers, convert_to_tensor=True)
-
-    # print("Generating Transforms...")
-    # transform = sklearn.manifold.TSNE(n_components=2).fit_transform(
-    #     embeddings.cpu().numpy()
-    # )
-
-    # out_data = []
-    # for i, row in enumerate(new_paper_list):
-    #     out_data.append({"id": row["UID"], "pos": transform[i].tolist()})
+    if __embeddings:
+        return __embeddings
+    else:
+        return getAffinity(config, taxonomy)
 
 
 if __name__ == "__main__":
