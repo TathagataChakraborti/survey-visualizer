@@ -1,0 +1,42 @@
+;
+; Preferences on the default "simple" setting
+;
+-(Explanation > Artifact being explained > Algorithmic)
+-(Explanation > Artifact being explained > Model Reconciliation)
++(Explanation > Artifact being explained > Inferential Reconciliation)
+-(Explanation > Artifact being explained > Plans)
+-(Explanation > Explanation Objective > Process)
++(Explanation > Explanation Objective > Preference)
++(Explanation > Explanation Property > Social)
++(Explanation > Explanation Property > Contrastive)
++(Explanation > Explanation Property > Selective)
++(Explanation > Explanation Property > Abstraction)
++(Explanation > Explanation Property > Addresses Vocabulary Mismatch)
++(Explanation > Evaluation > User Study)
+-(Explanation > Problem Setting > Deterministic Dynamics)
+-(Explanation > Problem Setting > OverSubscription Setting)
++(Explanation > Problem Setting > Temporal/Numeric)
+-(Explanation > Problem Setting > Stochastic Dynamics)
+-(Explanation > Problem Setting > Motion Planning)
+-(Explanation > Problem Setting > HTN)
++(Explanation > Problem Setting > Qualitative Non-Determinism)
++(Explanation > Problem Setting > Partial Observability)
+-(Explanation > Problem Setting > Reinforcement Learning)
+-(Explanation > Interpretable Behavioral Measures > Explicability)
+-(Explanation > Interpretable Behavioral Measures > Legibility)
+-(Explanation > Interpretable Behavioral Measures > Predictability)
+-(Explanation > Overview/Position Paper > Explanation)
+-(Explanation > Overview/Position Paper > Interpretable Behavioral)
+
+
+; Custom constraints
+
+; Use the <type>:<description> pattern for custom constraints
+; <description> should be a comma-separated list of feature names
+; <type> can be one of:
+;   - atmostone
+;   - atleastone
+;   - oneof
+;   - implies
+
+implies: Explanation > Problem Setting > HTN,Explanation > Problem Setting > Deterministic Dynamics
