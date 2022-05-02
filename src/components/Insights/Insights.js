@@ -28,6 +28,8 @@ import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
 import Edge from '@carbon/charts-react/diagrams/Edge';
 
 let config = require('../../config.json');
+let view_config = config.views.filter(view => view.name === 'Insights')[0];
+
 let embeddings = require('../../compiler/data/Insights.json');
 let taxonomy = require('../../compiler/data/Taxonomy.json');
 taxonomy = taxonomy.find(
@@ -621,68 +623,77 @@ class Insights extends React.Component {
               <br />
               <br />
 
-              <MultiSelect
-                helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
-                id="multiselect-paper"
-                itemToString={item => (item ? item.text : '')}
-                items={this.state.paper_data.map((paper, i) => {
-                  return { id: i, text: paper.title + ' by ' + paper.authors };
-                })}
-                label="List of papers"
-                titleText={
-                  <>
-                    <span style={{ color: 'red' }}>Optional</span> Select list
-                    of papers you want to focus on
-                  </>
-                }
-                initialSelectedItems={this.state.selected_papers}
-                onChange={value => {
-                  this.logPaperSelection(value.selectedItems);
-                }}
-              />
-
-              <br />
-              <br />
-
-              <MultiSelect
-                helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
-                id="multiselect-tags"
-                itemToString={item => (item ? item.text : '')}
-                items={tag_labels}
-                label="List of tags"
-                titleText={
-                  <>
-                    <span style={{ color: 'red' }}>Optional</span> Select list
-                    of tags you want to focus on
-                  </>
-                }
-                initialSelectedItems={this.state.selected_tags}
-                onChange={value => {
-                  this.logTagSelection(value.selectedItems);
-                }}
-              />
-
-              <br />
-              <br />
-
-              <div className="bx--row">
-                <div className="bx--col-lg-4">
-                  <NumberInput
-                    helperText={
+              {view_config.interactive && (
+                <>
+                  <MultiSelect
+                    helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
+                    id="multiselect-paper"
+                    itemToString={item => (item ? item.text : '')}
+                    items={this.state.paper_data.map((paper, i) => {
+                      return {
+                        id: i,
+                        text: paper.title + ' by ' + paper.authors,
+                      };
+                    })}
+                    label="List of papers"
+                    titleText={
                       <>
-                        <span style={{ color: 'red' }}>Optional</span> Number of
-                        papers
+                        <span style={{ color: 'red' }}>Optional</span> Select
+                        list of papers you want to focus on
                       </>
                     }
-                    id="num-papers"
-                    invalidText="Number is not valid"
-                    max={maxImagination}
-                    min={1}
-                    step={1}
-                    value={this.state.num_papers}
-                    onChange={this.changeNumePapers.bind(this)}
+                    initialSelectedItems={this.state.selected_papers}
+                    onChange={value => {
+                      this.logPaperSelection(value.selectedItems);
+                    }}
                   />
-                </div>
+
+                  <br />
+                  <br />
+
+                  <MultiSelect
+                    helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
+                    id="multiselect-tags"
+                    itemToString={item => (item ? item.text : '')}
+                    items={tag_labels}
+                    label="List of tags"
+                    titleText={
+                      <>
+                        <span style={{ color: 'red' }}>Optional</span> Select
+                        list of tags you want to focus on
+                      </>
+                    }
+                    initialSelectedItems={this.state.selected_tags}
+                    onChange={value => {
+                      this.logTagSelection(value.selectedItems);
+                    }}
+                  />
+
+                  <br />
+                  <br />
+                </>
+              )}
+
+              <div className="bx--row">
+                {view_config.interactive && (
+                  <div className="bx--col-lg-4">
+                    <NumberInput
+                      helperText={
+                        <>
+                          <span style={{ color: 'red' }}>Optional</span> Number
+                          of papers
+                        </>
+                      }
+                      id="num-papers"
+                      invalidText="Number is not valid"
+                      max={maxImagination}
+                      min={1}
+                      step={1}
+                      value={this.state.num_papers}
+                      onChange={this.changeNumePapers.bind(this)}
+                    />
+                  </div>
+                )}
                 <div className="bx--col-lg-4">
                   <Button
                     kind="primary"
