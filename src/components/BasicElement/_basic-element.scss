@@ -1,0 +1,44 @@
+.contributing-card {
+  height: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: xxx-large;
+}
+
+.contributing-card-inner {
+  width: 100%;
+  height: 200px;
+}
+
+.resource-card-inner {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.bx--data-table--short .bx--table-header-label {
+  width: max-content;
+}
+
+.bx--btn--ghost--resource {
+  color: black !important;
+  background-color: #e5e5e5 !important;
+  margin-left: 10px !important;
+}
+
+.bx--btn--ghost--resource:hover {
+  background-color: #d5d5d5 !important;
+}
+
+.no-decoration {
+  text-decoration: none !important;
+}
+
+.no-decoration:hover {
+  text-decoration: none !important;
+}
+
+.label-text {
+  color: silver;
+  font-size: smaller;
+}

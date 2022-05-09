@@ -1,0 +1,37 @@
+.bx--cc--card-node__column,
+.text-overflow,
+node {
+  width: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.hover-cursor:hover {
+  cursor: pointer;
+}
+
+.chart-grid-backdrop {
+  fill: #ffffff00 !important;
+}
+
+.bx--cc--axes g.axis path.domain {
+  stroke: #ffffff00 !important;
+}
+
+.navigation-buttons {
+  background-color: #f4f4f4;
+  margin-right: 5px;
+}
+
+.expand-button {
+  background-color: #f4f4f4;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  height: 100%;
+}
+
+.full-accordion > .bx--accordion__content {
+  padding: 0 !important;
+}

@@ -1,0 +1,11 @@
+openpyxl
+pdfplumber
+python-Levenshtein
+transformers
+sentence_transformers
+sklearn
+torch>=1.4.0
+ics
+black
+nnf
+flask

@@ -1,0 +1,56 @@
+;
+; Preferences on the default "simple" setting
+;
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Visualization Robots)
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Simulated Robots)
+-(Virtual Design Element (VDE) > Virtual Entities > Robots > Robot Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Entities > Control Objects > Panels & Buttons)
+-(Virtual Design Element (VDE) > Virtual Entities > Control Objects > 3D Controllers)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Agents)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Objects)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Environments)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Object Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Entities > Environmental > Environment Digital Twins)
+-(Virtual Design Element (VDE) > Virtual Alterations > Superficial > Cosmetic Alterations)
+-(Virtual Design Element (VDE) > Virtual Alterations > Superficial > Special Effect Alterations)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Body Extensions)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Body Diminishments)
+-(Virtual Design Element (VDE) > Virtual Alterations > Morphological > Form Transformations)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > Internal > Internal Reading)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > Internal > Internal Readiness)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > External > Robot Pose)
+-(Virtual Design Element (VDE) > Robot Status Visualizations > External > Robot Location)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Purviews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Numerical Readings)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor Images & Videos)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > External Sensor 3D Data)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > Sensed Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > Robot Inherent Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Environment > User-Defined Spatial Regions)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Labels)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Attributes)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Locations)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Entity > Entity Appearances)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Headings)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Waypoints)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Callouts)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Spatial Previews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Trajectories)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Alteration Previews)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Command Options & Validity)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Status)
+-(Virtual Design Element (VDE) > Robot Comprehension Visualizations > Task > Task Instructions)
+
+
+; Custom constraints
+
+; Use the <type>:<description> pattern for custom constraints
+; <description> should be a comma-separated list of feature names
+; <type> can be one of:
+;   - atmostone
+;   - atleastone
+;   - oneof
+;   - implies
+
+;atmostone: Virtual Design Element (VDE) > Virtual Entities > Robots > Simulated Robots,Virtual Design Element (VDE) > Virtual Entities > Robots > Robot Digital Twins
+atmostone: Virtual Design Element (VDE) > Virtual Entities > Environmental > Simulated Environments,Virtual Design Element (VDE) > Virtual Entities > Environmental > Environment Digital Twins

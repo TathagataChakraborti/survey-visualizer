@@ -1,0 +1,62 @@
+;
+; Preferences on the default "simple" setting
+;
+-(Learning Parameters > Agent Features > Rationality > Causally Rational)
+-(Learning Parameters > Agent Features > Rationality > Optimally Rational)
++(Learning Parameters > Model Features > Uncertainty > Deterministic)
+-(Learning Parameters > Model Features > Uncertainty > Non-deterministic)
+-(Learning Parameters > Model Features > Uncertainty > Probabilistic)
+-(Learning Parameters > Model Features > Actions > Parameterized)
+-(Learning Parameters > Model Features > Actions > Typing)
+-(Learning Parameters > Model Features > Actions > Macros)
+-(Learning Parameters > Model Features > Actions > Cost)
+-(Learning Parameters > Model Features > Predicates > Parameterized)
+-(Learning Parameters > Model Features > Predicates > Parameters Typed)
++(Learning Parameters > Data Features > Fluent Observability > Fully Observable)
+-(Learning Parameters > Data Features > Fluent Observability > Partially Observable)
+-(Learning Parameters > Data Features > Fluent Observability > Unobservable)
+-(Learning Parameters > Data Features > Fluent Observability > Noise)
+-(Learning Parameters > Data Features > Predicate Information > Parameterized)
+-(Learning Parameters > Data Features > Predicate Information > Typing)
+-(Learning Parameters > Data Features > Action Information > Parameterized)
+-(Learning Parameters > Data Features > Action Information > Typing)
+-(Learning Parameters > Data Features > Action Information > Noise)
++(Learning Parameters > Data Features > Action Information > Action Labels Known)
+-(Learning Parameters > Data Features > Action Information > Parameters Known)
+-(Learning Parameters > Data Features > Action Information > Partial Preconditions)
+-(Learning Parameters > Data Features > Action Information > Partial Effects)
+-(Learning Parameters > Data Features > Action Information > Cost)
+-(Learning Parameters > Data Features > State Information > Goal Access)
+-(Learning Parameters > Data Features > State Information > Init Access)
++(Learning Parameters > Data Features > Trace > Full)
+-(Learning Parameters > Data Features > Trace > Partial)
+-(Learning Parameters > Data Features > Trace > Cost)
+
+
+; Custom constraints
+
+; Use the <type>:<description> pattern for custom constraints
+; <description> should be a comma-separated list of feature names
+; <type> can be one of:
+;   - atmostone
+;   - atleastone
+;   - oneof
+;   - implies
+
+atmostone:Rationality
+
+implies:Uncertainty > Probabilistic,Uncertainty > Non-deterministic,Uncertainty > Deterministic
+atleastone:Uncertainty > Probabilistic,Uncertainty > Non-deterministic,Uncertainty > Deterministic
+
+implies:Fluent Observability > Partially Observable,Fluent Observability > Fully Observable
+implies:Fluent Observability > Unobservable,~Fluent Observability > Partially Observable
+implies:Fluent Observability > Unobservable,~Fluent Observability > Fully Observable
+atleastone:Fluent Observability > Unobservable,Fluent Observability > Partially Observable,Fluent Observability > Fully Observable
+
+implies:Trace > Partial,Trace > Full
+atleastone:Trace > Partial,Trace > Full
+
+implies:Actions > Typing,Actions > Parameterized
+implies:Predicates > Parameters Typed,Predicates > Parameterized
+implies:Predicate Information > Typing,Predicate Information > Parameterized
+implies:Action Information > Typing,Action Information > Parameterized
