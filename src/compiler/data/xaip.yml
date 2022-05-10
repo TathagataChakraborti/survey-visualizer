@@ -1,0 +1,61 @@
+---
+metadata:
+  acronym: XAIP
+  name: Explainable Planning
+  title_text: 'Explainable AI Planning'
+  citation_text: "@inproceedings{xaip-landscape, \n title={The Emerging Landscape of\n\t Explainable Automated Planning\n\t & Decision Making}, \n author={Tathagata Chakraborti, \n\t Sarath Sreedharan, and\n\t Subbarao Kambhampati}, \n booktitle = {IJCAI}, \n year={2020}}"
+  link_to_contribute: https://github.com/sarathsreedharan/survey-visualizer
+  link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
+  primary_link: https://www.ijcai.org/proceedings/2020/669
+  secondary_links: 
+    - name: Explainable Behavior Generation
+      link: https://ojs.aaai.org/index.php/ICAPS/article/view/3463
+  community_link: https://join.slack.com/t/xaip2021/shared_invite/zt-svdiylde-EwqOBkguynR6jKbi_UKDXA
+  info_tile: true
+  info_text: Learn more about the Workshop Series on Explainable AI Planning (XAIP) at the International Conference on Automated Planning and Scheduling.
+  info_link:
+  - link: http://ibm.biz/xaip-workshop
+    text: XAIP Workshop Series
+link_to_server: https://testapp.mua8gtem6c8.us-east.codeengine.appdomain.cloud
+default_view: Taxonomy
+min_year: 1984
+views:
+- name: Taxonomy
+  disabled: false
+  default_tab: XAIP
+  tabs:
+  - tab_name: XAIP
+    title_text: Landscape of Explainable AI Planning (XAIP)
+    disabled: false
+    fancy_chart: true
+    input_file:
+      filename: path/to/spreadsheet
+      active_worksheet: main
+    papers_list:
+      shuffle_list: true
+      key_map:
+        slug: 0
+        title: 4
+        authors: 3
+        venue: 2
+        year: 1
+      rows:
+        start: 4
+        stop: 78
+    taxonomy:
+      rows:
+        start: 1
+        stop: 3
+      columns:
+        start: 6
+        stop: 32
+- name: Affinity
+  disabled: false
+- name: Network
+  files_directory: 
+    location: /path/to/PDFs
+  match_threshold: 0.25
+  disabled: false
+- name: Insights
+  disabled: false
+  interactive: false
