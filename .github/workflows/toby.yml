@@ -2,7 +2,7 @@ name: toby
 
 on:
   workflow_dispatch:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   super-lint:
