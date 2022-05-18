@@ -15,15 +15,10 @@ def dropbox_connect(DROPBOX_ACCESS_TOKEN):
         print('Error connecting to Dropbox with access token: ' + str(e))
     return dbx
 
-# get list of files
-
 
 def dropbox_list_files(dbx, path):
     """Return a Pandas dataframe of files in a given Dropbox folder path in the Apps directory.
     """
-
-    # dbx = dropbox_connect()
-
     try:
         files = dbx.files_list_folder(path).entries
         files_list = []
