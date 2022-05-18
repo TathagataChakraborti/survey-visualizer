@@ -91,7 +91,7 @@ jobs:
         run: docker push $IMAGE_REPO/$IMAGE_NAME":"$IMAGE_TAG
       - name: Update container image
         env:
-          APP_NAME: test
+          APP_NAME: macq
           PROJECT_NAME: macq
           IMAGE_TAG: ${{steps.vars.outputs.sha_short}}${{steps.vars.outputs.current_time}}
           APP_REGION: us-east
