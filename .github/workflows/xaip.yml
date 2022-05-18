@@ -1,14 +1,14 @@
-name: macq
+name: xaip
 
 on:
   workflow_dispatch:
     branches: [main]
 
 env:
-  CONFIG_FILE_PATH: ./src/compiler/data/macq.yaml
+  CONFIG_FILE_PATH: ./src/compiler/data/xaip.yml
   IMAGE_REPO: us.icr.io/research/macq
-  IMAGE_NAME: macq
-  NEW_CONFIG_FILE: macq.yaml
+  IMAGE_NAME: xaip
+  NEW_CONFIG_FILE: xaip.yaml
 
 jobs:
   setup-build-push-deploy:
@@ -39,9 +39,9 @@ jobs:
       - name: Download & build dependencies
         env:
           DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
-          DROPBOX_FOLDER: macq_pdf
+          DROPBOX_FOLDER: xaip_pdf
           LOCAL_PDF_FOLDER: pdfs
-          SLUG: 1HxlYvY7Qv63CwxcbfRbfmtju7ScU2X4OC3MrCWu8qpA
+          SLUG: 1DJgrsMEs1HguPbRgd_lxIF8hESYxGPLeq9Ir8lxtkZI
           DROPBOX_HELPER_PATH: "./src/deployments/dropbox_helper.py"
         run: |
           curl -L "https://docs.google.com/spreadsheets/d/${SLUG}/export?format=xlsx" > slug.xlsx
@@ -54,7 +54,7 @@ jobs:
           PDF_FOLDER_PATH_PATTERN: \/path\/to\/PDFs
           PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH: .\/pdfs
           WORKSHEET_PATTERN: "active_worksheet: main"
-          WORKSHEET_PATTERN_TO_REPLACE_WITH: "active_worksheet: slug"
+          WORKSHEET_PATTERN_TO_REPLACE_WITH: "active_worksheet: main"
         run: |
           sed -e "s/${SLUG_FILE_PATH_PATTERN}/${SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${PDF_FOLDER_PATH_PATTERN}/${PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${WORKSHEET_PATTERN}/${WORKSHEET_PATTERN_TO_REPLACE_WITH}/g" $CONFIG_FILE_PATH > $NEW_CONFIG_FILE
       - name: Generate build sources
@@ -92,7 +92,7 @@ jobs:
         run: docker push $IMAGE_REPO/$IMAGE_NAME":"$IMAGE_TAG
       - name: Update container image
         env:
-          APP_NAME: macq
+          APP_NAME: xaip
           PROJECT_NAME: macq
           IMAGE_TAG: ${{steps.vars.outputs.sha_short}}${{steps.vars.outputs.current_time}}
           APP_REGION: us-east
