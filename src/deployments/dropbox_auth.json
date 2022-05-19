@@ -1,0 +1,60 @@
+{
+	"info": {
+		"_postman_id": "2e8ac8dc-f1f2-4b8f-8951-434d34adb7a0",
+		"name": "Dropbox-refresh_token",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Dropbox_token request with refresh token to get access token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": DROPBOX-APP-SECRET,
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": DROPBOX-APP-KEY,
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refresh_token",
+							"value": DROPBOX-APP-REFRESH-TOKEN,
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api.dropboxapi.com/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"api",
+						"dropboxapi",
+						"com"
+					],
+					"path": [
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

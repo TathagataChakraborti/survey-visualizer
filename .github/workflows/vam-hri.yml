@@ -17,12 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Compute sha
-        id: vars
-        shell: bash
-        run: |
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "::set-output name=current_time::$(date +%s%3N)"
       - name: Install OS packages
         run: |
           sudo apt update
@@ -32,13 +26,31 @@ jobs:
           sudo n 14.15.1
           node -v
           sudo npm install -g yarn
+          sudo npm install -g newman
           pip3 install --upgrade --no-cache-dir huggingface-hub
           pip3 install --no-cache-dir -r "requirements.txt"
           pip3 install --no-cache-dir setuptools Levenshtein
           pip3 install --no-cache-dir -r ./src/deployments/deployment_requirements.txt
+      - name: Handle Dropbox auth
+        id: vars
+        shell: bash
+        env:
+          DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+          DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+          DROPBOX_APP_REFRESH_TOKEN: ${{ secrets.DROPBOX_APP_REFRESH_TOKEN }}
+          DROPBOX_AUTH_JSON_PATH: "./src/deployments/dropbox_auth.json"
+          NEW_DROPBOX_AUTH_FILE: "postman_collection.json"
+          DROPBOX_RESPONSE_FILE: "dropbox_response.txt"
+          JSON_READER_PATH: "./src/deployments/json_reader.py"
+        run: |
+          sed -e "s/DROPBOX-APP-SECRET/\"$DROPBOX_APP_SECRET\"/g" -e "s/DROPBOX-APP-KEY/\"$DROPBOX_APP_KEY\"/g" -e "s/DROPBOX-APP-REFRESH-TOKEN/\"$DROPBOX_APP_REFRESH_TOKEN\"/g" $DROPBOX_AUTH_JSON_PATH > $NEW_DROPBOX_AUTH_FILE
+          newman run --verbose $NEW_DROPBOX_AUTH_FILE | grep access_token -A 3 | sed -z 's/\n//g'| sed 's/ //g' | sed 's/\│//g'> $DROPBOX_RESPONSE_FILE
+          echo "::set-output name=dropbox_token::$(python $JSON_READER_PATH $DROPBOX_RESPONSE_FILE)"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=current_time::$(date +%s%3N)"
       - name: Download & build dependencies
         env:
-          DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
+          DROPBOX_ACCESS_TOKEN: ${{steps.vars.outputs.dropbox_token}}
           DROPBOX_FOLDER: vamhri_pdf
           LOCAL_PDF_FOLDER: pdfs
           SLUG: 1VO1vg6OHbB7LJEPVSDzDz5221tj_CSSz8v65NSBZUOg
