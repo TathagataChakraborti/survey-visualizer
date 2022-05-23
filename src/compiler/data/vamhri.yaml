@@ -40,7 +40,7 @@ views:
     input_file:
       filename: data/slug.xlsx
       active_worksheet: Master List
-      relative: false
+      relative: true
     papers_list:
       key_map:
         slug: 0
