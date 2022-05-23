@@ -53,7 +53,7 @@ jobs:
           DROPBOX_ACCESS_TOKEN: ${{steps.vars.outputs.dropbox_token}}
           DROPBOX_FOLDER: macq_pdf
           LOCAL_PDF_FOLDER: pdfs
-          SLUG: 1HxlYvY7Qv63CwxcbfRbfmtju7ScU2X4OC3MrCWu8qpA
+          SLUG: ${{ secrets.MACQ_SLUG }}
           DROPBOX_HELPER_PATH: "./src/deployments/dropbox_helper.py"
         run: |
           curl -L "https://docs.google.com/spreadsheets/d/${SLUG}/export?format=xlsx" > slug.xlsx

@@ -53,7 +53,7 @@ jobs:
           DROPBOX_ACCESS_TOKEN: ${{steps.vars.outputs.dropbox_token}}
           DROPBOX_FOLDER: xaip_pdf
           LOCAL_PDF_FOLDER: pdfs
-          SLUG: 1DJgrsMEs1HguPbRgd_lxIF8hESYxGPLeq9Ir8lxtkZI
+          SLUG: ${{ secrets.XAIP_SLUG }}
           DROPBOX_HELPER_PATH: "./src/deployments/dropbox_helper.py"
         run: |
           curl -L "https://docs.google.com/spreadsheets/d/${SLUG}/export?format=xlsx" > slug.xlsx
