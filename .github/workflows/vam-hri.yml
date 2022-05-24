@@ -61,12 +61,12 @@ jobs:
           python $DROPBOX_HELPER_PATH  $DROPBOX_ACCESS_TOKEN $DROPBOX_FOLDER $LOCAL_PDF_FOLDER
       - name: Edit app configuration
         env:
-          SLUG_FILE_PATH_PATTERN: path\/to\/spreadsheet
+          SLUG_FILE_PATH_PATTERN: data\/slug.xlsx
           SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH: .\/slug.xlsx
-          PDF_FOLDER_PATH_PATTERN: \/path\/to\/PDFs
+          PDF_FOLDER_PATH_PATTERN: data\/pdfs
           PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH: .\/pdfs
-          WORKSHEET_PATTERN: "active_worksheet: main"
-          WORKSHEET_PATTERN_TO_REPLACE_WITH: "active_worksheet: \"Master List\""
+          WORKSHEET_PATTERN: "relative: true"
+          WORKSHEET_PATTERN_TO_REPLACE_WITH: "relative: false"
         run: |
           sed -e "s/${SLUG_FILE_PATH_PATTERN}/${SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${PDF_FOLDER_PATH_PATTERN}/${PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${WORKSHEET_PATTERN}/${WORKSHEET_PATTERN_TO_REPLACE_WITH}/g" $CONFIG_FILE_PATH > $NEW_CONFIG_FILE
       - name: Generate build sources
