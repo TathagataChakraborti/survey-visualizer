@@ -4,14 +4,18 @@ on:
   workflow_dispatch:
     branches: [main]
 
+env:
+  IMAGE_REPO: us.icr.io/research/macq
+  IMAGE_NAME: toby
+
 jobs:
-  super-lint:
-    name: toby
+  setup-build-push-deploy:
+    name: Setup, Build, Push, and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: compute sha
+      - name: Compute sha
         id: vars
         shell: bash
         run: |
@@ -19,8 +23,6 @@ jobs:
           echo "::set-output name=current_time::$(date +%s%3N)"
       - name: Build a docker image
         env:
-          IMAGE_REPO: us.icr.io/research/macq
-          IMAGE_NAME: toby
           IMAGE_TAG: ${{steps.vars.outputs.sha_short}}${{steps.vars.outputs.current_time}}
         run: docker build -t $IMAGE_REPO/$IMAGE_NAME":"$IMAGE_TAG .
         working-directory: ./src/server
@@ -42,16 +44,12 @@ jobs:
           bx target
       - name: Push docker image
         env:
-          IMAGE_REPO: us.icr.io/research/macq
-          IMAGE_NAME: toby
           IMAGE_TAG: ${{steps.vars.outputs.sha_short}}${{steps.vars.outputs.current_time}}
         run: docker push $IMAGE_REPO/$IMAGE_NAME":"$IMAGE_TAG
       - name: Update container image
         env:
           APP_NAME: toby
           PROJECT_NAME: macq
-          IMAGE_REPO: us.icr.io/research/macq
-          IMAGE_NAME: toby
           IMAGE_TAG: ${{steps.vars.outputs.sha_short}}${{steps.vars.outputs.current_time}}
           APP_REGION: us-east
           APP_RESOURCE_GROUP: CUELAB

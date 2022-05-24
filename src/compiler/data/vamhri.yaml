@@ -38,8 +38,9 @@ views:
     disabled: false
     fancy_chart: false
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -64,8 +65,9 @@ views:
     disabled: false
     fancy_chart: true
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -93,8 +95,9 @@ views:
     disabled: false
     fancy_chart: true
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -121,7 +124,8 @@ views:
   disabled: false
 - name: Network
   files_directory:
-    location: /path/to/PDFs
+    location: data/pdfs
+    relative: true
   match_threshold: 0.25
   disabled: false
 - name: Insights
