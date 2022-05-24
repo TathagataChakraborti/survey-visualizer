@@ -61,14 +61,15 @@ jobs:
           python $DROPBOX_HELPER_PATH  $DROPBOX_ACCESS_TOKEN $DROPBOX_FOLDER $LOCAL_PDF_FOLDER
       - name: Edit app configuration
         env:
+          env:
           SLUG_FILE_PATH_PATTERN: data\/slug.xlsx
           SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH: .\/slug.xlsx
           PDF_FOLDER_PATH_PATTERN: data\/pdfs
           PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH: .\/pdfs
-          WORKSHEET_PATTERN: "relative: true"
-          WORKSHEET_PATTERN_TO_REPLACE_WITH: "relative: false"
+          FILE_PATH_TYPE_PATTERN: "relative: true"
+          FILE_PATH_TYPE_PATTERN_TO_REPLACE_WITH: "relative: false"
         run: |
-          sed -e "s/${SLUG_FILE_PATH_PATTERN}/${SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${PDF_FOLDER_PATH_PATTERN}/${PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${WORKSHEET_PATTERN}/${WORKSHEET_PATTERN_TO_REPLACE_WITH}/g" $CONFIG_FILE_PATH > $NEW_CONFIG_FILE
+          sed -e "s/${SLUG_FILE_PATH_PATTERN}/${SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${PDF_FOLDER_PATH_PATTERN}/${PDF_FOLDER_PATH_PATTERN_TO_REPLACE_WITH}/g" -e "s/${FILE_PATH_TYPE_PATTERN}/${FILE_PATH_TYPE_PATTERN_TO_REPLACE_WITH}/g" $CONFIG_FILE_PATH > $NEW_CONFIG_FILE
       - name: Generate build sources
         run: python src/compiler/compile.py --file $NEW_CONFIG_FILE
       - name: Install node dependencies
