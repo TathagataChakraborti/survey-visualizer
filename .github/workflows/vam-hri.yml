@@ -61,7 +61,6 @@ jobs:
           python $DROPBOX_HELPER_PATH  $DROPBOX_ACCESS_TOKEN $DROPBOX_FOLDER $LOCAL_PDF_FOLDER
       - name: Edit app configuration
         env:
-          env:
           SLUG_FILE_PATH_PATTERN: data\/slug.xlsx
           SLUG_FILE_PATH_PATTERN_TO_REPLACE_WITH: .\/slug.xlsx
           PDF_FOLDER_PATH_PATTERN: data\/pdfs
