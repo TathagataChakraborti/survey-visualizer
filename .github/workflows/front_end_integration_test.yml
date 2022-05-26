@@ -35,6 +35,6 @@ jobs:
         run: yarn build
       - name: Build docker image
         env:
-          IMAGE_REPO: us.icr.io/research/macq
+          IMAGE_REPO: us.icr.io/research/vam_hri
           IMAGE_NAME: vam_hri
         run: docker build -t $IMAGE_REPO/$IMAGE_NAME .
