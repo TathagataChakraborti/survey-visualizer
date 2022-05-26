@@ -33,7 +33,8 @@ jobs:
           REGION: us-south
           RESOURCE_GROUP: CUELAB
         run: |
-          apt install -y curl
+          sudo apt update
+          sudo apt install -y curl
           curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
           bx plugin install container-registry
           bx plugin install container-service
