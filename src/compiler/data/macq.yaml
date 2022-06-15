@@ -7,7 +7,7 @@ metadata:
     year={2022}}"
   link_to_contribute: https://github.com/AI-Planning/macq
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
-  primary_link: https://drive.google.com/file/d/1WqO-PWbE7uhHVbSRnqGcJkQN2-Hpquh2/view?usp=sharing
+  primary_link: https://arxiv.org/abs/2206.06530
   secondary_links: 
     - name: Arora et al. 2019
       link: https://hal.archives-ouvertes.fr/hal-02010536/file/A_Review_of_Learning_Planning_Action_Models.pdf
