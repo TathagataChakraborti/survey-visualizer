@@ -3,7 +3,7 @@ metadata:
   acronym: MACQ
   name: Model Learning for AI Planning
   title_text: 'MACQ: A Holistic View of Model Acquisition Techniques'
-  citation_text: "@inproceedings{macq, \n title={{MACQ: A Holistic View of Model\n\t Acquisition Techniques}}, \n author={Ethan Callanan, Rebecca De Venezia,\n\t Victoria Armstrong, Alison Paredes,\n\t Tathagata Chakraborti, and\n\t Christian Muise}, \n booktitle={ICAPS Workshop on Knowledge \n\t    Engineering for Planning \n\t    and Scheduling (KEPS)}, \n
+  citation_text: "@inproceedings{macq, \n title={{MACQ: A Holistic View of Model\n\t Acquisition Techniques}}, \n author={Ethan Callanan and Rebecca De Venezia\n\t and Victoria Armstrong and Alison Paredes\n\t and Tathagata Chakraborti and\n\t Christian Muise}, \n booktitle={ICAPS Workshop on Knowledge \n\t    Engineering for Planning \n\t    and Scheduling (KEPS)}, \n
     year={2022}}"
   link_to_contribute: https://github.com/AI-Planning/macq
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
