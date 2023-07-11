@@ -21,8 +21,8 @@ metadata:
   info_link:
   - link: http://icaps22.icaps-conference.org/workshops/KEPS
     text: KEPS 2022
-  - link: http://ieeevis.org/year/2022/welcome
-    text: IEEEVIS 2022
+  - link: https://icaps23.icaps-conference.org/program/tutorials/model
+    text: ICAPS 2023
 link_to_server: https://toby.mua8gtem6c8.us-east.codeengine.appdomain.cloud
 default_view: Taxonomy
 min_year: 1984
