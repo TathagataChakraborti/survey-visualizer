@@ -4,7 +4,7 @@
 ![Build](https://github.com/TathagataChakraborti/survey-visualizer/actions/workflows/CI.yml/badge.svg)
 
 This repository hosts the source code for a generic visualization tool for data from survey papers, for readers to explore on the browser.
-It accepts as input a formatted spreadsheet and produces several views in terms of hierarchy of concepts,
+It accepts as input a formatted spreadsheet and produces several views in terms of a hierarchy of concepts,
 document concept similarity, and citation network. See [example deployments](#active-deployments) below.
 
 ## Setting up locally
@@ -14,7 +14,7 @@ document concept similarity, and citation network. See [example deployments](#ac
 First you need to provide a configuration file and the source spreadsheet to generate the data for the frontend.
 
 1. Put all your spreadsheets in [this directory](./src/compiler/data/) and your PDFs (if available) in [this directory](./src/compiler/pdfs/). Some sample files have been kept there for you.
-2. Configure your `config.yaml`. See [here](./src/config.yaml) for an example. Detailed instructions on how to configure your system are available [here](./src/README.md).
+2. Configure your `config.yaml`. See [here](./src/compiler/data/vamhri.yaml) for an example. Detailed instructions on how to configure your system are available [here](./src/README.md).
 
 3. Then run the following:
 
@@ -39,7 +39,7 @@ user:~$ yarn start
 You can contribute in two forms:
 
 1. Directly to this code base for new features, bug fixes, etc. Open an issue [here](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose).
-2. To the surveys that pull from this code base, in the form of new paper entires, updates to the taxonomies, and so on. See below for a list of active deployments.
+2. To the surveys that pull from this code base, in the form of new paper entries, updates to the taxonomies, and so on. See below for a list of active deployments.
 
 ### Active Deployments
 
