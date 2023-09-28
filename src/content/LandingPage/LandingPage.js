@@ -37,26 +37,26 @@ class LandingPage extends React.Component {
       <>
         <Grid>
           <Column lg={4} md={8} sm={4}>
-            <div className="bx--container">
+            <div className="cds--container">
               <ContentSwitcher
                 onChange={e => this.logChange(e)}
                 size="sm"
-                selectedIndex={config['views']
+                selectedIndex={config.views
                   .map(e => e.name)
                   .indexOf(this.state.view)}>
-                {config['views'].map((view, id) => (
-                  <Switch key={id} name={view['name']} text={view['name']} />
+                {config.views.map((view, id) => (
+                  <Switch key={id} name={view.name} text={view.name} />
                 ))}
               </ContentSwitcher>
 
               <br />
               <br />
 
-              <h3>{config['metadata']['title_text']}</h3>
+              <h3>{config.metadata.title_text}</h3>
 
               <br />
               <CodeSnippet type="multi">
-                {config['metadata']['citation_text']}
+                {config.metadata.citation_text}
               </CodeSnippet>
 
               <br />
@@ -67,19 +67,19 @@ class LandingPage extends React.Component {
                   className="buttonset"
                   size="sm"
                   renderIcon={Document}
-                  href={config['metadata']['primary_link']}
+                  href={config.metadata.primary_link}
                   target="_blank">
                   Read
                 </Button>
                 <br />
-                {config['metadata']['secondary_links'].length === 1 && (
+                {config.metadata.secondary_links.length === 1 && (
                   <>
                     <Button
                       kind="tertiary"
                       className="buttonset"
                       size="sm"
                       renderIcon={Document}
-                      href={config['metadata']['secondary_links'][0]['link']}
+                      href={config.metadata.secondary_links[0].link}
                       target="_blank">
                       See Also
                     </Button>
@@ -91,19 +91,19 @@ class LandingPage extends React.Component {
                   className="buttonset tertiary-secondary"
                   renderIcon={LogoGithub}
                   size="sm"
-                  href={config['metadata']['link_to_contribute']}
+                  href={config.metadata.link_to_contribute}
                   target="_blank">
                   Contribute
                 </Button>
                 <br />
-                {config['metadata']['community_link'] && (
+                {config.metadata.community_link && (
                   <>
                     <Button
                       kind="tertiary"
                       className="buttonset tertiary-danger"
                       renderIcon={LogoSlack}
                       size="sm"
-                      href={config['metadata']['community_link']}
+                      href={config.metadata.community_link}
                       target="_blank">
                       Community
                     </Button>
@@ -112,14 +112,14 @@ class LandingPage extends React.Component {
                 )}
               </ButtonSet>
 
-              {config['metadata']['info_tile'] && (
+              {config.metadata.info_tile && (
                 <Tile>
                   <p style={{ fontSize: 'small' }}>
-                    {config['metadata']['info_text']}
+                    {config.metadata.info_text}
                   </p>
 
                   <div style={{ paddingTop: '3px' }}>
-                    {config['metadata']['info_link'].map((link, id) => (
+                    {config.metadata.info_link.map((link, id) => (
                       <span key={id}>
                         {' '}
                         {id > 0 && '|'}{' '}
@@ -134,13 +134,13 @@ class LandingPage extends React.Component {
 
               <br />
 
-              {config['metadata']['secondary_links'].length > 1 && (
+              {config.metadata.secondary_links.length > 1 && (
                 <ContainedList
                   size="sm"
                   label="See Also"
                   kind="disclosed"
                   className="see-also">
-                  {config['metadata']['secondary_links'].map((item, i) => (
+                  {config.metadata.secondary_links.map((item, i) => (
                     <ContainedListItem
                       onClick={() => window.open(item.link)}
                       action={
@@ -162,7 +162,7 @@ class LandingPage extends React.Component {
             </div>
 
             <div className="footer">
-              <div className="bx--container">
+              <div className="cds--container">
                 <p
                   style={{
                     fontSize: 'small',
@@ -184,7 +184,7 @@ class LandingPage extends React.Component {
                 </GitHubButton>
               </div>
 
-              <div className="bx--container" style={{ paddingTop: '0' }}>
+              <div className="cds--container" style={{ paddingTop: '0' }}>
                 App built by{' '}
                 <Link href="https://twitter.com/tchakra2" target="_blank">
                   tchakra2

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link, Tile, Slider, Tag } from '@carbon/react';
+import { Slider, Tag, ContainedListItem } from '@carbon/react';
 import { AreaChart } from '@carbon/charts-react';
-import { Download } from '@carbon/icons-react';
 
 import '@carbon/charts/styles.css';
 
@@ -94,22 +93,17 @@ function getChildren(node, taxonomy) {
 
 const PaperInner = props => (
   <p className="paper">
-    {props.paper.title} <em>by {props.paper.authors}</em>. {props.paper.venue} (
-    {props.paper.year}){' '}
-    {props.paper.link && (
-      <Link className="hover-cursor" href={props.paper.link} target="_blank">
-        <span className="download-icon">
-          <Download />
-        </span>
-      </Link>
-    )}
+    <strong>{props.paper.title}</strong> <em>by {props.paper.authors}</em>.{' '}
+    {props.paper.venue} ({props.paper.year}){' '}
   </p>
 );
 
 const Paper = props => (
-  <Tile className="paper-tile">
+  <ContainedListItem
+    onClick={() => window.open(props.paper.link)}
+    key={props.paper.title}>
     <PaperInner paper={props.paper} />
-  </Tile>
+  </ContainedListItem>
 );
 
 class Simulate extends React.Component {
