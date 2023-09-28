@@ -1,5 +1,5 @@
 import React from 'react';
-import { InlineNotification } from 'carbon-components-react';
+import { InlineNotification } from '@carbon/react';
 import { ForceGraph } from './observablehq.js';
 import { Simulate, TagArea } from '../../components/Info';
 
@@ -137,7 +137,7 @@ class Network extends React.Component {
 
   render() {
     return (
-      <>
+      <div className="cds--container" onMouseUp={this.mouseUpGlobal.bind(this)}>
         <InlineNotification
           subtitle={
             <span>
@@ -152,47 +152,37 @@ class Network extends React.Component {
           kind="info"
           lowContrast
         />
-        <div
-          className="bx--container"
-          onMouseUp={this.mouseUpGlobal.bind(this)}>
-          <div className="bx--row">
-            <Simulate
-              data={this.state.node_data}
-              years={this.state.years}
-              handleSimulate={this.handleSimulate.bind(this)}
-              slide_on={this.state.slide_on}
-            />
-          </div>
+        <br />
 
-          <br />
-          <br />
+        <Simulate
+          data={this.state.node_data}
+          years={this.state.years}
+          handleSimulate={this.handleSimulate.bind(this)}
+          slide_on={this.state.slide_on}
+        />
 
-          <div ref={this.ref} style={{ height: '50vh' }}>
-            <Chart
-              data={{
-                nodes: this.state.node_data,
-                links: this.state.link_data,
-              }}
-              width={this.state.width}
-              height={this.state.height}
-            />
-          </div>
+        <br />
+        <br />
 
-          <br />
-          <br />
-
-          <div className="bx--container">
-            <div className="bx--row">
-              <div className="bx--col-lg-12">
-                <TagArea
-                  data={this.state.node_data}
-                  updateTagSelection={this.updateTagSelection.bind(this)}
-                />
-              </div>
-            </div>
-          </div>
+        <div ref={this.ref} style={{ height: '50vh' }}>
+          <Chart
+            data={{
+              nodes: this.state.node_data,
+              links: this.state.link_data,
+            }}
+            width={this.state.width}
+            height={this.state.height}
+          />
         </div>
-      </>
+
+        <br />
+        <br />
+
+        <TagArea
+          data={this.state.node_data}
+          updateTagSelection={this.updateTagSelection.bind(this)}
+        />
+      </div>
     );
   }
 }

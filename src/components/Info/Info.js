@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link, Tile, Slider, Tag } from 'carbon-components-react';
+import { Grid, Column, Slider, Tag, ContainedListItem } from '@carbon/react';
 import { AreaChart } from '@carbon/charts-react';
-import { Download16 } from '@carbon/icons-react';
 
 import '@carbon/charts/styles.css';
 
@@ -92,24 +91,15 @@ function getChildren(node, taxonomy) {
   return children;
 }
 
-const PaperInner = props => (
-  <p className="paper">
-    {props.paper.title} <em>by {props.paper.authors}</em>. {props.paper.venue} (
-    {props.paper.year}){' '}
-    {props.paper.link && (
-      <Link className="hover-cursor" href={props.paper.link} target="_blank">
-        <span className="download-icon">
-          <Download16 />
-        </span>
-      </Link>
-    )}
-  </p>
-);
-
 const Paper = props => (
-  <Tile className="paper-tile">
-    <PaperInner paper={props.paper} />
-  </Tile>
+  <ContainedListItem
+    onClick={() => window.open(props.paper.link)}
+    key={props.paper.title}>
+    <p className="paper">
+      <strong>{props.paper.title}</strong> <em>by {props.paper.authors}</em>{' '}
+      {props.paper.venue} ({props.paper.year})
+    </p>
+  </ContainedListItem>
 );
 
 class Simulate extends React.Component {
@@ -213,10 +203,10 @@ class Simulate extends React.Component {
 
   render() {
     return (
-      <>
-        <div className="bx--col-lg-6">
+      <Grid>
+        <Column lg={6} md={4} sm={4}>
           <Slider
-            labelText={config['metadata']['acronym'] + ' through the years'}
+            labelText={config.metadata.acronym + ' through the years'}
             hideTextInput
             onChange={this.handleSimulate.bind(this)}
             min={this.state.years.min_val}
@@ -224,17 +214,18 @@ class Simulate extends React.Component {
             value={this.state.years.cur_val}
             step={1}
           />
-        </div>
+        </Column>
 
-        <div
-          className={
-            'bx--col-lg-6 ' + (!this.state.slide_on && ' display_none')
-          }>
+        <Column
+          lg={10}
+          md={6}
+          sm={4}
+          className={this.state.slide_on ? '' : 'display_none'}>
           <AreaChart
             data={this.getTimeline()}
             options={this.state.options}></AreaChart>
-        </div>
-      </>
+        </Column>
+      </Grid>
     );
   }
 }
@@ -407,6 +398,7 @@ class TagArea extends React.Component {
       <>
         {this.objectSort(this.state.selected_tags).map((tag, i) => (
           <Tag
+            className="topic-tag"
             filter={this.state.filter_tags.indexOf(tag) > -1}
             onClose={this.onCloseTag.bind(this, tag)}
             onClick={this.onClickTag.bind(this, tag)}
@@ -428,7 +420,6 @@ export {
   unhashID,
   getParents,
   getChildren,
-  PaperInner,
   Paper,
   TagArea,
   Simulate,

@@ -10,14 +10,7 @@ a:hover {
   text-decoration: none;
 }
 
-.sidebar {
-}
-
-.bx--grid--full-width {
-  padding: 0;
-}
-
-.bx--container {
+.cds--container {
   padding: 20px;
 }
 
@@ -25,6 +18,8 @@ a:hover {
   position: fixed;
   bottom: 0;
   font-size: smaller;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 999;
 }
 
 .bonus-link {
@@ -58,7 +53,6 @@ a:hover {
   background-color: black;
 }
 
-.see-also-accordion .bx--accordion__content {
-  padding: 0;
-  margin: 0;
+.see-also .cds--contained-list__header,
+.see-also .cds--contained-list-item__content {
 }

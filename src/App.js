@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './app.scss';
 
-import { Content } from 'carbon-components-react/lib/components/UIShell';
+import { Content } from '@carbon/react';
 import { Route, Switch } from 'react-router-dom';
 
 import LandingPage from './content/LandingPage';

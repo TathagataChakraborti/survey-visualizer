@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stage, Layer, Rect, Circle } from 'react-konva';
-import { InlineNotification, Link } from 'carbon-components-react';
-import { PaperInner, Simulate, TagArea } from '../../components/Info';
+import { Grid, Column, InlineNotification } from '@carbon/react';
+import { Paper, Simulate, TagArea } from '../../components/Info';
 
 import '@carbon/charts/styles.css';
 
@@ -241,7 +241,7 @@ class Affinity extends React.Component {
 
     this.setState({
       ...this.state,
-      hoverText: <PaperInner paper={paper_data} />,
+      hoverText: <Paper paper={paper_data} />,
     });
   }
 
@@ -417,49 +417,44 @@ class Affinity extends React.Component {
   render() {
     return (
       <div onMouseUp={this.mouseUpGlobal.bind(this)}>
-        <InlineNotification
-          subtitle={
-            <span>
-              This view into document similarity space was inspired from{' '}
-              <Link
-                href="https://github.com/Mini-Conf/Mini-Conf"
-                target="_blank">
-                Miniconf
-              </Link>
-              . Each dot is a paper. If you <b>hover</b> over a dot, you see the
-              corresponding paper. To learn more about an area of the plot,{' '}
-              <b>Select</b> one or more papers by clicking on the dots or by
-              pressing SHIFT and dragging a rectangle over them.
-            </span>
-          }
-          title="Document Embeddings"
-          kind="info"
-          lowContrast
-        />
+        <div className="cds--container">
+          <InlineNotification
+            subtitle={
+              <span>
+                This view into document similarity space was inspired from
+                Miniconf. Each dot is a paper. If you <b>hover</b> over a dot,
+                you see the corresponding paper. To learn more about an area of
+                the plot, <b>Select</b> one or more papers by clicking on the
+                dots or by pressing SHIFT and dragging a rectangle over them.
+              </span>
+            }
+            title="Document Embeddings"
+            kind="info"
+            lowContrast
+          />
 
-        <div className="bx--container">
-          <div className="bx--row">
-            <Simulate
-              data={this.state.data}
-              years={this.state.years}
-              handleSimulate={this.handleSimulate.bind(this)}
-              slide_on={this.state.slide_on}
-            />
+          <br />
+          <Grid>
+            <Column lg={4} md={4} sm={4}>
+              <Simulate
+                data={this.state.data}
+                years={this.state.years}
+                handleSimulate={this.handleSimulate.bind(this)}
+                slide_on={this.state.slide_on}
+              />
+            </Column>
 
-            <div
-              className={
-                'bx--col-lg-6 ' + (this.state.slide_on && ' display_none')
-              }
-              style={{ height: '75px' }}>
+            <Column
+              lg={7}
+              md={4}
+              sm={4}
+              style={{ paddingLeft: '20px', height: '75px' }}>
               <span>{this.state.hoverText}</span>
-            </div>
-          </div>
+            </Column>
+          </Grid>
         </div>
 
-        <div
-          className="bx--col-lg-16"
-          style={{ height: '40vh' }}
-          ref={this.ref}>
+        <div style={{ height: '40vh' }} ref={this.ref}>
           <Stage
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}
@@ -515,15 +510,11 @@ class Affinity extends React.Component {
           </Stage>
         </div>
 
-        <div className="bx--container">
-          <div className="bx--row">
-            <div className="bx--col-lg-12">
-              <TagArea
-                data={this.state.data}
-                updateTagSelection={this.updateTagSelection.bind(this)}
-              />
-            </div>
-          </div>
+        <div className="cds--container">
+          <TagArea
+            data={this.state.data}
+            updateTagSelection={this.updateTagSelection.bind(this)}
+          />
         </div>
       </div>
     );
