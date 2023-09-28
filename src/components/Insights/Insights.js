@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, DotMark } from '@carbon/icons-react';
-import { PaperInner } from '../../components/Info';
+import { Paper } from '../../components/Info';
 import {
   Grid,
   Column,
@@ -380,7 +380,7 @@ class Insight extends React.Component {
                         <StructuredListCell
                           className={Boolean(paper.selected) ? 'text-blue' : ''}
                           style={{ width: '20%' }}>
-                          <PaperInner
+                          <Paper
                             paper={
                               this.state.paper_data.filter((p, i) => {
                                 return p.UID === paper.UID;

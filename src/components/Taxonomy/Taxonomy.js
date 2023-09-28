@@ -14,7 +14,7 @@ import {
   unhashID,
   getParents,
   getChildren,
-  PaperInner,
+  Paper,
 } from '../../components/Info';
 import { buildElbowPathString } from '@carbon/charts';
 import {
@@ -35,11 +35,6 @@ import {
   Link,
   Breadcrumb,
   BreadcrumbItem,
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListBody,
-  StructuredListRow,
-  StructuredListCell,
   Slider,
   Toggle,
   AccordionItem,
@@ -49,6 +44,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  ContainedList,
 } from '@carbon/react';
 
 let config = require('../../config.json');
@@ -63,7 +59,7 @@ class Taxonomy extends React.Component {
     this.ref = React.createRef();
     this.state = {
       data: data,
-      active_tab: view_config['default_tab'],
+      active_tab: view_config.default_tab,
       taxonomy_data: [],
       paper_data: [],
       taxonomy_data_fancy: [],
@@ -777,8 +773,8 @@ class Taxonomy extends React.Component {
               aria-label=""
               style={{ height: '100%' }}>
               <div className="cds--container">
-                <div className="bx--row">
-                  <div className="bx--col-lg-10">
+                <Grid>
+                  <Column lg={8} md={8} sm={4}>
                     {this.state.modal && (
                       <>
                         <h4>
@@ -807,6 +803,7 @@ class Taxonomy extends React.Component {
                           <span key={i}>
                             {i > 0 && ' | '}
                             <Link
+                              style={{ cursor: 'pointer' }}
                               onClick={this.onClickModalNode.bind(this, child)}>
                               {child.name}
                             </Link>
@@ -824,7 +821,7 @@ class Taxonomy extends React.Component {
                       size="sm"
                       renderIcon={Document}
                       iconDescription="Add"
-                      href={config['metadata']['primary_link']}
+                      href={config.metadata.primary_link}
                       target="_blank">
                       Read More
                     </Button>
@@ -833,41 +830,31 @@ class Taxonomy extends React.Component {
                       kind="tertiary"
                       renderIcon={LogoGithub}
                       size="sm"
-                      href={config['metadata']['link_to_contribute']}
+                      href={config.metadata.link_to_contribute}
                       target="_blank">
                       Contribute
                     </Button>
                     <br />
                     <br />
 
-                    <StructuredListWrapper>
-                      <StructuredListHead>
-                        <StructuredListRow>
-                          <StructuredListCell head>
-                            Papers in this Category
-                          </StructuredListCell>
-                        </StructuredListRow>
-                      </StructuredListHead>
-                      <StructuredListBody>
-                        {this.state.paper_data
-                          .filter(
-                            paper =>
-                              paper['tags']
-                                .map(e => hashID(e))
-                                .indexOf(hashID(this.state.modal)) > -1
-                          )
-                          .map(item => (
-                            <StructuredListRow key={item.UID}>
-                              <StructuredListCell>
-                                <PaperInner paper={item} />
-                              </StructuredListCell>
-                              <StructuredListCell></StructuredListCell>
-                            </StructuredListRow>
-                          ))}
-                      </StructuredListBody>
-                    </StructuredListWrapper>
-                  </div>
-                  <div className="bx--col-lg-6">
+                    <ContainedList
+                      label="Papers in this Category"
+                      size="sm"
+                      type="disclosed">
+                      {this.state.paper_data
+                        .filter(
+                          paper =>
+                            paper['tags']
+                              .map(e => hashID(e))
+                              .indexOf(hashID(this.state.modal)) > -1
+                        )
+                        .map(item => (
+                          <Paper key={item.UID} paper={item} />
+                        ))}
+                    </ContainedList>
+                  </Column>
+
+                  <Column lg={4} md={8} sm={4}>
                     {this.state.modal && (
                       <SimpleBarChart
                         data={this.getTimeline()}
@@ -875,8 +862,8 @@ class Taxonomy extends React.Component {
                           this.state.config.modal_timeline
                         }></SimpleBarChart>
                     )}
-                  </div>
-                </div>
+                  </Column>
+                </Grid>
               </div>
             </Modal>
           </div>

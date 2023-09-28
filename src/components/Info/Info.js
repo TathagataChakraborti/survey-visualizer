@@ -91,18 +91,14 @@ function getChildren(node, taxonomy) {
   return children;
 }
 
-const PaperInner = props => (
-  <p className="paper">
-    <strong>{props.paper.title}</strong> <em>by {props.paper.authors}</em>.{' '}
-    {props.paper.venue} ({props.paper.year}){' '}
-  </p>
-);
-
 const Paper = props => (
   <ContainedListItem
     onClick={() => window.open(props.paper.link)}
     key={props.paper.title}>
-    <PaperInner paper={props.paper} />
+    <p className="paper">
+      <strong>{props.paper.title}</strong> <em>by {props.paper.authors}</em>{' '}
+      {props.paper.venue} ({props.paper.year})
+    </p>
   </ContainedListItem>
 );
 
@@ -424,7 +420,6 @@ export {
   unhashID,
   getParents,
   getChildren,
-  PaperInner,
   Paper,
   TagArea,
   Simulate,
