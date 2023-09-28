@@ -2,6 +2,8 @@ import React from 'react';
 import { ArrowRight, DotMark } from '@carbon/icons-react';
 import { PaperInner } from '../../components/Info';
 import {
+  Grid,
+  Column,
   Tag,
   Link,
   InlineNotification,
@@ -277,10 +279,10 @@ class Insight extends React.Component {
       }
     }
     return (
-      <>
-        <div className="bx--col-lg-16">
+      <Grid>
+        <Column lg={16} md={8} sm={4}>
           <br />
-          <div className="bx--row" style={{ width: '75%' }}>
+          <div style={{ width: '75%' }}>
             <Tile>
               <p style={{ fontSize: 'inherit' }}>
                 This is a paper, described in terms of the tags in this
@@ -308,11 +310,7 @@ class Insight extends React.Component {
               </div>
             ));
 
-            return (
-              <div key={idx} className="bx--row">
-                {render_item}
-              </div>
-            );
+            return <div key={idx}>{render_item}</div>;
           })}
           <br />
           <br />
@@ -332,7 +330,7 @@ class Insight extends React.Component {
                     There was an error rendering the new paper embedding. Please
                     report a bug{' '}
                     <Link
-                      href={config['metadata']['link_to_code'] + '/issues'}
+                      href={config.metadata.link_to_code + '/issues'}
                       target="_blank">
                       here
                     </Link>
@@ -353,7 +351,7 @@ class Insight extends React.Component {
               </svg>
             )}
           </div>
-        </div>
+        </Column>
 
         <StructuredListWrapper ariaLabel="Neighboring Papers">
           <StructuredListHead>
@@ -426,7 +424,7 @@ class Insight extends React.Component {
             </StructuredListRow>
           </StructuredListBody>
         </StructuredListWrapper>
-      </>
+      </Grid>
     );
   }
 }
@@ -435,7 +433,7 @@ class Insights extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: config['default_view'],
+      view: config.default_view,
       paper_data: paper_data,
       taxonomy_data: taxonomy_data,
       pageID: 1,
@@ -558,234 +556,232 @@ class Insights extends React.Component {
 
   render() {
     return (
-      <>
-        <div
-          className="bx--grid bx--grid--full-width"
-          style={{
-            width: '100%',
-            minHeight: '100vh',
-          }}>
-          <Accordion align="start">
-            <AccordionItem title="Tell me topics that do not have any papers!">
-              <InlineNotification
-                lowContrast
-                hideCloseButton
-                kind="error"
-                title="Coming soon!"
-              />
-            </AccordionItem>
-            <AccordionItem title="What are topics that have the least number of papers?">
-              <InlineNotification
-                lowContrast
-                hideCloseButton
-                kind="error"
-                title="Coming soon!"
-              />
-            </AccordionItem>
-            <AccordionItem title="What are most popular topics?">
-              <InlineNotification
-                lowContrast
-                hideCloseButton
-                kind="error"
-                title="Coming soon!"
-              />
-            </AccordionItem>
-            <AccordionItem title="Search papers using tags">
-              <p>
-                You can search papers interactively using tags in the{' '}
-                <Link href="/">home</Link> page.
-              </p>
-            </AccordionItem>
-            <AccordionItem
-              className="whats-next"
-              title={<>What should I work on next?! &#129299;</>}
-              open>
-              <p style={{ fontSize: 'inherit' }}>
-                In her{' '}
-                <Link
-                  href="https://ojs.aaai.org/index.php/aimagazine/article/view/18149"
-                  target="_blank">
-                  AAAI 2020 presidential address
-                </Link>
-                , Yolanda Gil asked:{' '}
-                <em>"Will AI write the scientific papers of the future?"</em> to
-                put into context the outsized impact that AI is beginning to
-                have on the scientific process. This section builds on this
-                theme and uses an AI constraint solver to imagine new papers yet
-                unwritten. Learn more about it{' '}
-                <Link href="" target="_blank">
-                  here
-                </Link>
-                .
-              </p>
+      <div
+        style={{
+          width: '100%',
+          minHeight: '100vh',
+        }}>
+        <Accordion align="start">
+          <AccordionItem title="Tell me topics that do not have any papers!">
+            <InlineNotification
+              lowContrast
+              hideCloseButton
+              kind="error"
+              title="Coming soon!"
+            />
+          </AccordionItem>
+          <AccordionItem title="What are topics that have the least number of papers?">
+            <InlineNotification
+              lowContrast
+              hideCloseButton
+              kind="error"
+              title="Coming soon!"
+            />
+          </AccordionItem>
+          <AccordionItem title="What are most popular topics?">
+            <InlineNotification
+              lowContrast
+              hideCloseButton
+              kind="error"
+              title="Coming soon!"
+            />
+          </AccordionItem>
+          <AccordionItem title="Search papers using tags">
+            <p>
+              You can search papers interactively using tags in the{' '}
+              <Link href="/">home</Link> page.
+            </p>
+          </AccordionItem>
+          <AccordionItem
+            className="whats-next"
+            title={<>What should I work on next?! &#129299;</>}
+            open>
+            <p style={{ fontSize: 'inherit' }}>
+              In her{' '}
+              <Link
+                href="https://ojs.aaai.org/index.php/aimagazine/article/view/18149"
+                target="_blank">
+                AAAI 2020 presidential address
+              </Link>
+              , Yolanda Gil asked:{' '}
+              <em>"Will AI write the scientific papers of the future?"</em> to
+              put into context the outsized impact that AI is beginning to have
+              on the scientific process. This section builds on this theme and
+              uses an AI constraint solver to imagine new papers yet unwritten.
+              Learn more about it{' '}
+              <Link href="" target="_blank">
+                here
+              </Link>
+              .
+            </p>
 
-              <br />
-              <br />
+            <br />
+            <br />
 
-              {view_config.interactive && (
-                <>
-                  <MultiSelect
-                    helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
-                    id="multiselect-paper"
-                    itemToString={item => (item ? item.text : '')}
-                    items={this.state.paper_data.map((paper, i) => {
-                      return {
-                        id: i,
-                        text: paper.title + ' by ' + paper.authors,
-                      };
-                    })}
-                    label="List of papers"
-                    titleText={
-                      <>
-                        <span style={{ color: 'red' }}>Optional</span> Select
-                        list of papers you want to focus on
-                      </>
-                    }
-                    initialSelectedItems={this.state.selected_papers}
-                    onChange={value => {
-                      this.logPaperSelection(value.selectedItems);
-                    }}
-                  />
+            {view_config.interactive && (
+              <>
+                <MultiSelect
+                  helperText="You can make the new paper search focus on papers of interest. If nothing is selected, the system will work with all the papers."
+                  id="multiselect-paper"
+                  itemToString={item => (item ? item.text : '')}
+                  items={this.state.paper_data.map((paper, i) => {
+                    return {
+                      id: i,
+                      text: paper.title + ' by ' + paper.authors,
+                    };
+                  })}
+                  label="List of papers"
+                  titleText={
+                    <>
+                      <span style={{ color: 'red' }}>Optional</span> Select list
+                      of papers you want to focus on
+                    </>
+                  }
+                  initialSelectedItems={this.state.selected_papers}
+                  onChange={value => {
+                    this.logPaperSelection(value.selectedItems);
+                  }}
+                />
 
-                  <br />
-                  <br />
+                <br />
+                <br />
 
-                  <MultiSelect
-                    helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
-                    id="multiselect-tags"
-                    itemToString={item => (item ? item.text : '')}
-                    items={tag_labels}
-                    label="List of tags"
-                    titleText={
-                      <>
-                        <span style={{ color: 'red' }}>Optional</span> Select
-                        list of tags you want to focus on
-                      </>
-                    }
-                    initialSelectedItems={this.state.selected_tags}
-                    onChange={value => {
-                      this.logTagSelection(value.selectedItems);
-                    }}
-                  />
+                <MultiSelect
+                  helperText="You can make the new paper search focus on tags of interest. If nothing is selected, the system will work with all the tags."
+                  id="multiselect-tags"
+                  itemToString={item => (item ? item.text : '')}
+                  items={tag_labels}
+                  label="List of tags"
+                  titleText={
+                    <>
+                      <span style={{ color: 'red' }}>Optional</span> Select list
+                      of tags you want to focus on
+                    </>
+                  }
+                  initialSelectedItems={this.state.selected_tags}
+                  onChange={value => {
+                    this.logTagSelection(value.selectedItems);
+                  }}
+                />
 
-                  <br />
-                  <br />
-                </>
-              )}
+                <br />
+                <br />
+              </>
+            )}
 
-              <div className="bx--row">
-                <div className="bx--col-lg-4">
-                  <NumberInput
-                    helperText={
-                      <>
-                        <span style={{ color: 'red' }}>Optional</span> Number of
-                        papers
-                      </>
-                    }
-                    id="num-papers"
-                    invalidText="Number is not valid"
-                    max={maxImagination}
-                    min={1}
-                    step={1}
-                    value={this.state.num_papers}
-                    onChange={this.changeNumePapers.bind(this)}
-                  />
-                </div>
-                <div className="bx--col-lg-4">
-                  <Button
-                    kind="primary"
-                    size="field"
-                    onClick={this.imaginePapers.bind(this)}>
-                    What's Next
-                  </Button>
-                </div>
+            <Grid>
+              <Column lg={4} md={4} sm={4}>
+                <NumberInput
+                  helperText={
+                    <>
+                      <span style={{ color: 'red' }}>Optional</span> Number of
+                      papers
+                    </>
+                  }
+                  id="num-papers"
+                  invalidText="Number is not valid"
+                  max={maxImagination}
+                  min={1}
+                  step={1}
+                  value={this.state.num_papers}
+                  onChange={this.changeNumePapers.bind(this)}
+                  size="sm"
+                />
+              </Column>
+              <Column lg={4} md={4} sm={4}>
+                <Button
+                  kind="primary"
+                  size="sm"
+                  onClick={this.imaginePapers.bind(this)}>
+                  What's Next
+                </Button>
+              </Column>
+            </Grid>
+
+            {this.state.loading && (
+              <div style={{ padding: '50px' }}>
+                <Loading
+                  style={{ margin: '0 auto' }}
+                  description="Active loading indicator"
+                  withOverlay={false}
+                />
               </div>
+            )}
 
-              {this.state.loading && (
-                <div style={{ padding: '50px' }}>
-                  <Loading
-                    style={{ margin: '0 auto' }}
-                    description="Active loading indicator"
-                    withOverlay={false}
-                  />
-                </div>
-              )}
+            {this.state.error && (
+              <>
+                <br />
+                <br />
+                <ToastNotification
+                  lowContrast
+                  subtitle={
+                    <span>
+                      There was an error contacting the server. Please report a
+                      bug{' '}
+                      <Link
+                        href={config.metadata.link_to_code + '/issues'}
+                        target="_blank">
+                        here
+                      </Link>
+                      .
+                    </span>
+                  }
+                  title="ERROR"
+                />
+              </>
+            )}
 
-              {this.state.error && (
-                <>
-                  <br />
-                  <br />
-                  <ToastNotification
-                    lowContrast
-                    subtitle={
-                      <span>
-                        There was an error contacting the server. Please report
-                        a bug{' '}
-                        <Link
-                          href={config['metadata']['link_to_code'] + '/issues'}
-                          target="_blank">
-                          here
-                        </Link>
-                        .
-                      </span>
+            {this.state.new_papers.length > 0 && (
+              <div>
+                <br />
+                <br />
+
+                <Pagination
+                  backwardText="Previous paper"
+                  forwardText="Next paper"
+                  itemsPerPageText="Papers per page:"
+                  page={1}
+                  pageSize={1}
+                  pageSizes={[
+                    ...Array(this.state.new_papers.length).keys(),
+                  ].map(i => i + 1)}
+                  size="md"
+                  totalItems={this.state.new_papers.length}
+                  onChange={e => {
+                    this.setState({
+                      ...this.state,
+                      pageID: e.page,
+                      pageMAX: e.pageSize,
+                    });
+                  }}
+                />
+
+                {[...Array(this.state.new_papers.length).keys()].map(
+                  (item, idx) => {
+                    if (
+                      idx >= (this.state.pageID - 1) * this.state.pageMAX &&
+                      idx < this.state.pageID * this.state.pageMAX
+                    ) {
+                      return (
+                        <Insight
+                          key={idx}
+                          paper_data={this.state.paper_data}
+                          data={this.state.new_papers[idx]}
+                        />
+                      );
+                    } else {
+                      return null;
                     }
-                    title="ERROR"
-                  />
-                </>
-              )}
+                  }
+                )}
+              </div>
+            )}
 
-              {this.state.new_papers.length > 0 && (
-                <div>
-                  <br />
-                  <br />
-
-                  <Pagination
-                    backwardText="Previous paper"
-                    forwardText="Next paper"
-                    itemsPerPageText="Papers per page:"
-                    page={1}
-                    pageSize={1}
-                    pageSizes={[
-                      ...Array(this.state.new_papers.length).keys(),
-                    ].map(i => i + 1)}
-                    size="md"
-                    totalItems={this.state.new_papers.length}
-                    onChange={e => {
-                      this.setState({
-                        ...this.state,
-                        pageID: e.page,
-                        pageMAX: e.pageSize,
-                      });
-                    }}
-                  />
-
-                  {[...Array(this.state.new_papers.length).keys()].map(
-                    (item, idx) => {
-                      if (
-                        idx >= (this.state.pageID - 1) * this.state.pageMAX &&
-                        idx < this.state.pageID * this.state.pageMAX
-                      ) {
-                        return (
-                          <Insight
-                            key={idx}
-                            paper_data={this.state.paper_data}
-                            data={this.state.new_papers[idx]}
-                          />
-                        );
-                      } else {
-                        return null;
-                      }
-                    }
-                  )}
-                </div>
-              )}
-
-              <br />
-              <br />
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </>
+            <br />
+            <br />
+          </AccordionItem>
+        </Accordion>
+      </div>
     );
   }
 }

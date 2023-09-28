@@ -50,7 +50,6 @@ class LandingPage extends React.Component {
               </ContentSwitcher>
 
               <br />
-              <br />
 
               <h3>{config.metadata.title_text}</h3>
 

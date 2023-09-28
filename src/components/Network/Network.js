@@ -153,16 +153,14 @@ class Network extends React.Component {
           lowContrast
         />
         <div
-          className="bx--container"
+          className="cds--container"
           onMouseUp={this.mouseUpGlobal.bind(this)}>
-          <div className="bx--row">
-            <Simulate
-              data={this.state.node_data}
-              years={this.state.years}
-              handleSimulate={this.handleSimulate.bind(this)}
-              slide_on={this.state.slide_on}
-            />
-          </div>
+          <Simulate
+            data={this.state.node_data}
+            years={this.state.years}
+            handleSimulate={this.handleSimulate.bind(this)}
+            slide_on={this.state.slide_on}
+          />
 
           <br />
           <br />
@@ -181,16 +179,10 @@ class Network extends React.Component {
           <br />
           <br />
 
-          <div className="bx--container">
-            <div className="bx--row">
-              <div className="bx--col-lg-12">
-                <TagArea
-                  data={this.state.node_data}
-                  updateTagSelection={this.updateTagSelection.bind(this)}
-                />
-              </div>
-            </div>
-          </div>
+          <TagArea
+            data={this.state.node_data}
+            updateTagSelection={this.updateTagSelection.bind(this)}
+          />
         </div>
       </>
     );

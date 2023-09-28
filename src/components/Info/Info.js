@@ -1,5 +1,5 @@
 import React from 'react';
-import { Slider, Tag, ContainedListItem } from '@carbon/react';
+import { Grid, Column, Slider, Tag, ContainedListItem } from '@carbon/react';
 import { AreaChart } from '@carbon/charts-react';
 
 import '@carbon/charts/styles.css';
@@ -207,10 +207,10 @@ class Simulate extends React.Component {
 
   render() {
     return (
-      <>
-        <div className="bx--col-lg-6">
+      <Grid>
+        <Column lg={6} md={4} sm={4}>
           <Slider
-            labelText={config['metadata']['acronym'] + ' through the years'}
+            labelText={config.metadata.acronym + ' through the years'}
             hideTextInput
             onChange={this.handleSimulate.bind(this)}
             min={this.state.years.min_val}
@@ -218,17 +218,18 @@ class Simulate extends React.Component {
             value={this.state.years.cur_val}
             step={1}
           />
-        </div>
+        </Column>
 
-        <div
-          className={
-            'bx--col-lg-6 ' + (!this.state.slide_on && ' display_none')
-          }>
+        <Column
+          lg={10}
+          md={6}
+          sm={4}
+          className={this.state.slide_on ? '' : 'display_none'}>
           <AreaChart
             data={this.getTimeline()}
             options={this.state.options}></AreaChart>
-        </div>
-      </>
+        </Column>
+      </Grid>
     );
   }
 }
@@ -401,6 +402,7 @@ class TagArea extends React.Component {
       <>
         {this.objectSort(this.state.selected_tags).map((tag, i) => (
           <Tag
+            className="topic-tag"
             filter={this.state.filter_tags.indexOf(tag) > -1}
             onClose={this.onCloseTag.bind(this, tag)}
             onClick={this.onClickTag.bind(this, tag)}
