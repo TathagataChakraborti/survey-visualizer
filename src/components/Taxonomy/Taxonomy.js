@@ -26,6 +26,9 @@ import {
   CaretLeft,
 } from '@carbon/icons-react';
 import {
+  Grid,
+  Column,
+  Tile,
   Modal,
   Checkbox,
   Button,
@@ -37,12 +40,15 @@ import {
   StructuredListBody,
   StructuredListRow,
   StructuredListCell,
-  Tabs,
-  Tab,
   Slider,
   Toggle,
   AccordionItem,
   Accordion,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from '@carbon/react';
 
 let config = require('../../config.json');
@@ -66,8 +72,8 @@ class Taxonomy extends React.Component {
         nodeHeight: 50,
         nodeWidth: 200,
         nodeGapHoriontal: 250,
-        nodeGapVertical: 100,
-        slider: 12,
+        nodeGapVertical: 120,
+        slider: 8,
         vertical_offset: 0,
         plot_options: {
           title: '',
@@ -262,16 +268,6 @@ class Taxonomy extends React.Component {
     });
   };
 
-  handleSliderChange = e => {
-    this.setState({
-      ...this.state,
-      config: {
-        ...this.state.config,
-        slider: e.value,
-      },
-    });
-  };
-
   getPapersWithTag = node => {
     return this.state.paper_data.filter(
       paper =>
@@ -447,6 +443,8 @@ class Taxonomy extends React.Component {
 
   render() {
     var depth_hashes = {};
+    var max_height = 0;
+
     const nodes = this.state.taxonomy_data.map(
       (taxonomy_layer, taxonomy_level) => {
         var current_level = 0;
@@ -516,6 +514,8 @@ class Taxonomy extends React.Component {
               y: y,
             };
 
+            max_height = y > max_height ? y : max_height;
+
             return (
               <foreignObject
                 style={{ overflow: 'visible' }}
@@ -523,34 +523,31 @@ class Taxonomy extends React.Component {
                 transform={`translate(${x}, ${y})`}
                 height={this.state.config.nodeHeight}
                 width={this.state.config.nodeWidth}>
-                <>
-                  <CardNode onClick={this.onClickModalNode.bind(this, node)}>
-                    <CardNodeColumn>
-                      <CardNodeTitle className="text-overflow">
-                        {node.name}
-                      </CardNodeTitle>
-                    </CardNodeColumn>
-                  </CardNode>
-                  {getChildren(node, this.state.taxonomy_data).length > 0 && (
-                    <Button
-                      onClick={this.onClickExpandNode.bind(this, node)}
-                      kind="ghost"
-                      className="expand-button"
-                      renderIcon={this.determineExpandButton(node.expanded)}
-                      iconDescription="Expand"
-                      hasIconOnly
-                    />
-                  )}
+                <CardNode onClick={this.onClickModalNode.bind(this, node)}>
+                  <CardNodeColumn>
+                    <CardNodeTitle className="text-overflow">
+                      {node.name}
+                    </CardNodeTitle>
+                  </CardNodeColumn>
+                </CardNode>
+
+                <Checkbox
+                  labelText={
+                    <span className="text-blue">
+                      {this.getPapersWithTag(node).length}
+                    </span>
+                  }
+                  id={hashID(node, this.state.taxonomy_data)}
+                  onClick={this.updateSelectedTags.bind(this)}
+                />
+
+                {getChildren(node, this.state.taxonomy_data).length > 0 && (
                   <Checkbox
-                    labelText={
-                      <span className="text-blue">
-                        {this.getPapersWithTag(node).length}
-                      </span>
-                    }
-                    id={hashID(node, this.state.taxonomy_data)}
-                    onClick={this.updateSelectedTags.bind(this)}
+                    labelText={node.expanded ? 'Collapse' : 'Expand'}
+                    id={'collapse' + hashID(node, this.state.taxonomy_data)}
+                    onClick={this.onClickExpandNode.bind(this, node)}
                   />
-                </>
+                )}
               </foreignObject>
             );
           } else {
@@ -648,12 +645,12 @@ class Taxonomy extends React.Component {
       });
 
     const taxonomy_area = view_config.tabs.map((tab, id) => (
-      <div className="tab-content">
+      <div>
         {tab.title_text && (
-          <>
+          <Tile>
             <h6>{tab.title_text}</h6>
             <br />
-          </>
+          </Tile>
         )}
         {tab.tab_name === this.state.active_tab && (
           <div>
@@ -663,18 +660,27 @@ class Taxonomy extends React.Component {
                   title="Treemap View"
                   className="full-accordion"
                   open>
-                  <div className="bx--container">
-                    <div className="bx--row">
+                  <div className="cds--container">
+                    <div style={{ display: 'flex' }}>
                       <div style={{ borderRight: '1pt solid silver' }}>
                         <h6>Relative Zoom</h6>
 
                         <Slider
                           hideTextInput
                           id="slider"
-                          max={16}
+                          max={12}
                           min={0}
                           step={1}
-                          onChange={this.handleSliderChange.bind(this)}
+                          onChange={({ value }) => {
+                            console.log(value);
+                            this.setState({
+                              ...this.state,
+                              config: {
+                                ...this.state.config,
+                                slider: value,
+                              },
+                            });
+                          }}
                           value={this.state.config.slider}
                         />
                       </div>
@@ -716,8 +722,8 @@ class Taxonomy extends React.Component {
                       </div>
                     </div>
 
-                    <div className="bx--row">
-                      <div className={'bx--col-lg-' + this.state.config.slider}>
+                    <Grid>
+                      <Column lg={this.state.config.slider} md={8} sm={4}>
                         {this.state.config.plot_options.draw_treemap && (
                           <TreemapChart
                             data={this.state.taxonomy_data_fancy}
@@ -725,13 +731,9 @@ class Taxonomy extends React.Component {
                               this.state.config.plot_options
                             }></TreemapChart>
                         )}
-                      </div>
+                      </Column>
 
-                      <div
-                        className={
-                          'bx--col-lg-' +
-                          (16 - this.state.config.slider).toString()
-                        }>
+                      <Column lg={12 - this.state.config.slider} md={8} sm={4}>
                         {this.state.config.plot_options.draw_circlemap && (
                           <CirclePackChart
                             data={this.state.taxonomy_data_fancy}
@@ -739,8 +741,8 @@ class Taxonomy extends React.Component {
                             >
                           </CirclePackChart>
                         )}
-                      </div>
-                    </div>
+                      </Column>
+                    </Grid>
                   </div>
                 </AccordionItem>
               )}
@@ -749,8 +751,13 @@ class Taxonomy extends React.Component {
                 title="Hierarchy View"
                 className="full-accordion"
                 open>
+                <br />
                 <div ref={this.ref}>
-                  <svg height="10000px" width="100%">
+                  <svg
+                    height={
+                      max_height + 3 * this.state.config.nodeHeight + 'px'
+                    }
+                    width="100%">
                     {buttons}
                     {edges}
                     {nodes}
@@ -769,7 +776,7 @@ class Taxonomy extends React.Component {
               size="lg"
               aria-label=""
               style={{ height: '100%' }}>
-              <div className="bx--container">
+              <div className="cds--container">
                 <div className="bx--row">
                   <div className="bx--col-lg-10">
                     {this.state.modal && (
@@ -814,7 +821,7 @@ class Taxonomy extends React.Component {
                     <Button
                       style={{ marginRight: '10px' }}
                       kind="primary"
-                      size="field"
+                      size="sm"
                       renderIcon={Document}
                       iconDescription="Add"
                       href={config['metadata']['primary_link']}
@@ -825,7 +832,7 @@ class Taxonomy extends React.Component {
                     <Button
                       kind="tertiary"
                       renderIcon={LogoGithub}
-                      size="field"
+                      size="sm"
                       href={config['metadata']['link_to_contribute']}
                       target="_blank">
                       Contribute
@@ -880,23 +887,25 @@ class Taxonomy extends React.Component {
     return (
       <div>
         {view_config.tabs.length === 1 && <>{taxonomy_area[0]}</>}
-
         {view_config.tabs.length > 1 && (
-          <Tabs
-            scrollIntoView={false}
-            selected={view_config.tabs
-              .map(tab => view_config.default_tab === tab.tab_name)
-              .indexOf(true)}>
-            {view_config.tabs.map((tab, id) => (
-              <Tab
-                key={id}
-                id={tab.tab_name}
-                label={tab.tab_name}
-                disabled={tab.disabled}
-                onClick={this.switchTabs.bind(this, tab.tab_name)}>
-                {taxonomy_area[id]}
-              </Tab>
-            ))}
+          <Tabs>
+            <TabList aria-label="List of tabs">
+              {view_config.tabs.map((tab, id) => (
+                <Tab
+                  onClick={this.switchTabs.bind(this, tab.tab_name)}
+                  key={tab.tab_name}
+                  disabled={tab.disabled}>
+                  {tab.tab_name}
+                </Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {view_config.tabs.map((tab, id) => (
+                <TabPanel className="tab-content" key={tab.tab_name}>
+                  {taxonomy_area[id]}
+                </TabPanel>
+              ))}
+            </TabPanels>
           </Tabs>
         )}
       </div>

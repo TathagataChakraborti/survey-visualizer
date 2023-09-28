@@ -402,7 +402,7 @@ class BasicElement extends React.Component {
                   Insights
                 </Button>
 
-                <ContainedList size="sm">
+                <ContainedList label="" size="sm">
                   {this.state.paper_data.map((item, id) => (
                     <Paper key={id} paper={item} />
                   ))}
