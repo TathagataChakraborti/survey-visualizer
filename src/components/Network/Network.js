@@ -1,5 +1,5 @@
 import React from 'react';
-import { InlineNotification } from 'carbon-components-react';
+import { InlineNotification } from '@carbon/react';
 import { ForceGraph } from './observablehq.js';
 import { Simulate, TagArea } from '../../components/Info';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stage, Layer, Rect, Circle } from 'react-konva';
-import { InlineNotification, Link } from 'carbon-components-react';
+import { InlineNotification, Link } from '@carbon/react';
 import { PaperInner, Simulate, TagArea } from '../../components/Info';
 
 import '@carbon/charts/styles.css';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight16, DotMark16 } from '@carbon/icons-react';
+import { ArrowRight, DotMark } from '@carbon/icons-react';
 import { PaperInner } from '../../components/Info';
 import {
   Tag,
@@ -22,10 +22,9 @@ import {
   Loading,
   ToastNotification,
   InlineLoading,
-} from 'carbon-components-react';
+} from '@carbon/react';
 
-import ShapeNode from '@carbon/charts-react/diagrams/ShapeNode';
-import Edge from '@carbon/charts-react/diagrams/Edge';
+import { Edge, ShapeNode } from '@carbon/charts-react';
 
 let config = require('../../config.json');
 let view_config = config.views.filter(view => view.name === 'Insights')[0];
@@ -221,7 +220,7 @@ class Insight extends React.Component {
             id={paper.UID}
             size={ShapeNodeSize}
             onClick={this.selectNode.bind(this, paper.UID)}
-            renderIcon={<DotMark16 />}
+            renderIcon={<DotMark />}
             className={
               this.state.imagination.neighbors
                 .map(p => p.UID)
@@ -243,7 +242,7 @@ class Insight extends React.Component {
               id={0}
               size={SpecialShapeNodeSize}
               onClick={this.selectNode.bind(this, this.state.new_paper.UID)}
-              renderIcon={<DotMark16 />}
+              renderIcon={<DotMark />}
               className="special-circle"
             />
           </foreignObject>
@@ -304,7 +303,7 @@ class Insight extends React.Component {
                   {tag}
                 </Tag>
                 {i !== new_item.length - 1 && (
-                  <ArrowRight16 className="label-connector" />
+                  <ArrowRight className="label-connector" />
                 )}
               </div>
             ));

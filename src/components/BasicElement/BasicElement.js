@@ -1,11 +1,6 @@
 import React from 'react';
-import { CaretUp32, CaretDown32 } from '@carbon/icons-react';
-import {
-  Search,
-  ToastNotification,
-  NumberInput,
-  Button,
-} from 'carbon-components-react';
+import { CaretUp, CaretDown } from '@carbon/icons-react';
+import { Search, ToastNotification, NumberInput, Button } from '@carbon/react';
 import { Paper, hashID } from '../../components/Info';
 
 import { Affinity } from '../Affinity';
@@ -365,7 +360,7 @@ class BasicElement extends React.Component {
               name="decreasing"
               kind="ghost"
               className="navigation-buttons"
-              renderIcon={CaretUp32}
+              renderIcon={CaretUp}
               iconDescription="Sort down by year"
               size="sm"
               hasIconOnly
@@ -375,7 +370,7 @@ class BasicElement extends React.Component {
               name="increasing"
               kind="ghost"
               className="navigation-buttons"
-              renderIcon={CaretDown32}
+              renderIcon={CaretDown}
               iconDescription="Sort up by year"
               size="sm"
               hasIconOnly

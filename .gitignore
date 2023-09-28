@@ -135,10 +135,16 @@ dmypy.json
 /node_modules/
 /build/
 
-!.env
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
 
+*.vscode
 *.idea
 *.DS_Store
+
+!.env
 
 .eslintcache
 
@@ -163,6 +169,7 @@ dmypy.json
 
 *.nnf
 *.vars
+
 
 
 

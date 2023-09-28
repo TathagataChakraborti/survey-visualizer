@@ -1,11 +1,10 @@
 import React from 'react';
 import '@carbon/charts/styles.css';
-import Edge from '@carbon/charts-react/diagrams/Edge';
-import CardNode, {
+import {
+  CardNode,
+  Edge,
   CardNodeColumn,
   CardNodeTitle,
-} from '@carbon/charts-react/diagrams/CardNode';
-import {
   TreemapChart,
   CirclePackChart,
   SimpleBarChart,
@@ -17,14 +16,14 @@ import {
   getChildren,
   PaperInner,
 } from '../../components/Info';
-import { buildElbowPathString } from '@carbon/charts/components/diagrams/buildPaths';
+import { buildElbowPathString } from '@carbon/charts';
 import {
-  Document32,
-  LogoGithub32,
-  Add16,
-  Subtract16,
-  CaretRight32,
-  CaretLeft32,
+  Document,
+  LogoGithub,
+  Add,
+  Subtract,
+  CaretRight,
+  CaretLeft,
 } from '@carbon/icons-react';
 import {
   Modal,
@@ -44,7 +43,7 @@ import {
   Toggle,
   AccordionItem,
   Accordion,
-} from 'carbon-components-react';
+} from '@carbon/react';
 
 let config = require('../../config.json');
 let view_config = config.views.filter(view => view.name === 'Taxonomy')[0];
@@ -415,9 +414,9 @@ class Taxonomy extends React.Component {
 
   determineExpandButton = node_status => {
     if (node_status) {
-      return Subtract16;
+      return Subtract;
     } else {
-      return Add16;
+      return Add;
     }
   };
 
@@ -691,7 +690,7 @@ class Taxonomy extends React.Component {
                             name="climb-down"
                             kind="ghost"
                             className="navigation-buttons"
-                            renderIcon={CaretLeft32}
+                            renderIcon={CaretLeft}
                             iconDescription="Navigate Up"
                             size="sm"
                             disabled={
@@ -704,7 +703,7 @@ class Taxonomy extends React.Component {
                             name="climb-up"
                             kind="ghost"
                             className="navigation-buttons"
-                            renderIcon={CaretRight32}
+                            renderIcon={CaretRight}
                             iconDescription="Navigate Down"
                             size="sm"
                             disabled={
@@ -816,7 +815,7 @@ class Taxonomy extends React.Component {
                       style={{ marginRight: '10px' }}
                       kind="primary"
                       size="field"
-                      renderIcon={Document32}
+                      renderIcon={Document}
                       iconDescription="Add"
                       href={config['metadata']['primary_link']}
                       target="_blank">
@@ -825,7 +824,7 @@ class Taxonomy extends React.Component {
 
                     <Button
                       kind="tertiary"
-                      renderIcon={LogoGithub32}
+                      renderIcon={LogoGithub}
                       size="field"
                       href={config['metadata']['link_to_contribute']}
                       target="_blank">

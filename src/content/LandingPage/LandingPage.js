@@ -1,12 +1,7 @@
 import React from 'react';
 import GitHubButton from 'react-github-btn';
 import { isMobile } from 'react-device-detect';
-import {
-  Document32,
-  LogoGithub32,
-  LogoSlack32,
-  Add32,
-} from '@carbon/icons-react';
+import { Document, LogoGithub, LogoSlack, Add } from '@carbon/icons-react';
 import { BasicElement } from '../../components/BasicElement';
 import {
   Button,
@@ -19,7 +14,7 @@ import {
   Tile,
   Accordion,
   AccordionItem,
-} from 'carbon-components-react';
+} from '@carbon/react';
 
 let config = require('../../config.json');
 
@@ -99,7 +94,7 @@ class LandingPage extends React.Component {
                     kind="primary"
                     className="buttonset"
                     size="field"
-                    renderIcon={Document32}
+                    renderIcon={Document}
                     href={config['metadata']['primary_link']}
                     target="_blank">
                     Read
@@ -111,7 +106,7 @@ class LandingPage extends React.Component {
                         kind="tertiary"
                         className="buttonset"
                         size="small"
-                        renderIcon={Document32}
+                        renderIcon={Document}
                         href={config['metadata']['secondary_links'][0]['link']}
                         target="_blank">
                         See Also
@@ -122,7 +117,7 @@ class LandingPage extends React.Component {
                   <Button
                     kind="tertiary"
                     className="buttonset tertiary-secondary"
-                    renderIcon={LogoGithub32}
+                    renderIcon={LogoGithub}
                     size="small"
                     href={config['metadata']['link_to_contribute']}
                     target="_blank">
@@ -134,7 +129,7 @@ class LandingPage extends React.Component {
                       <Button
                         kind="tertiary"
                         className="buttonset tertiary-danger"
-                        renderIcon={LogoSlack32}
+                        renderIcon={LogoSlack}
                         size="small"
                         href={config['metadata']['community_link']}
                         target="_blank">
@@ -170,7 +165,7 @@ class LandingPage extends React.Component {
                                     target="_blank"
                                     href={item.link}
                                     kind="ghost"
-                                    renderIcon={Add32}>
+                                    renderIcon={Add}>
                                     {item.name}
                                   </Button>
                                   <br />

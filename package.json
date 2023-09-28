@@ -1,10 +1,9 @@
 {
-  "name": "survey_visualizer",
-  "version": "0.0.0",
-  "private": true,
-  "repository": "https://github.com/TathagataChakraborti/survey-visualizer",
+  "name": "survey-visualizer",
+  "version": "0.0.1",
+  "repository": "git@github.com:TathagataChakraborti/survey-visualizer",
   "bugs": "https://github.com/TathagataChakraborti/survey-visualizer/issues",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "react-scripts build",
     "ci-check": "yarn format:diff",
@@ -18,20 +17,16 @@
     "deploy": "rm -rf ./build && yarn build && cf push -f manifest.yml"
   },
   "dependencies": {
-    "@carbon/charts": "^0.54.12",
-    "@carbon/charts-react": "^0.54.12",
-    "@carbon/grid": "^10.3.0",
-    "@carbon/icons-react": "^10.3.0",
-    "carbon-components": "^10.3.0",
-    "carbon-components-react": "^7.3.0",
-    "carbon-icons": "7.0.7",
+    "@carbon/charts-react": "^1.11.10",
+    "@carbon/react": "^1.31.3",
     "d3": "^7.3.0",
     "konva": "8.1.3",
-    "react": "^16.12.0",
+    "react": "^18.1.0",
     "react-datawrapper-chart": "^1.1.1",
     "react-device-detect": "2.1.2",
-    "react-dom": "^16.12.0",
+    "react-dom": "^18.1.0",
     "react-ga": "^3.3.0",
+    "react-github-btn": "^1.4.0",
     "react-konva": "17.0.2-5",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^5.0.1",
@@ -42,8 +37,7 @@
     "@commitlint/config-conventional": "^7.5.0",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.5",
-    "prettier": "^1.17.0",
-    "react-github-btn": "1.2.1"
+    "prettier": "^1.17.0"
   },
   "eslintConfig": {
     "extends": "react-app"

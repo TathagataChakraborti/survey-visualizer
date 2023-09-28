@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, Tile, Slider, Tag } from 'carbon-components-react';
+import { Link, Tile, Slider, Tag } from '@carbon/react';
 import { AreaChart } from '@carbon/charts-react';
-import { Download16 } from '@carbon/icons-react';
+import { Download } from '@carbon/icons-react';
 
 import '@carbon/charts/styles.css';
 
@@ -99,7 +99,7 @@ const PaperInner = props => (
     {props.paper.link && (
       <Link className="hover-cursor" href={props.paper.link} target="_blank">
         <span className="download-icon">
-          <Download16 />
+          <Download />
         </span>
       </Link>
     )}
