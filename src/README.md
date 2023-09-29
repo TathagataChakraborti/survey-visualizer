@@ -16,30 +16,30 @@ This part is pretty self-explanatory
 
 ```yaml
 metadata:
-  acronym: VAMHRI
-  name: VAM-HRI
-  title_text:
-    'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction:
-    A Survey and Virtual Design Element Taxonomy'
-  citation_text:
-    "@inproceedings{vam-hri, \n title={{Virtual, Augmented, and Mixed
-    Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
-    Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
-    and Tom \n\t Williams and Daniel Szafir}, \n booktitle={arXiv:2202.11249}, \n
-    year={2022}}"
-  link_to_contribute: https://github.com/miwalker/survey-visualizer/issues/new/choose
-  link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
-  primary_link: https://arxiv.org/abs/2202.11249
-  secondary_links:
-    - name: The Reality-Virtuality Interaction Cube
-      link: https://ieeexplore.ieee.org/document/8673071
-  info_tile: true
-  info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
-  info_link:
-    - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
-      text: How it started
-    - link: https://vam-hri.github.io/
-      text: How it's going
+    acronym: VAMHRI
+    name: VAM-HRI
+    title_text:
+        'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction:
+        A Survey and Virtual Design Element Taxonomy'
+    citation_text:
+        "@inproceedings{vam-hri, \n title={{Virtual, Augmented, and Mixed
+        Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
+        Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
+        and Tom \n\t Williams and Daniel Szafir}, \n booktitle={arXiv:2202.11249}, \n
+        year={2022}}"
+    link_to_contribute: https://github.com/miwalker/survey-visualizer/issues/new/choose
+    link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
+    primary_link: https://arxiv.org/abs/2202.11249
+    secondary_links:
+        - name: The Reality-Virtuality Interaction Cube
+          link: https://ieeexplore.ieee.org/document/8673071
+    info_tile: true
+    info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
+    info_link:
+        - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
+          text: How it started
+        - link: https://vam-hri.github.io/
+          text: How it's going
 ```
 
 The `name` field appears as the title of the webpage (name of the tab on your browser). The rest of these fields
@@ -85,41 +85,41 @@ with this tab as default. _This classification will be used as the basis for the
 
 ```yaml
 tabs:
-  - tab_name: Taxonomy
-    title_text: Taxonomy View of VAM-HRI Interaction Design Elements
-    root_text: Design Element
-    disabled: false
-    fancy_chart: false
-    input_file:
-      filename: data/slug.xlsx
-      relative: true
-      active_worksheet: Cubed - Thao
-    papers_list:
-      shuffle_list: true
-      key_map:
-        title: 3
-        abstract:
-        authors: 2
-        venue: 1
-        sessions:
-        year: 0
-        keywords:
-      rows:
-        start: 7
-        stop: 184
-        exclude:
-          - 141
-          - 151
-    taxonomy:
-      rows:
-        start: 1
-        stop: 6
-        exclude:
-          - 5
-          - 6
-      columns:
-        start: 69
-        stop: 146
+    - tab_name: Taxonomy
+      title_text: Taxonomy View of VAM-HRI Interaction Design Elements
+      root_text: Design Element
+      disabled: false
+      fancy_chart: false
+      input_file:
+          filename: data/slug.xlsx
+          relative: true
+          active_worksheet: Cubed - Thao
+      papers_list:
+          shuffle_list: true
+          key_map:
+              title: 3
+              abstract:
+              authors: 2
+              venue: 1
+              sessions:
+              year: 0
+              keywords:
+          rows:
+              start: 7
+              stop: 184
+              exclude:
+                  - 141
+                  - 151
+      taxonomy:
+          rows:
+              start: 1
+              stop: 6
+              exclude:
+                  - 5
+                  - 6
+          columns:
+              start: 69
+              stop: 146
 ```
 
 For each tab in the Taxonomy view, you can provide a link to the spreadsheet (and corresponding active sheet) to read from.
@@ -185,8 +185,8 @@ reference (with the lowest match below that threshold taken as the matched refer
 ```yaml
 - name: Network
   files_directory:
-    location: data/pdfs
-    relative: true
+      location: data/pdfs
+      relative: true
   match_threshold: 0.25
   disabled: false
 ```
