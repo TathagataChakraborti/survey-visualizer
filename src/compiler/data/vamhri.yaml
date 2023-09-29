@@ -10,7 +10,7 @@ metadata:
     year={2023}}"
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
   primary_link: https://dl.acm.org/doi/10.1145/3597623
-  secondary_links: 
+  secondary_links:
     - name: VAM-HRI Cube
       link: https://ieeexplore.ieee.org/document/8673071
     - name: Makhataeva et al.
@@ -129,5 +129,5 @@ views:
   match_threshold: 0.25
   disabled: false
 - name: Insights
-  disabled: false
+  disabled: true
 
