@@ -1,0 +1,182 @@
+{
+    "metadata": {
+        "acronym": "VAMHRI",
+        "name": "Virtual, Augmented, and Mixed Reality for Human-Robot Interaction",
+        "title_text": "Virtual, Augmented, and Mixed Reality for Human-Robot Interaction",
+        "citation_text": "@article{vam-hri, \n title={{Virtual, Augmented, and Mixed Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti and Tom \n\t Williams and Daniel Szafir}, \n journal={ACM Transactions on\n\t Human-Robot Interaction}, \n year={2023}}",
+        "link_to_code": "https://github.com/TathagataChakraborti/survey-visualizer",
+        "primary_link": "https://dl.acm.org/doi/10.1145/3597623",
+        "secondary_links": [
+            {
+                "name": "VAM-HRI Cube",
+                "link": "https://ieeexplore.ieee.org/document/8673071"
+            },
+            {
+                "name": "Makhataeva et al.",
+                "link": "https://www.mdpi.com/2218-6581/9/2/21"
+            },
+            {
+                "name": "Phaijit et al.",
+                "link": "https://dl.acm.org/doi/abs/10.5555/3523760.3523801"
+            }
+        ],
+        "community_link": "https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw",
+        "info_tile": true,
+        "info_text": "Learn more about the VAM-HRI Workshop Series",
+        "info_link": [
+            {
+                "link": "https://ojs.aaai.org//index.php/aimagazine/article/view/2822",
+                "text": "How it started"
+            },
+            {
+                "link": "https://vam-hri.github.io/",
+                "text": "How it's going"
+            }
+        ]
+    },
+    "link_to_server": "https://toby.mua8gtem6c8.us-east.codeengine.appdomain.cloud",
+    "default_view": "Taxonomy",
+    "min_year": 1984,
+    "views": [
+        {
+            "name": "Taxonomy",
+            "disabled": false,
+            "default_tab": "Taxonomy",
+            "tabs": [
+                {
+                    "tab_name": "Taxonomy",
+                    "title_text": "Taxonomy View of VAM-HRI Interation Design Elements",
+                    "disabled": false,
+                    "fancy_chart": false,
+                    "input_file": {
+                        "filename": "/Users/tchakra2/Desktop/temp/vam-hri/slug.xlsx",
+                        "active_worksheet": "Master List",
+                        "relative": false
+                    },
+                    "papers_list": {
+                        "key_map": {
+                            "slug": 0,
+                            "title": 3,
+                            "abstract": 5,
+                            "authors": 2,
+                            "venue": 4,
+                            "year": 1,
+                            "link": 6
+                        },
+                        "rows": {
+                            "start": 5,
+                            "stop": 179
+                        }
+                    },
+                    "taxonomy": {
+                        "rows": {
+                            "start": 1,
+                            "stop": 4
+                        },
+                        "columns": {
+                            "start": 9,
+                            "stop": 47
+                        }
+                    }
+                },
+                {
+                    "tab_name": "Command Sequencing",
+                    "title_text": "VAM 3D Command Sequencing Paradigm",
+                    "disabled": false,
+                    "fancy_chart": true,
+                    "input_file": {
+                        "filename": "/Users/tchakra2/Desktop/temp/vam-hri/slug.xlsx",
+                        "active_worksheet": "Master List",
+                        "relative": false
+                    },
+                    "papers_list": {
+                        "key_map": {
+                            "slug": 0,
+                            "title": 3,
+                            "abstract": 5,
+                            "authors": 2,
+                            "venue": 4,
+                            "year": 1,
+                            "link": 6
+                        },
+                        "rows": {
+                            "start": 5,
+                            "stop": 179
+                        }
+                    },
+                    "taxonomy": {
+                        "rows": {
+                            "start": 1,
+                            "stop": 4,
+                            "exclude": [
+                                2,
+                                3
+                            ]
+                        },
+                        "columns": {
+                            "start": 48,
+                            "stop": 51
+                        }
+                    }
+                },
+                {
+                    "tab_name": "Teleoperation",
+                    "title_text": "HMD-Mediated Remote Robot Teleoperation Interface Paradigm",
+                    "disabled": false,
+                    "fancy_chart": true,
+                    "input_file": {
+                        "filename": "/Users/tchakra2/Desktop/temp/vam-hri/slug.xlsx",
+                        "active_worksheet": "Master List",
+                        "relative": false
+                    },
+                    "papers_list": {
+                        "key_map": {
+                            "slug": 0,
+                            "title": 3,
+                            "abstract": 5,
+                            "authors": 2,
+                            "venue": 4,
+                            "year": 1,
+                            "link": 6
+                        },
+                        "rows": {
+                            "start": 5,
+                            "stop": 179
+                        }
+                    },
+                    "taxonomy": {
+                        "rows": {
+                            "start": 1,
+                            "stop": 4,
+                            "exclude": [
+                                2,
+                                3
+                            ]
+                        },
+                        "columns": {
+                            "start": 52,
+                            "stop": 55
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Affinity",
+            "disabled": false
+        },
+        {
+            "name": "Network",
+            "files_directory": {
+                "location": "/Users/tchakra2/Desktop/temp/vam-hri/pdfs",
+                "relative": false
+            },
+            "match_threshold": 0.25,
+            "disabled": false
+        },
+        {
+            "name": "Insights",
+            "disabled": true
+        }
+    ]
+}
