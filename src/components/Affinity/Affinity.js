@@ -5,10 +5,10 @@ import { Paper, Simulate, TagArea } from '../../components/Info';
 
 import '@carbon/charts/styles.css';
 
-let config = require('../../config.json');
-let embeddings = require('../../compiler/data/Affinity.json');
+import config from '../../config.json';
+import embeddings from '../../compiler/data/Affinity.json';
+import taxonomy_data from '../../compiler/data/Taxonomy.json';
 
-let taxonomy_data = require('../../compiler/data/Taxonomy.json');
 let paper_data = taxonomy_data.find(
     e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
 ).data;
@@ -54,8 +54,7 @@ class Affinity extends React.Component {
             var new_embedding = e;
 
             new_embedding.x =
-                (fillFactor * stageWidth * (-offsetX + e.x)) /
-                (maxX - offsetX);
+                (fillFactor * stageWidth * (-offsetX + e.x)) / (maxX - offsetX);
             new_embedding.y =
                 (fillFactor * stageHeight * (-offsetY + e.y)) /
                 (maxY - offsetY);
@@ -73,11 +72,9 @@ class Affinity extends React.Component {
             var new_item = item;
 
             new_item['x'] =
-                5 * ShapeNodeSize +
-                this.applyScalingX(1, embedding_item.x);
+                5 * ShapeNodeSize + this.applyScalingX(1, embedding_item.x);
             new_item['y'] =
-                5 * ShapeNodeSize +
-                this.applyScalingY(1, embedding_item.y);
+                5 * ShapeNodeSize + this.applyScalingY(1, embedding_item.y);
 
             new_item.selected = false;
             return new_item;

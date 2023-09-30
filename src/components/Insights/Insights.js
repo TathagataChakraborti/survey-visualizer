@@ -28,11 +28,12 @@ import {
 
 import { Edge, ShapeNode } from '@carbon/charts-react';
 
-let config = require('../../config.json');
+import config from '../../config.json';
+import embeddings from '../../compiler/data/Insights.json';
+import taxonomy from '../../compiler/data/Taxonomy.json';
+
 let view_config = config.views.filter(view => view.name === 'Insights')[0];
 
-let embeddings = require('../../compiler/data/Insights.json');
-let taxonomy = require('../../compiler/data/Taxonomy.json');
 taxonomy = taxonomy.find(
     e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab
 );

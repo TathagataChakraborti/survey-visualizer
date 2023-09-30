@@ -16,6 +16,8 @@ import { Network } from '../Network';
 import { Taxonomy } from '../Taxonomy';
 import { Insights } from '../Insights';
 
+import config from '../../config.json';
+
 const components = {
     Taxonomy: Taxonomy,
     Network: Network,
@@ -23,7 +25,6 @@ const components = {
     Insights: Insights,
 };
 
-let config = require('../../config.json');
 let current_year = new Date().getFullYear();
 
 class BasicElement extends React.Component {

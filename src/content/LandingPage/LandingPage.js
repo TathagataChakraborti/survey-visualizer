@@ -16,7 +16,7 @@ import {
     ContainedListItem,
 } from '@carbon/react';
 
-let config = require('../../config.json');
+import config from '../../config.json';
 
 class LandingPage extends React.Component {
     constructor(props) {

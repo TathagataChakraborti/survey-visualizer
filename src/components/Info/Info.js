@@ -3,8 +3,7 @@ import { Grid, Column, Slider, Tag, ContainedListItem } from '@carbon/react';
 import { AreaChart } from '@carbon/charts-react';
 
 import '@carbon/charts/styles.css';
-
-let config = require('../../config.json');
+import config from '../../config.json';
 
 const tagSensitivity = 5;
 
