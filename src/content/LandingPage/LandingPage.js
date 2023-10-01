@@ -44,13 +44,15 @@ class LandingPage extends React.Component {
                                 selectedIndex={config.views
                                     .map(e => e.name)
                                     .indexOf(this.state.view)}>
-                                {config.views.filter(item => !item.disabled).map((view, id) => (
-                                    <Switch
-                                        key={id}
-                                        name={view.name}
-                                        text={view.name}
-                                    />
-                                ))}
+                                {config.views
+                                    .filter(item => !item.disabled)
+                                    .map((view, id) => (
+                                        <Switch
+                                            key={id}
+                                            name={view.name}
+                                            text={view.name}
+                                        />
+                                    ))}
                             </ContentSwitcher>
 
                             <br />
