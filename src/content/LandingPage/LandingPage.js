@@ -16,7 +16,7 @@ import {
     ContainedListItem,
 } from '@carbon/react';
 
-import config from '../../config.json';
+let config = require('../../config.json');
 
 class LandingPage extends React.Component {
     constructor(props) {
@@ -68,6 +68,7 @@ class LandingPage extends React.Component {
 
                             <ButtonSet stacked>
                                 <Button
+                                    style={{ marginBottom: '10px' }}
                                     kind="primary"
                                     className="buttonset"
                                     size="sm"
@@ -76,26 +77,24 @@ class LandingPage extends React.Component {
                                     target="_blank">
                                     Read
                                 </Button>
-                                <br />
                                 {config.metadata.secondary_links.length ===
                                     1 && (
-                                    <>
-                                        <Button
-                                            kind="tertiary"
-                                            className="buttonset"
-                                            size="sm"
-                                            renderIcon={Document}
-                                            href={
-                                                config.metadata
-                                                    .secondary_links[0].link
-                                            }
-                                            target="_blank">
-                                            See Also
-                                        </Button>
-                                        <br />
-                                    </>
+                                    <Button
+                                        style={{ marginBottom: '10px' }}
+                                        kind="tertiary"
+                                        className="buttonset"
+                                        size="sm"
+                                        renderIcon={Document}
+                                        href={
+                                            config.metadata.secondary_links[0]
+                                                .link
+                                        }
+                                        target="_blank">
+                                        See Also
+                                    </Button>
                                 )}
                                 <Button
+                                    style={{ marginBottom: '10px' }}
                                     kind="tertiary"
                                     className="buttonset tertiary-secondary"
                                     renderIcon={LogoGithub}
@@ -104,22 +103,17 @@ class LandingPage extends React.Component {
                                     target="_blank">
                                     Contribute
                                 </Button>
-                                <br />
                                 {config.metadata.community_link && (
-                                    <>
-                                        <Button
-                                            kind="tertiary"
-                                            className="buttonset tertiary-danger"
-                                            renderIcon={LogoSlack}
-                                            size="sm"
-                                            href={
-                                                config.metadata.community_link
-                                            }
-                                            target="_blank">
-                                            Community
-                                        </Button>
-                                        <br />
-                                    </>
+                                    <Button
+                                        style={{ marginBottom: '10px' }}
+                                        kind="tertiary"
+                                        className="buttonset tertiary-danger"
+                                        renderIcon={LogoSlack}
+                                        size="sm"
+                                        href={config.metadata.community_link}
+                                        target="_blank">
+                                        Community
+                                    </Button>
                                 )}
                             </ButtonSet>
 

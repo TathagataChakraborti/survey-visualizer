@@ -5,9 +5,9 @@ import { Paper, Simulate, TagArea } from '../../components/Info';
 
 import '@carbon/charts/styles.css';
 
-import config from '../../config.json';
-import embeddings from '../../compiler/data/Affinity.json';
-import taxonomy_data from '../../compiler/data/Taxonomy.json';
+let config = require('../../config.json');
+let embeddings = require('../../compiler/data/Affinity.json');
+let taxonomy_data = require('../../compiler/data/Taxonomy.json');
 
 let paper_data = taxonomy_data.find(
     e => e.name === config.views.find(e => e.name === 'Taxonomy').default_tab

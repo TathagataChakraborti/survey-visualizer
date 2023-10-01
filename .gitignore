@@ -160,9 +160,9 @@ dmypy.json
 *~$*.xlsx
 
 # temporary files
-# /src/config.json
-# /src/compiler/data/*.json
-# /public/config.json
+/src/config.json
+/src/compiler/data/*.json
+/public/config.json
 
 # temporary files from SAT encoding
 /src/compiler/analysis/macqvars.json
