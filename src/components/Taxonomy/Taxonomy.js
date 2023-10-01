@@ -47,8 +47,8 @@ import {
     ContainedList,
 } from '@carbon/react';
 
-import config from '../../config.json';
-import data from '../../compiler/data/Taxonomy.json';
+let config = require('../../config.json');
+let data = require('../../compiler/data/Taxonomy.json');
 
 let view_config = config.views.filter(view => view.name === 'Taxonomy')[0];
 let fancy_chart_default_level = 2;

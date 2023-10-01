@@ -16,7 +16,7 @@ import { Network } from '../Network';
 import { Taxonomy } from '../Taxonomy';
 import { Insights } from '../Insights';
 
-import config from '../../config.json';
+let config = require('../../config.json');
 
 const components = {
     Taxonomy: Taxonomy,

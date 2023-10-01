@@ -3,7 +3,7 @@ import { InlineNotification } from '@carbon/react';
 import { ForceGraph } from './observablehq.js';
 import { Simulate, TagArea } from '../../components/Info';
 
-import paper_data from '../../compiler/data/Network.json';
+let paper_data = require('../../compiler/data/Network.json');
 
 const initWidth = 800;
 const initHeight = 600;
