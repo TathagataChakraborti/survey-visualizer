@@ -1,0 +1,107 @@
+{
+    "metadata": {
+        "acronym": "MACQ",
+        "name": "Model Learning for AI Planning",
+        "title_text": "MACQ: A Holistic View of Model Acquisition Techniques",
+        "citation_text": "@inproceedings{macq, \n title={{MACQ: A Holistic View of Model\n\t Acquisition Techniques}}, \n author={Ethan Callanan and Rebecca De Venezia\n\t and Victoria Armstrong and Alison Paredes\n\t and Tathagata Chakraborti and\n\t Christian Muise}, \n booktitle={ICAPS Workshop on Knowledge \n\t    Engineering for Planning \n\t    and Scheduling (KEPS)}, \n year={2022}}",
+        "link_to_contribute": "https://github.com/AI-Planning/macq",
+        "link_to_code": "https://github.com/TathagataChakraborti/survey-visualizer",
+        "primary_link": "https://arxiv.org/abs/2206.06530",
+        "secondary_links": [
+            {
+                "name": "Arora et al. 2019",
+                "link": "https://hal.archives-ouvertes.fr/hal-02010536/file/A_Review_of_Learning_Planning_Action_Models.pdf"
+            },
+            {
+                "name": "Jilani et al. 2014",
+                "link": "http://eprints.hud.ac.uk/id/eprint/20380/"
+            },
+            {
+                "name": "Jimenez et al. 2012",
+                "link": "https://www.cambridge.org/core/journals/knowledge-engineering-review/article/abs/review-of-machine-learning-for-automated-planning/F641360D1F0461D0B323C8A299DBE61E"
+            }
+        ],
+        "community_link": "https://join.slack.com/t/theplanningcommunity/shared_invite/enQtNjg0MTIzNTE3MTY4LTQ4YTRiNjhjNmVlNmEwMGMxOTQwNTZlYWM2YTk1YjdkZmIyMTU5MzRjZjYzOWYxMjJkNGM3YTM2MWI0MmM2MGY",
+        "info_tile": true,
+        "info_text": "Interested in model acquistion for AI planning? Learn more about the MACQ package at upcoming venus",
+        "info_link": [
+            {
+                "link": "http://icaps22.icaps-conference.org/workshops/KEPS",
+                "text": "KEPS 2022"
+            },
+            {
+                "link": "https://icaps23.icaps-conference.org/program/tutorials/model",
+                "text": "ICAPS 2023"
+            }
+        ]
+    },
+    "link_to_server": "https://toby.mua8gtem6c8.us-east.codeengine.appdomain.cloud",
+    "default_view": "Taxonomy",
+    "min_year": 1984,
+    "views": [
+        {
+            "name": "Taxonomy",
+            "disabled": false,
+            "default_tab": "Taxonomy",
+            "tabs": [
+                {
+                    "tab_name": "Taxonomy",
+                    "disabled": false,
+                    "fancy_chart": true,
+                    "fancy_chart_default_level": 2,
+                    "input_file": {
+                        "filename": "/Users/tchakra2/Desktop/temp/slug.xlsx",
+                        "active_worksheet": "slug"
+                    },
+                    "papers_list": {
+                        "shuffle_list": true,
+                        "key_map": {
+                            "slug": 0,
+                            "title": 2,
+                            "abstract": 5,
+                            "authors": 4,
+                            "venue": 6,
+                            "sessions": null,
+                            "year": 7,
+                            "keywords": null,
+                            "link": 3
+                        },
+                        "rows": {
+                            "start": 5,
+                            "stop": 48,
+                            "exclude": [
+                                39
+                            ]
+                        }
+                    },
+                    "taxonomy": {
+                        "rows": {
+                            "start": 1,
+                            "stop": 4
+                        },
+                        "columns": {
+                            "start": 11,
+                            "stop": 40
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Affinity",
+            "disabled": false
+        },
+        {
+            "name": "Network",
+            "files_directory": {
+                "location": "/Users/tchakra2/Desktop/temp/pdfs"
+            },
+            "match_threshold": 0.25,
+            "disabled": false
+        },
+        {
+            "name": "Insights",
+            "disabled": false
+        }
+    ]
+}
