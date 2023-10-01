@@ -1,0 +1,14 @@
+openpyxl==3.1.2
+pdfplumber==0.10.2
+python-Levenshtein==0.22.0
+transformers==4.33.3
+sentence_transformers==2.2.2
+sklearn==0.0.post9
+torch==2.0.1
+ics==0.7.2
+black==23.9.1
+nnf==0.4.1
+flask==2.3.3
+flask_cors==4.0.0
+pydantic==2.4.2
+pyyaml==6.0.1

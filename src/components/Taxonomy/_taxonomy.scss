@@ -1,39 +1,43 @@
 .cds--cc--card-node__column,
 .text-overflow,
 node {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .hover-cursor:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .chart-grid-backdrop {
-  fill: #ffffff00 !important;
+    fill: #ffffff00 !important;
 }
 
 .cds--cc--axes g.axis path.domain {
-  stroke: #ffffff00 !important;
+    stroke: #ffffff00 !important;
 }
 
 .navigation-buttons {
-  background-color: #f4f4f4;
-  margin-right: 5px;
+    background-color: #f4f4f4;
+    margin-right: 5px;
 }
 
 .expand-button {
-  background-color: #f4f4f4;
-  position: absolute !important;
-  right: 0 !important;
-  top: 0 !important;
-  height: 100%;
+    background-color: #f4f4f4;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    height: 100%;
 }
 
 .full-accordion > .cds--accordion__content {
-  padding: 0 !important;
+    padding: 0 !important;
+}
+
+.tab-content.cds--tab-content {
+    padding-left: 0;
 }
 
 .tab-content.cds--tab-content {
