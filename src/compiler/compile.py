@@ -150,7 +150,7 @@ class Config2Data:
 
                     for key in key_map:
                         if key_map[key] is not None:
-                            setattr(new_paper, key, row[key_map[key]].value)
+                            setattr(new_paper, key, row[key_map[key] - 1].value)
                         else:
                             setattr(new_paper, key, None)
 
