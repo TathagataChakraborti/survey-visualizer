@@ -69,8 +69,10 @@ const getModalTimelineOptions = data => {
         (max, item) => (max < item.value ? item.value : max),
         0
     );
-    const step = Math.floor(max_value / 5);
-    const values = [];
+    var step = Math.floor(max_value / 5);
+    var values = [];
+
+    step = step ? step : 1;
 
     for (var i = 0; i <= max_value + step; i += step) values.push(i);
 
