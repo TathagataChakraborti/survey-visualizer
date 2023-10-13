@@ -1,6 +1,6 @@
 import React from 'react';
 import { CaretUp, CaretDown } from '@carbon/icons-react';
-import { Paper, hashID } from '../../components/Info';
+import { Paper, hashID, getMinYear, getMaxYear } from '../../components/Info';
 import {
     Grid,
     Column,
@@ -18,14 +18,13 @@ import { Insights } from '../Insights';
 
 let config = require('../../config.json');
 
+const current_year = new Date().getFullYear();
 const components = {
     Taxonomy: Taxonomy,
     Network: Network,
     Affinity: Affinity,
     Insights: Insights,
 };
-
-let current_year = new Date().getFullYear();
 
 class BasicElement extends React.Component {
     constructor(props) {
@@ -39,7 +38,7 @@ class BasicElement extends React.Component {
             tags: [],
             number: 0,
             years: {
-                min_min: 1984,
+                min_min: config.min_year,
                 min_val: config.min_year,
                 max_max: current_year,
                 max_val: current_year,
@@ -141,17 +140,8 @@ class BasicElement extends React.Component {
     };
 
     updateSelectedTab = (paper_data, taxonomy_data) => {
-        const min_year = paper_data.reduce((min_year, paper) => {
-            if (paper.year < min_year) min_year = paper.year;
-
-            return min_year;
-        }, this.state.years.max_max);
-
-        const max_year = paper_data.reduce((max_year, paper) => {
-            if (paper.year > max_year) max_year = paper.year;
-
-            return max_year;
-        }, this.state.years.min_min);
+        const min_year = getMinYear(paper_data, this.state.years.max_max);
+        const max_year = getMaxYear(paper_data, this.state.years.min_min);
 
         this.setState({
             ...this.state,
