@@ -12,38 +12,39 @@ the category on that column or not.
 
 ## Metadata
 
-This part is pretty self-explanatory
+This part is pretty self-explanatory.
 
 ```yaml
 metadata:
-    acronym: VAMHRI
-    name: VAM-HRI
-    title_text:
-        'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction:
-        A Survey and Virtual Design Element Taxonomy'
-    citation_text:
-        "@inproceedings{vam-hri, \n title={{Virtual, Augmented, and Mixed
-        Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
-        Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
-        and Tom \n\t Williams and Daniel Szafir}, \n booktitle={arXiv:2202.11249}, \n
-        year={2022}}"
-    link_to_contribute: https://github.com/miwalker/survey-visualizer/issues/new/choose
-    link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
-    primary_link: https://arxiv.org/abs/2202.11249
-    secondary_links:
-        - name: The Reality-Virtuality Interaction Cube
-          link: https://ieeexplore.ieee.org/document/8673071
-    info_tile: true
-    info_text: Learn more about the VAM-HRI Workshop Series at HRI 2018-present
-    info_link:
-        - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
-          text: How it started
-        - link: https://vam-hri.github.io/
-          text: How it's going
+  acronym: VAMHRI
+  name: Virtual, Augmented, and Mixed Reality for Human-Robot Interaction
+  title_text: 'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction'
+  citation_text: "@article{vam-hri, \n title={{Virtual, Augmented, and Mixed
+    Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
+    Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
+    and Tom \n\t Williams and Daniel Szafir}, \n journal={ACM Transactions on\n\t  Human-Robot Interaction}, \n
+    year={2023}}"
+  link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
+  primary_link: https://dl.acm.org/doi/10.1145/3597623
+  secondary_links:
+    - name: VAM-HRI Cube
+      link: https://ieeexplore.ieee.org/document/8673071
+    - name: Makhataeva et al.
+      link: https://www.mdpi.com/2218-6581/9/2/21
+    - name: Phaijit et al.
+      link: https://dl.acm.org/doi/abs/10.5555/3523760.3523801
+  community_link: https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw
+  info_tile: true
+  info_text: Learn more about the VAM-HRI Workshop Series
+  info_link:
+  - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
+    text: How it started
+  - link: https://vam-hri.github.io/
+    text: How it's going
 ```
 
 The `name` field appears as the title of the webpage (name of the tab on your browser). The rest of these fields
-appear as follows on the left-hand side [[example](http://ibm.biz/vam-hri)] as a gateway to the survey resources for the particular deployment:
+appear as follows on the left-hand side [[example](https://vamhri.com)] as a gateway to the survey resources for the particular deployment:
 
 <img width="100%" alt="image" src="https://user-images.githubusercontent.com/4764242/156827296-eb24127f-d008-4a57-b60f-035f4c009647.png">
 
@@ -51,8 +52,7 @@ The primary link should point to the survey paper this deployment is built upon.
 pointing to other papers, or links, that may be of interest.
 
 Note that the `link to contribute` field should lead directly to wherever the authors of the survey want people to go to make
-further contributions or get in touch. In this example, it's a [fork](https://github.com/miwalker/survey-visualizer) of this library which hosts
-a [deployment](http://ibm.biz/vam-hri) for [this](https://arxiv.org/abs/2202.11249) paper.
+further contributions or get in touch. For example, a fork of this repository that hosts a deployment for a particular survey.
 
 ## Views
 
@@ -97,12 +97,12 @@ tabs:
       papers_list:
           shuffle_list: true
           key_map:
-              title: 3
+              title: 4
               abstract:
-              authors: 2
-              venue: 1
+              authors: 3
+              venue: 2
               sessions:
-              year: 0
+              year: 1
               keywords:
           rows:
               start: 7
@@ -122,15 +122,17 @@ tabs:
               stop: 146
 ```
 
-For each tab in the Taxonomy view, you can provide a link to the spreadsheet (and corresponding active sheet) to read from.
-The path to the file can be either marked relative to the directory you are running the compiler from i.e. this/path/compiler/...
-or can be an absolute path.
+For each tab in the Taxonomy view, you can provide a link to the spreadsheet to read from. Unless otherwise specified, we will use
+the active sheet as the default sheet to read from (as indicated by the optional `default_tab` flag). 
+The path to the file can be marked relative to the directory you are running the compiler 
+from i.e. path/to/compiler/... or it can be an absolute path (as indicated by the `relative` flag).
 
 The rows and columns (for either the taxonomy area or the paper list) indicate the start and end of where to read from
 in the spreadsheet, as well as rows/columns to ignore if required.
 For example, we are asking here to read the "Taxonomy" hierarchy from rows 1-6 (but ignore rows 5 and 6)
 and columns 69 to 146, and rows 7-184 (excluding 141 and 151) for the list of papers.
-The `key_map` entry indicates where (columns) the paper metadata is documented in the spreadsheet (e.g. the title is in column 3).
+The `key_map` entry indicates where (columns) the paper metadata is documented in the spreadsheet (e.g. the title is in column 4).
+The row and column indices start at 1.
 
 The `shuffle_list` key, if _True_, will make the paper list appear in randomized order. If disabled, the papers on the visualizer
 appear in the order they are given in the source spreadsheet.
