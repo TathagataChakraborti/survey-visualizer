@@ -507,29 +507,25 @@ class Taxonomy extends React.Component {
                                     .filter(e => e.parent === parent.name)
                                     .indexOf(node);
                         } else {
-                            while (
+                            for (
+                                cache_taxonomy_level;
                                 cache_taxonomy_level <
-                                this.state.taxonomy_data.length
+                                this.state.taxonomy_data.length;
+                                cache_taxonomy_level++
                             ) {
-                                var new_parents = [];
-                                var new_taxonomy_layer = this.state.taxonomy_data[
-                                    cache_taxonomy_level
-                                ].filter(node =>
-                                    new Set(cache_parents.map(p => p.name)).has(
-                                        node.parent
-                                    )
+                                const parent_names = new Set(
+                                    cache_parents.map(p => p.name)
                                 );
+                                const new_taxonomy_layer = this.state.taxonomy_data[
+                                    cache_taxonomy_level
+                                ].filter(node => parent_names.has(node.parent));
 
-                                new_taxonomy_layer.forEach(parent => {
-                                    if (!parent.expanded) {
-                                        cache_nodes.push(parent);
-                                    } else {
-                                        new_parents.push(parent);
-                                    }
-                                });
-
-                                cache_parents = new_parents;
-                                cache_taxonomy_level++;
+                                cache_nodes = new_taxonomy_layer.filter(
+                                    parent => !parent.expanded
+                                );
+                                cache_parents = new_taxonomy_layer.filter(
+                                    parent => parent.expanded
+                                );
                             }
 
                             temp_y = cache_nodes.length;

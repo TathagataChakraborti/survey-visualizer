@@ -433,7 +433,7 @@ class Affinity extends React.Component {
                         This view into document similarity space was inspired
                         from{' '}
                         <Link href="https://www.mini-conf.org" target="_blank">
-                            Miniconf
+                            MiniConf
                         </Link>
                         . Each dot is a paper. If you <b>hover</b> over a dot,
                         you see the corresponding paper. To learn more about an
