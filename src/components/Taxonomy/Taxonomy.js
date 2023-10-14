@@ -145,23 +145,7 @@ class Taxonomy extends React.Component {
     }
 
     componentDidMount(props) {
-        if (this.ref.current) {
-            const container_width = this.ref.current.offsetWidth;
-
-            this.setState(
-                {
-                    ...this.state,
-                    config: {
-                        ...this.state.config,
-                        nodeWidth: container_width / 5,
-                        nodeGapHoriontal: container_width / 4,
-                    },
-                },
-                () => {
-                    this.switchTabs(this.state.active_tab);
-                }
-            );
-        }
+        this.switchTabs(this.state.active_tab);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -209,6 +193,9 @@ class Taxonomy extends React.Component {
                   new_taxonomoy_data.length - 1
               );
 
+        const container_width = this.ref.current.offsetWidth;
+        const taxonomic_levels = new_taxonomoy_data.length;
+
         this.setState(
             {
                 ...this.state,
@@ -218,6 +205,8 @@ class Taxonomy extends React.Component {
                 config: {
                     ...this.state.config,
                     vertical_offset: tab_config.taxonomy.columns.start,
+                    nodeWidth: container_width / (taxonomic_levels + 1),
+                    nodeGapHoriontal: container_width / taxonomic_levels,
                     plot_options: {
                         ...this.state.config.plot_options,
                         level: fancy_chart_level,
