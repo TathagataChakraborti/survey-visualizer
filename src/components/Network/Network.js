@@ -1,5 +1,4 @@
 import React from 'react';
-import { InlineNotification } from '@carbon/react';
 import { ForceGraph } from './observablehq.js';
 import { Simulate, TagArea } from '../../components/Info';
 
@@ -152,20 +151,16 @@ class Network extends React.Component {
             <div
                 className="cds--container"
                 onMouseUp={this.mouseUpGlobal.bind(this)}>
-                <InlineNotification
-                    subtitle={
-                        <span>
-                            This network shows how papers here point to each
-                            other. Hover over a node to see its identity. The
-                            connections are parsed automatically from PDFs.{' '}
-                            <strong>This process is somewhat noisy.</strong> We
-                            hope to improve it over time.
-                        </span>
-                    }
-                    title="Citation Network"
-                    kind="info"
-                    lowContrast
-                />
+                <h6>Citation Network</h6>
+                <p style={{ fontSize: 'smaller', marginTop: '5px' }}>
+                    This network shows how papers here point to each other.
+                    Hover over a node to see its identity. The connections are
+                    parsed automatically from PDFs.{' '}
+                    <strong>This process is somewhat noisy.</strong> We hope to
+                    improve it over time.
+                </p>
+                <hr />
+
                 <br />
 
                 <Simulate

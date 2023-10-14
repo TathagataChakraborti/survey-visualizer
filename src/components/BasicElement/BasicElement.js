@@ -5,6 +5,7 @@ import {
     Grid,
     Column,
     Search,
+    Layer,
     ToastNotification,
     NumberInput,
     Button,
@@ -216,15 +217,18 @@ class BasicElement extends React.Component {
                     <Column lg={16} md={8} sm={4}>
                         <Grid>
                             <Column lg={10} md={8} sm={4}>
-                                <Search
-                                    light
-                                    labelText=""
-                                    id="search"
-                                    placeholder="Search"
-                                    size="sm"
-                                    value={this.state.search}
-                                    onChange={this.handleInputChange.bind(this)}
-                                />
+                                <Layer>
+                                    <Search
+                                        labelText=""
+                                        id="search"
+                                        placeholder="Search"
+                                        size="sm"
+                                        value={this.state.search}
+                                        onChange={this.handleInputChange.bind(
+                                            this
+                                        )}
+                                    />
+                                </Layer>
                                 <div
                                     className="label-text"
                                     style={{ paddingTop: '5px' }}>
@@ -235,65 +239,77 @@ class BasicElement extends React.Component {
                             </Column>
 
                             <Column lg={3} md={4} sm={2}>
-                                <NumberInput
-                                    light
-                                    onChange={(event, { value, direction }) => {
-                                        this.setState(
-                                            {
-                                                ...this.state,
-                                                years: {
-                                                    ...this.state.years,
-                                                    min_val: parseInt(value),
+                                <Layer>
+                                    <NumberInput
+                                        onChange={(
+                                            event,
+                                            { value, direction }
+                                        ) => {
+                                            this.setState(
+                                                {
+                                                    ...this.state,
+                                                    years: {
+                                                        ...this.state.years,
+                                                        min_val: parseInt(
+                                                            value
+                                                        ),
+                                                    },
                                                 },
-                                            },
-                                            () => {
-                                                this.refreshData();
-                                            }
-                                        );
-                                    }}
-                                    size="sm"
-                                    id="min-year"
-                                    min={this.state.years.min_min}
-                                    max={this.state.years.max_val}
-                                    value={this.state.years.min_val}
-                                    helperText={
-                                        <div className="label-text">
-                                            Earliest date
-                                        </div>
-                                    }
-                                    invalidText="Invalid"
-                                />
+                                                () => {
+                                                    this.refreshData();
+                                                }
+                                            );
+                                        }}
+                                        size="sm"
+                                        id="min-year"
+                                        min={this.state.years.min_min}
+                                        max={this.state.years.max_val}
+                                        value={this.state.years.min_val}
+                                        helperText={
+                                            <div className="label-text">
+                                                Earliest date
+                                            </div>
+                                        }
+                                        invalidText="Invalid"
+                                    />
+                                </Layer>
                             </Column>
 
                             <Column lg={3} md={4} sm={2}>
-                                <NumberInput
-                                    light
-                                    onChange={(event, { value, direction }) => {
-                                        this.setState(
-                                            {
-                                                ...this.state,
-                                                years: {
-                                                    ...this.state.years,
-                                                    max_val: parseInt(value),
+                                <Layer>
+                                    <NumberInput
+                                        onChange={(
+                                            event,
+                                            { value, direction }
+                                        ) => {
+                                            this.setState(
+                                                {
+                                                    ...this.state,
+                                                    years: {
+                                                        ...this.state.years,
+                                                        max_val: parseInt(
+                                                            value
+                                                        ),
+                                                    },
                                                 },
-                                            },
-                                            () => {
-                                                this.refreshData();
-                                            }
-                                        );
-                                    }}
-                                    size="sm"
-                                    id="max-year"
-                                    min={this.state.years.min_val}
-                                    max={this.state.years.max_max}
-                                    value={this.state.years.max_val}
-                                    helperText={
-                                        <div className="label-text">
-                                            Latest date
-                                        </div>
-                                    }
-                                    invalidText="Invalid"
-                                />
+                                                () => {
+                                                    this.refreshData();
+                                                }
+                                            );
+                                        }}
+                                        size="sm"
+                                        id="max-year"
+                                        min={this.state.years.min_val}
+                                        max={this.state.years.max_max}
+                                        value={this.state.years.max_val}
+                                        helperText={
+                                            <div className="label-text">
+                                                Latest date
+                                            </div>
+                                        }
+                                        invalidText="Invalid"
+                                    />
+                                </Layer>
                             </Column>
                         </Grid>
                     </Column>
