@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stage, Layer, Rect, Circle } from 'react-konva';
-import { Grid, Column, InlineNotification } from '@carbon/react';
+import { Grid, Column, Link } from '@carbon/react';
 import { Paper, Simulate, TagArea } from '../../components/Info';
 
 import '@carbon/charts/styles.css';
@@ -428,22 +428,20 @@ class Affinity extends React.Component {
         return (
             <div onMouseUp={this.mouseUpGlobal.bind(this)}>
                 <div className="cds--container">
-                    <InlineNotification
-                        subtitle={
-                            <span>
-                                This view into document similarity space was
-                                inspired from Miniconf. Each dot is a paper. If
-                                you <b>hover</b> over a dot, you see the
-                                corresponding paper. To learn more about an area
-                                of the plot, <b>Select</b> one or more papers by
-                                clicking on the dots or by pressing SHIFT and
-                                dragging a rectangle over them.
-                            </span>
-                        }
-                        title="Document Embeddings"
-                        kind="info"
-                        lowContrast
-                    />
+                    <h6>Document Embeddings</h6>
+                    <p style={{ fontSize: 'smaller', marginTop: '5px' }}>
+                        This view into document similarity space was inspired
+                        from{' '}
+                        <Link href="https://www.mini-conf.org" target="_blank">
+                            MiniConf
+                        </Link>
+                        . Each dot is a paper. If you <b>hover</b> over a dot,
+                        you see the corresponding paper. To learn more about an
+                        area of the plot, <b>Select</b> one or more papers by
+                        clicking on the dots or by pressing SHIFT and dragging a
+                        rectangle over them.
+                    </p>
+                    <hr />
 
                     <br />
                     <Grid>

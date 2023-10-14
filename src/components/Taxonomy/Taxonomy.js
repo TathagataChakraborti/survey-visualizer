@@ -15,6 +15,8 @@ import {
     getParents,
     getChildren,
     Paper,
+    getMinYear,
+    getMaxYear,
 } from '../../components/Info';
 import { buildElbowPathString } from '@carbon/charts';
 import {
@@ -53,6 +55,56 @@ let data = require('../../compiler/data/Taxonomy.json');
 let view_config = config.views.filter(view => view.name === 'Taxonomy')[0];
 let fancy_chart_default_level = 2;
 
+const getModalTimelineOptions = data => {
+    const min_year = data.reduce(
+        (min, item) => (min > item.year ? item.year : min),
+        2 ** 20
+    );
+    const max_year = data.reduce(
+        (max, item) => (max < item.year ? item.year : max),
+        0
+    );
+
+    const max_value = data.reduce(
+        (max, item) => (max < item.value ? item.value : max),
+        0
+    );
+    var step = Math.floor(max_value / 5);
+    var values = [];
+
+    step = step ? step : 1;
+
+    for (var i = 0; i <= max_value + step; i += step) values.push(i);
+
+    return {
+        legend: {
+            enabled: false,
+        },
+        grid: {
+            x: {
+                enabled: false,
+            },
+            y: {
+                enabled: false,
+            },
+        },
+        axes: {
+            left: {
+                mapsTo: 'year',
+                scaleType: 'labels',
+            },
+            top: {
+                mapsTo: 'value',
+                ticks: {
+                    values: values,
+                },
+            },
+        },
+        height: (50 * (max_year - min_year)).toString() + 'px',
+        width: '90%',
+    };
+};
+
 class Taxonomy extends React.Component {
     constructor(props) {
         super(props);
@@ -64,6 +116,7 @@ class Taxonomy extends React.Component {
             paper_data: [],
             taxonomy_data_fancy: [],
             modal: false,
+            years: props.years,
             config: {
                 nodeHeight: 50,
                 nodeWidth: 200,
@@ -87,52 +140,12 @@ class Taxonomy extends React.Component {
                         },
                     },
                 },
-                modal_timeline: {
-                    legend: {
-                        enabled: false,
-                    },
-                    grid: {
-                        x: {
-                            enabled: false,
-                        },
-                        y: {
-                            enabled: false,
-                        },
-                    },
-                    axes: {
-                        left: {
-                            mapsTo: 'year',
-                            scaleType: 'labels',
-                        },
-                        top: {
-                            mapsTo: 'value',
-                        },
-                    },
-                    height: '1000px',
-                    width: '90%',
-                },
             },
         };
     }
 
     componentDidMount(props) {
-        if (this.ref.current) {
-            const container_width = this.ref.current.offsetWidth;
-
-            this.setState(
-                {
-                    ...this.state,
-                    config: {
-                        ...this.state.config,
-                        nodeWidth: container_width / 5,
-                        nodeGapHoriontal: container_width / 4,
-                    },
-                },
-                () => {
-                    this.switchTabs(this.state.active_tab);
-                }
-            );
-        }
+        this.switchTabs(this.state.active_tab);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -180,6 +193,9 @@ class Taxonomy extends React.Component {
                   new_taxonomoy_data.length - 1
               );
 
+        const container_width = this.ref.current.offsetWidth;
+        const taxonomic_levels = new_taxonomoy_data.length;
+
         this.setState(
             {
                 ...this.state,
@@ -189,6 +205,8 @@ class Taxonomy extends React.Component {
                 config: {
                     ...this.state.config,
                     vertical_offset: tab_config.taxonomy.columns.start,
+                    nodeWidth: container_width / (taxonomic_levels + 1),
+                    nodeGapHoriontal: container_width / taxonomic_levels,
                     plot_options: {
                         ...this.state.config.plot_options,
                         level: fancy_chart_level,
@@ -336,14 +354,16 @@ class Taxonomy extends React.Component {
     };
 
     getTimeline(e) {
-        const current_year = new Date().getFullYear();
-
-        var years = [...Array(current_year + 1 - config.min_year).keys()].map(
-            e => {
-                return e + config.min_year;
-            }
+        const max_year = getMaxYear(this.state.paper_data, 0);
+        const min_year = Math.max(
+            config.min_year,
+            getMinYear(this.state.paper_data, max_year)
         );
+
         var data = {};
+        var years = [...Array(max_year + 1 - min_year).keys()].map(e => {
+            return e + min_year;
+        });
 
         const paper_data = this.state.paper_data.filter(
             paper =>
@@ -487,29 +507,25 @@ class Taxonomy extends React.Component {
                                     .filter(e => e.parent === parent.name)
                                     .indexOf(node);
                         } else {
-                            while (
+                            for (
+                                cache_taxonomy_level;
                                 cache_taxonomy_level <
-                                this.state.taxonomy_data.length
+                                this.state.taxonomy_data.length;
+                                cache_taxonomy_level++
                             ) {
-                                var new_parents = [];
-                                var new_taxonomy_layer = this.state.taxonomy_data[
-                                    cache_taxonomy_level
-                                ].filter(node =>
-                                    new Set(cache_parents.map(p => p.name)).has(
-                                        node.parent
-                                    )
+                                const parent_names = new Set(
+                                    cache_parents.map(p => p.name)
                                 );
+                                const new_taxonomy_layer = this.state.taxonomy_data[
+                                    cache_taxonomy_level
+                                ].filter(node => parent_names.has(node.parent));
 
-                                new_taxonomy_layer.forEach(parent => {
-                                    if (!parent.expanded) {
-                                        cache_nodes.push(parent);
-                                    } else {
-                                        new_parents.push(parent);
-                                    }
-                                });
-
-                                cache_parents = new_parents;
-                                cache_taxonomy_level++;
+                                cache_nodes = new_taxonomy_layer.filter(
+                                    parent => !parent.expanded
+                                );
+                                cache_parents = new_taxonomy_layer.filter(
+                                    parent => parent.expanded
+                                );
                             }
 
                             temp_y = cache_nodes.length;
@@ -541,6 +557,7 @@ class Taxonomy extends React.Component {
                                 height={this.state.config.nodeHeight}
                                 width={this.state.config.nodeWidth}>
                                 <CardNode
+                                    style={{ marginBottom: '5px' }}
                                     onClick={this.onClickModalNode.bind(
                                         this,
                                         node
@@ -718,7 +735,6 @@ class Taxonomy extends React.Component {
                                                     min={0}
                                                     step={1}
                                                     onChange={({ value }) => {
-                                                        console.log(value);
                                                         this.setState({
                                                             ...this.state,
                                                             config: {
@@ -977,10 +993,9 @@ class Taxonomy extends React.Component {
                                         {this.state.modal && (
                                             <SimpleBarChart
                                                 data={this.getTimeline()}
-                                                options={
-                                                    this.state.config
-                                                        .modal_timeline
-                                                }></SimpleBarChart>
+                                                options={getModalTimelineOptions(
+                                                    this.getTimeline()
+                                                )}></SimpleBarChart>
                                         )}
                                     </Column>
                                 </Grid>

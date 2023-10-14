@@ -26,6 +26,22 @@ const tag_size_percentile_map = {
     sm: 0,
 };
 
+function getMinYear(paper_data, max) {
+    return paper_data.reduce((min_year, paper) => {
+        if (paper.year < min_year) min_year = paper.year;
+
+        return min_year;
+    }, max);
+}
+
+function getMaxYear(paper_data, min) {
+    return paper_data.reduce((max_year, paper) => {
+        if (paper.year > max_year) max_year = paper.year;
+
+        return max_year;
+    }, min);
+}
+
 function generateURL(file, ext, dir) {
     return `${process.env.PUBLIC_URL}${dir}/${file}.${ext}`;
 }
@@ -421,6 +437,8 @@ class TagArea extends React.Component {
 }
 
 export {
+    getMinYear,
+    getMaxYear,
     generateURL,
     shuffleArray,
     hashID,

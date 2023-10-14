@@ -68,7 +68,12 @@ class Config2Data:
             print(f"Looking for spreadshet at {path} ...")
 
             wb = load_workbook(path, data_only=True)
-            sheet = wb[tab["input_file"]["active_worksheet"]]
+
+            active_worksheet = tab["input_file"].get("active_worksheet", None)
+            if active_worksheet:
+                sheet = wb[active_worksheet]
+            else:
+                sheet = wb.active
 
             row_number = 0
             for row in sheet.iter_rows(max_row=sheet.max_row):
@@ -145,7 +150,7 @@ class Config2Data:
 
                     for key in key_map:
                         if key_map[key] is not None:
-                            setattr(new_paper, key, row[key_map[key]].value)
+                            setattr(new_paper, key, row[key_map[key] - 1].value)
                         else:
                             setattr(new_paper, key, None)
 
