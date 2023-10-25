@@ -12,7 +12,7 @@ from encoding import (
 )
 
 USAGE = """
-    python3 macq_encoded.py [compile|find|find-k|server]
+    python3 macq_encoded.py [compile|find|find-k]
 """
 
 x1 = Var("Learning Parameters > Agent Features > Rationality > Causally Rational")
@@ -225,20 +225,6 @@ def find_k_new_papers(k, fcode):
     return all_papers
 
 
-def server(port):
-    from flask import Flask, jsonify, request
-
-    app = Flask(__name__)
-
-    @app.route("/findpapers", methods=["POST"])
-    def example():
-        data = request.json
-        caller = str(request.remote_addr).replace(".", "_")
-        return jsonify(find_k_new_papers(data["k"], caller))
-
-    app.run(port=port)
-
-
 if __name__ == "__main__":
 
     if sys.argv[1] == "compile":
@@ -256,10 +242,6 @@ if __name__ == "__main__":
         tstart = time.time()
         find_k_new_papers(k, "")
         print(f"\n\n\tTime taken: {time.time() - tstart}\n\n")
-
-    elif sys.argv[1] == "server":
-        port = int(sys.argv[2])
-        server(port)
 
     else:
         print(USAGE)
