@@ -2,6 +2,12 @@ import React from 'react';
 import { ArrowRight, DotMark } from '@carbon/icons-react';
 import { Paper } from '../../components/Info';
 import {
+    computeTagChains,
+    computeAllTagChains,
+    NoPaperList,
+    PopularTags,
+} from './Trends';
+import {
     Grid,
     Column,
     Tag,
@@ -40,32 +46,7 @@ taxonomy = taxonomy.find(
 
 let paper_data = taxonomy.data;
 let taxonomy_data = taxonomy.taxonomy;
-let tag_labels = [];
-
-taxonomy_data.forEach((taxonomy_level, level) => {
-    taxonomy_level.forEach((taxonomy_item, idx) => {
-        var new_item = [];
-
-        if (taxonomy_item.parent) {
-            tag_labels.forEach((known_item, i) => {
-                if (
-                    taxonomy_item.parent === known_item[known_item.length - 1]
-                ) {
-                    var new_item = known_item.map(e => e);
-                    new_item.push(taxonomy_item.name);
-                    tag_labels.push(new_item);
-                }
-            });
-        } else {
-            new_item.push(taxonomy_item.name);
-            tag_labels.push(new_item);
-        }
-    });
-});
-
-tag_labels = tag_labels.map((item, i) => {
-    return { id: i, text: item.join(' > ') };
-});
+let tag_labels = computeAllTagChains(taxonomy_data);
 
 const ShapeNodeSize = 10;
 const SpecialShapeNodeSize = 20;
@@ -568,24 +549,11 @@ class Insights extends React.Component {
                 const temp_paper_data = this.state.paper_data.map(
                     (paper, i) => {
                         var new_paper = JSON.parse(JSON.stringify(paper));
-                        var tag_chain = [];
+                        new_paper['tag_chain'] = computeTagChains(
+                            new_paper,
+                            tag_labels
+                        );
 
-                        new_paper.tags.forEach(tag => {
-                            var temp_c = [];
-                            if (tag.parent) temp_c = [tag.parent];
-
-                            temp_c.push(tag.name);
-                            var temp_c_for_check = temp_c.join(' > ');
-
-                            tag_labels.forEach(reference => {
-                                if (reference.text.endsWith(temp_c_for_check)) {
-                                    tag_chain.push(reference.text);
-                                    return false;
-                                }
-                            });
-                        });
-
-                        new_paper['tag_chain'] = tag_chain;
                         return new_paper;
                     }
                 );
@@ -639,27 +607,24 @@ class Insights extends React.Component {
                 }}>
                 <Accordion align="start">
                     <AccordionItem title="Tell me topics that do not have any papers!">
-                        <InlineNotification
-                            lowContrast
-                            hideCloseButton
-                            kind="error"
-                            title="Coming soon!"
+                        <NoPaperList
+                            tag_labels={tag_labels}
+                            paper_data={this.state.paper_data}
                         />
                     </AccordionItem>
                     <AccordionItem title="What are topics that have the least number of papers?">
-                        <InlineNotification
-                            lowContrast
-                            hideCloseButton
-                            kind="error"
-                            title="Coming soon!"
+                        <PopularTags
+                            slice_to={10}
+                            direction="increasing"
+                            tag_labels={tag_labels}
+                            paper_data={this.state.paper_data}
                         />
                     </AccordionItem>
                     <AccordionItem title="What are most popular topics?">
-                        <InlineNotification
-                            lowContrast
-                            hideCloseButton
-                            kind="error"
-                            title="Coming soon!"
+                        <PopularTags
+                            direction="decreasing"
+                            tag_labels={tag_labels}
+                            paper_data={this.state.paper_data}
                         />
                     </AccordionItem>
                     <AccordionItem title="Search papers using tags">
@@ -672,6 +637,14 @@ class Insights extends React.Component {
                         className="whats-next"
                         title={<>What should I work on next?! &#129299;</>}
                         open>
+                        <InlineNotification
+                            lowContrast
+                            hideCloseButton
+                            kind="error"
+                            title="Server down, pending funding!"
+                        />
+                        <br />
+
                         <p style={{ fontSize: 'inherit' }}>
                             In her{' '}
                             <Link
@@ -795,6 +768,7 @@ class Insights extends React.Component {
                             </Column>
                             <Column lg={4} md={4} sm={4}>
                                 <Button
+                                    disabled
                                     kind="primary"
                                     size="sm"
                                     onClick={this.imaginePapers.bind(this)}>
