@@ -171,12 +171,6 @@ class Affinity extends React.Component {
             const sy = this.state.newAnnotation[0].y;
             const { x, y } = e.target.getStage().getPointerPosition();
 
-            this.setState({
-                ...this.state,
-                annotations: [],
-                newAnnotation: [],
-            });
-
             const new_paper_data = this.state.cached_data.map(paper => {
                 var selected = false;
 
@@ -204,6 +198,8 @@ class Affinity extends React.Component {
                 this.setState(
                     {
                         ...this.state,
+                        annotations: [],
+                        newAnnotation: [],
                         data: new_paper_data.filter(e => e.selected),
                         cached_data: new_paper_data,
                     },
@@ -438,8 +434,8 @@ class Affinity extends React.Component {
                         . Each dot is a paper. If you <b>hover</b> over a dot,
                         you see the corresponding paper. To learn more about an
                         area of the plot, <b>Select</b> one or more papers by
-                        clicking on the dots or by pressing SHIFT and dragging a
-                        rectangle over them.
+                        clicking on the dots or by clicking on the general area,
+                        pressing SHIFT, and dragging a rectangle over them.
                     </p>
                     <hr />
 

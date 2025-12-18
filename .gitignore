@@ -174,3 +174,6 @@ dmypy.json
 *.firebase
 .firebaserc
 firebase.json
+
+# PDFs for MAcq
+**macq-pdfs/

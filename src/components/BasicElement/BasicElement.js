@@ -144,22 +144,27 @@ class BasicElement extends React.Component {
         const min_year = getMinYear(paper_data, this.state.years.max_max);
         const max_year = getMaxYear(paper_data, this.state.years.min_min);
 
-        this.setState({
-            ...this.state,
-            taxonomy_data: taxonomy_data,
-            paper_data: paper_data,
-            cached_paper_data: paper_data,
-            search: '',
-            tags: [],
-            number: paper_data.length,
-            years: {
-                ...this.state.years,
-                min_min: min_year,
-                max_max: max_year,
-                min_val: min_year,
-                max_val: max_year,
+        this.setState(
+            {
+                ...this.state,
+                taxonomy_data: taxonomy_data,
+                paper_data: paper_data,
+                cached_paper_data: paper_data,
+                search: '',
+                tags: [],
+                number: paper_data.length,
+                years: {
+                    ...this.state.years,
+                    min_min: min_year,
+                    max_max: max_year,
+                    min_val: min_year,
+                    max_val: max_year,
+                },
             },
-        });
+            () => {
+                this.sortYear(-1);
+            }
+        );
     };
 
     updateSelectedTags = tag => {
@@ -196,8 +201,7 @@ class BasicElement extends React.Component {
         );
     };
 
-    sortYear = e => {
-        var mode_selector = e.currentTarget.name === 'decreasing' ? -1 : 1;
+    sortYear = mode_selector => {
         var new_paper_data = this.state.paper_data;
 
         new_paper_data.sort(function(a, b) {
@@ -208,6 +212,11 @@ class BasicElement extends React.Component {
             ...this.state,
             paper_data: new_paper_data,
         });
+    };
+
+    sortYearHandle = e => {
+        var mode_selector = e.currentTarget.name === 'decreasing' ? -1 : 1;
+        this.sortYear(mode_selector);
     };
 
     render() {
@@ -415,7 +424,7 @@ class BasicElement extends React.Component {
                                 <br />
 
                                 <Button
-                                    onClick={this.sortYear.bind(this)}
+                                    onClick={this.sortYearHandle.bind(this)}
                                     name="decreasing"
                                     kind="ghost"
                                     className="navigation-buttons"
@@ -425,7 +434,7 @@ class BasicElement extends React.Component {
                                     hasIconOnly
                                 />
                                 <Button
-                                    onClick={this.sortYear.bind(this)}
+                                    onClick={this.sortYearHandle.bind(this)}
                                     name="increasing"
                                     kind="ghost"
                                     className="navigation-buttons"

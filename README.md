@@ -43,11 +43,11 @@ You can contribute in two forms:
 
 ### Active Deployments
 
-| Topic | Link | Contribute |
-|:------|:-----|:-----------|
-| <br/> Virtual, Augmented, and Mixed-Reality for <br/> Human-Robot Interaction <br/> <br/> [`paper`](https://arxiv.org/abs/2202.11249) [`paper`](https://ieeexplore.ieee.org/document/8673071) <br/><br/>  | [vamhri.com](https://vamhri.com) | [Contribute](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose) |
-| <br/> Explainable AI Planning <br/> <br/> [`paper`](https://www.ijcai.org/Proceedings/2020/669) [`paper`](https://ojs.aaai.org//index.php/ICAPS/article/view/3463) <br/> <br/> | [explainableplanning.com](https://explainableplanning.com) | [Contribute](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose) |
-| <br/> Model Acquisition for Planning <br/> <br/> [`paper`](https://drive.google.com/file/d/1WqO-PWbE7uhHVbSRnqGcJkQN2-Hpquh2/view?usp=sharing) <br/> <br/> | [macq.planning.domains](https://macq.planning.domains) | [Contribute](https://github.com/QuMuLab/macq) |
+| Topic                                                                                                                                                                                                    | Link                                                       | Contribute                                                                                |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| <br/> Virtual, Augmented, and Mixed-Reality for <br/> Human-Robot Interaction <br/> <br/> [`paper`](https://arxiv.org/abs/2202.11249) [`paper`](https://ieeexplore.ieee.org/document/8673071) <br/><br/> | [vamhri.com](https://vamhri.com)                           | [Contribute](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose) |
+| <br/> Explainable AI Planning <br/> <br/> [`paper`](https://www.ijcai.org/Proceedings/2020/669) [`paper`](https://ojs.aaai.org//index.php/ICAPS/article/view/3463) <br/> <br/>                           | [explainableplanning.com](https://explainableplanning.com) | [Contribute](https://github.com/TathagataChakraborti/survey-visualizer/issues/new/choose) |
+| <br/> Model Acquisition for Planning <br/> <br/> [`paper`](https://drive.google.com/file/d/1WqO-PWbE7uhHVbSRnqGcJkQN2-Hpquh2/view?usp=sharing) <br/> <br/>                                               | [macq.planning.domains](https://macq.planning.domains)     | [Contribute](https://github.com/QuMuLab/macq)                                             |
 
 ## How to Cite
 

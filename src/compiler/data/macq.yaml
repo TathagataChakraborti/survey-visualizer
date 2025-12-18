@@ -67,7 +67,7 @@ views:
   disabled: false
 - name: Network
   files_directory:
-    location: src/compiler/data/pdfs
+    location: src/compiler/data/macq-pdfs
   match_threshold: 0.25
   disabled: false
 - name: Insights

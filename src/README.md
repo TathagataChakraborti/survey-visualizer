@@ -16,31 +16,31 @@ This part is pretty self-explanatory.
 
 ```yaml
 metadata:
-  acronym: VAMHRI
-  name: Virtual, Augmented, and Mixed Reality for Human-Robot Interaction
-  title_text: 'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction'
-  citation_text: "@article{vam-hri, \n title={{Virtual, Augmented, and Mixed
-    Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
-    Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
-    and Tom \n\t Williams and Daniel Szafir}, \n journal={ACM Transactions on\n\t  Human-Robot Interaction}, \n
-    year={2023}}"
-  link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
-  primary_link: https://dl.acm.org/doi/10.1145/3597623
-  secondary_links:
-    - name: VAM-HRI Cube
-      link: https://ieeexplore.ieee.org/document/8673071
-    - name: Makhataeva et al.
-      link: https://www.mdpi.com/2218-6581/9/2/21
-    - name: Phaijit et al.
-      link: https://dl.acm.org/doi/abs/10.5555/3523760.3523801
-  community_link: https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw
-  info_tile: true
-  info_text: Learn more about the VAM-HRI Workshop Series
-  info_link:
-  - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
-    text: How it started
-  - link: https://vam-hri.github.io/
-    text: How it's going
+    acronym: VAMHRI
+    name: Virtual, Augmented, and Mixed Reality for Human-Robot Interaction
+    title_text: 'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction'
+    citation_text: "@article{vam-hri, \n title={{Virtual, Augmented, and Mixed
+        Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
+        Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
+        and Tom \n\t Williams and Daniel Szafir}, \n journal={ACM Transactions on\n\t  Human-Robot Interaction}, \n
+        year={2023}}"
+    link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
+    primary_link: https://dl.acm.org/doi/10.1145/3597623
+    secondary_links:
+        - name: VAM-HRI Cube
+          link: https://ieeexplore.ieee.org/document/8673071
+        - name: Makhataeva et al.
+          link: https://www.mdpi.com/2218-6581/9/2/21
+        - name: Phaijit et al.
+          link: https://dl.acm.org/doi/abs/10.5555/3523760.3523801
+    community_link: https://join.slack.com/t/vam-hri/shared_invite/zt-gjq1jtld-PzxfFywTi0qBF6CUX5julw
+    info_tile: true
+    info_text: Learn more about the VAM-HRI Workshop Series
+    info_link:
+        - link: https://ojs.aaai.org//index.php/aimagazine/article/view/2822
+          text: How it started
+        - link: https://vam-hri.github.io/
+          text: How it's going
 ```
 
 The `name` field appears as the title of the webpage (name of the tab on your browser). The rest of these fields
@@ -123,8 +123,8 @@ tabs:
 ```
 
 For each tab in the Taxonomy view, you can provide a link to the spreadsheet to read from. Unless otherwise specified, we will use
-the active sheet as the default sheet to read from (as indicated by the optional `default_tab` flag). 
-The path to the file can be marked relative to the directory you are running the compiler 
+the active sheet as the default sheet to read from (as indicated by the optional `default_tab` flag).
+The path to the file can be marked relative to the directory you are running the compiler
 from i.e. path/to/compiler/... or it can be an absolute path (as indicated by the `relative` flag).
 
 The rows and columns (for either the taxonomy area or the paper list) indicate the start and end of where to read from
