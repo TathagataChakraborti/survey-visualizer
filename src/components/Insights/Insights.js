@@ -12,7 +12,6 @@ import {
     Column,
     Tag,
     Link,
-    InlineNotification,
     Accordion,
     AccordionItem,
     StructuredListWrapper,
@@ -28,7 +27,7 @@ import {
     Pagination,
     Tile,
     Loading,
-    ToastNotification,
+    ActionableNotification,
     InlineLoading,
 } from '@carbon/react';
 
@@ -323,23 +322,22 @@ class Insight extends React.Component {
                         <>
                             <br />
                             <br />
-                            <ToastNotification
+
+                            <ActionableNotification
+                                actionButtonLabel="Report Issue"
+                                aria-label="close notification"
                                 lowContrast
-                                subtitle={
-                                    <span>
-                                        There was an error rendering the new
-                                        paper embedding. Please report a bug{' '}
-                                        <Link
-                                            href={
-                                                config.metadata.link_to_code +
-                                                '/issues'
-                                            }
-                                            target="_blank">
-                                            here
-                                        </Link>
-                                        .
-                                    </span>
-                                }
+                                closeOnEscape
+                                kind="error"
+                                onActionButtonClick={() => {
+                                    window.open(
+                                        config.metadata.link_to_code +
+                                            '/issues',
+                                        '_blank'
+                                    );
+                                }}
+                                statusIconDescription="error"
+                                subtitle="There was an error rendering new paper embedding. "
                                 title="ERROR"
                             />
                         </>
@@ -637,14 +635,6 @@ class Insights extends React.Component {
                         className="whats-next"
                         title={<>What should I work on next?! &#129299;</>}
                         open>
-                        <InlineNotification
-                            lowContrast
-                            hideCloseButton
-                            kind="error"
-                            title="Server down, pending funding!"
-                        />
-                        <br />
-
                         <p style={{ fontSize: 'inherit' }}>
                             In her{' '}
                             <Link
@@ -768,7 +758,6 @@ class Insights extends React.Component {
                             </Column>
                             <Column lg={4} md={4} sm={4}>
                                 <Button
-                                    disabled
                                     kind="primary"
                                     size="sm"
                                     onClick={this.imaginePapers.bind(this)}>
@@ -791,24 +780,22 @@ class Insights extends React.Component {
                             <>
                                 <br />
                                 <br />
-                                <ToastNotification
+
+                                <ActionableNotification
+                                    actionButtonLabel="Report Issue"
+                                    aria-label="close notification"
                                     lowContrast
-                                    subtitle={
-                                        <span>
-                                            There was an error contacting the
-                                            server. Please report a bug{' '}
-                                            <Link
-                                                href={
-                                                    config.metadata
-                                                        .link_to_code +
-                                                    '/issues'
-                                                }
-                                                target="_blank">
-                                                here
-                                            </Link>
-                                            .
-                                        </span>
-                                    }
+                                    closeOnEscape
+                                    kind="error"
+                                    onActionButtonClick={() => {
+                                        window.open(
+                                            config.metadata.link_to_code +
+                                                '/issues',
+                                            '_blank'
+                                        );
+                                    }}
+                                    statusIconDescription="error"
+                                    subtitle="There was an error contacting the server. "
                                     title="ERROR"
                                 />
                             </>

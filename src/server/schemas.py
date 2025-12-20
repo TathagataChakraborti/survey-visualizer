@@ -1,19 +1,26 @@
 from pydantic import BaseModel
-from typing import List, Union
-from enum import Enum
+from typing import List, Union, Optional
+from enum import StrEnum, auto
 
 
-class Domain(Enum):
-    MACQ = "macq"
-    VAMHRI = "vamhri"
-    XAIP = "xaip"
+class Domain(StrEnum):
+    @staticmethod
+    def _generate_next_value_(name, *args):
+        return name
 
-    @classmethod
-    def map_to_value(cls, incoming_value):
-        temp = incoming_value.lower().replace("-", "_")
-        list_of_names = list(cls._value2member_map_.keys())
+    MACQ = auto()
+    VAMHRI = auto()
+    XAIP = auto()
 
-        return list_of_names[list_of_names.index(temp)]
+
+class PaperTag(BaseModel):
+    name: str
+    parent: Optional[str]
+
+
+class Tag(BaseModel):
+    id: int
+    text: str
 
 
 class Paper(BaseModel):
@@ -23,10 +30,10 @@ class Paper(BaseModel):
     abstract: str
     authors: Union[str, List[str]]
     venue: str
-    sessions: str
+    sessions: Optional[str] = None
     year: int
-    keywords: Union[str, List[str]]
-    tags: List[str]
+    keywords: Optional[Union[str, List[str]]] = []
+    tags: List[PaperTag]
     citations: List[int]
     selected: bool = True
 
@@ -36,7 +43,7 @@ class RequestData(BaseModel):
     num_papers: int
     paper_data: List[Paper]
     selected_papers: List[int]
-    selected_tags: List[str]
+    selected_tags: List[Tag]
 
 
 class Transform(BaseModel):
