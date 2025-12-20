@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, DotMark } from '@carbon/icons-react';
+import { ArrowRight, DotMark, IbmCloudVirtualServerVpc } from '@carbon/icons-react';
 import { Paper } from '../../components/Info';
 import {
     computeTagChains,
@@ -10,6 +10,7 @@ import {
 import {
     Grid,
     Column,
+    Theme,
     Tag,
     Link,
     Accordion,
@@ -495,11 +496,15 @@ class Insights extends React.Component {
             selected_papers: [],
             selected_tags: [],
             num_papers: 1,
+            server_status: "error",
             loading: false,
             error: false,
         };
 
         this.updateSelectedTab();
+    }
+
+    componentDidMount() {
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -533,6 +538,46 @@ class Insights extends React.Component {
 
     updateSelectedTab(e) {
         this.props.updateSelectedTab(this.state.paper_data, []);
+    }
+
+    bringUpServer(e) {
+        this.setState(
+            {
+                ...this.state,
+                server_status: "active",
+            },
+            () => {
+                fetch(config.link_to_server + '/hello', {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                })
+                    .then(result => result.json())
+                    .then(data => {
+                        if(data.status) {
+                            this.setState({
+                                ...this.state,
+                                server_status: "finished",
+                            })
+                        } else {
+                            this.setState({
+                                ...this.state,
+                                server_status: "error",
+                            })
+
+                        }
+                    })
+                    .catch(data => {
+                            this.setState({
+                                ...this.state,
+                                server_status: "error",
+                            })
+                    });
+            }
+        );
     }
 
     imaginePapers(e) {
@@ -736,7 +781,46 @@ class Insights extends React.Component {
                         )}
 
                         <Grid>
+                            <Column lg={16} md={8} sm={4}>
+
+                            
+                            <Tile>
+
+
+                         <InlineLoading status={this.state.server_status} description="Server status" />
+
+                            <br/>
+
+
+  <Button
+  size='sm'
+  onClick={() => {this.bringUpServer()}}
+  kind="tertiary"
+    renderIcon={IbmCloudVirtualServerVpc}
+  >
+    Bring up server
+  </Button>
+
+  <p
+  className='button-text'
+  >
+                            Click here to bring up the server. If you are using the tool after
+                            a long time, the server might be asleep and take up to a minute to wake up.
+                            Once you get the green light, you can click <em>What's next?</em>.
+  </p>
+
+                            </Tile>
+                            <br/>
+                            <br/>
+
+
+
+
+                        </Column>
+
                             <Column lg={4} md={4} sm={4}>
+
+
                                 <NumberInput
                                     helperText={
                                         <>
@@ -758,6 +842,7 @@ class Insights extends React.Component {
                             </Column>
                             <Column lg={4} md={4} sm={4}>
                                 <Button
+                                disabled={this.state.server_status !== "finished"}
                                     kind="primary"
                                     size="sm"
                                     onClick={this.imaginePapers.bind(this)}>

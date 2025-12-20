@@ -22,7 +22,7 @@ CORS(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 
 
-@app.route("/hello", methods=["POST"])
+@app.route("/hello", methods=["GET"])
 def hello():
     return jsonify({"status": True})
 
