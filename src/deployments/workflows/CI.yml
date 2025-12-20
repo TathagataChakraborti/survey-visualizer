@@ -1,0 +1,40 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  setup-build:
+    name: Setup and Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install OS packages
+        run: |
+          sudo apt update
+          sudo apt install -y nodejs npm curl python3-pip python3-setuptools
+          node -v
+          sudo npm install -g n
+          sudo n 14.15.1
+          node -v
+          sudo npm install -g yarn
+          pip3 install --upgrade --no-cache-dir huggingface-hub
+          pip3 install --no-cache-dir -r "requirements.txt"
+          pip3 install --no-cache-dir setuptools Levenshtein
+          pip3 install --no-cache-dir -r ./src/deployments/deployment_requirements.txt
+      - name: Generate build sources
+        env:
+          CONFIG_FILE_PATH: ./src/compiler/data/vamhri.yaml
+        run: python src/compiler/compile.py --file $CONFIG_FILE_PATH
+      - name: Install node dependencies
+        run: |
+          yarn install --ignore-engines
+      - name: Build app
+        env:
+          CI: ""
+        run: yarn build
+      - name: Build docker image
+        env:
+          IMAGE_REPO: us.icr.io/research/vam_hri
+          IMAGE_NAME: vam_hri
+        run: docker build -t $IMAGE_REPO/$IMAGE_NAME .

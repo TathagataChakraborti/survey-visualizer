@@ -3,7 +3,7 @@ metadata:
   acronym: XAIP
   name: Explainable Planning
   title_text: 'Explainable AI Planning'
-  citation_text: "@inproceedings{xaip-landscape, \n title={The Emerging Landscape of\n\t Explainable Automated Planning\n\t & Decision Making}, \n author={Tathagata Chakraborti, \n\t Sarath Sreedharan, and\n\t Subbarao Kambhampati}, \n booktitle = {IJCAI}, \n year={2020}}"
+  citation_text: "@inproceedings{xaip-landscape, \n title={The Emerging Landscape of\n\t Explainable Automated Planning\n\t & Decision Making}, \n author={Tathagata Chakraborti and\n\t Sarath Sreedharan and\n\t Subbarao Kambhampati}, \n booktitle = {IJCAI}, \n year={2020}}"
   link_to_contribute: https://github.com/sarathsreedharan/survey-visualizer
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
   primary_link: https://www.ijcai.org/proceedings/2020/669
@@ -14,7 +14,7 @@ metadata:
   info_tile: true
   info_text: Learn more about the Workshop Series on Explainable AI Planning (XAIP) at the International Conference on Automated Planning and Scheduling.
   info_link:
-  - link: http://ibm.biz/xaip-workshop
+  - link: https://haxp-icaps.web.app
     text: XAIP Workshop Series
 link_to_server: https://testapp.mua8gtem6c8.us-east.codeengine.appdomain.cloud
 default_view: Taxonomy

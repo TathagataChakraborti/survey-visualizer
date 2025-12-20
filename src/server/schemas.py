@@ -1,8 +1,9 @@
-import enum
-from typing import List, Union, Dict, TypedDict
+from pydantic import BaseModel
+from typing import List, Union
+from enum import Enum
 
 
-class Domain(enum.Enum):
+class Domain(Enum):
     MACQ = "macq"
     VAMHRI = "vamhri"
     XAIP = "xaip"
@@ -15,7 +16,7 @@ class Domain(enum.Enum):
         return list_of_names[list_of_names.index(temp)]
 
 
-class Paper(TypedDict):
+class Paper(BaseModel):
     UID: int
     slug: str
     title: str
@@ -30,7 +31,7 @@ class Paper(TypedDict):
     selected: bool = True
 
 
-class RequestData(TypedDict):
+class RequestData(BaseModel):
     domain: Domain
     num_papers: int
     paper_data: List[Paper]
@@ -38,28 +39,28 @@ class RequestData(TypedDict):
     selected_tags: List[str]
 
 
-class Transform(TypedDict):
+class Transform(BaseModel):
     key: str
     value: bool
 
 
-class Neighbor(TypedDict):
+class Neighbor(BaseModel):
     UID: int
-    transforms: List[Transform]
+    transforms: List[Transform] = []
 
 
-class NewPaperData(TypedDict):
+class NewPaperData(BaseModel):
     key_map: List[str]
-    neighbors: List[Neighbor]
+    neighbors: List[Neighbor] = []
 
 
-class Embedding(TypedDict):
+class Embedding(BaseModel):
     UID: int
     x: float
     y: float
 
 
-class EmbeddingRequest(TypedDict):
+class EmbeddingRequest(BaseModel):
     paper_data: List[Paper]
     embeddings: List[Embedding]
     imagination: NewPaperData

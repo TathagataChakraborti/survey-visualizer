@@ -3,14 +3,14 @@ metadata:
   acronym: VAMHRI
   name: Virtual, Augmented, and Mixed Reality for Human-Robot Interaction
   title_text: 'Virtual, Augmented, and Mixed Reality for Human-Robot Interaction'
-  citation_text: "@inproceedings{vam-hri, \n title={{Virtual, Augmented, and Mixed
+  citation_text: "@article{vam-hri, \n title={{Virtual, Augmented, and Mixed
     Reality\n\t for Human-Robot Interaction: A Survey\n\t and Virtual Design Element
     Taxonomy}}, \n author={Michael Walker and Thao Phung and \n\t Tathagata Chakraborti
-    and Tom \n\t Williams and Daniel Szafir}, \n booktitle={arXiv:2202.11249}, \n
-    year={2022}}"
+    and Tom \n\t Williams and Daniel Szafir}, \n journal={ACM Transactions on\n\t Human-Robot Interaction}, \n
+    year={2023}}"
   link_to_code: https://github.com/TathagataChakraborti/survey-visualizer
-  primary_link: https://arxiv.org/abs/2202.11249
-  secondary_links: 
+  primary_link: https://dl.acm.org/doi/10.1145/3597623
+  secondary_links:
     - name: VAM-HRI Cube
       link: https://ieeexplore.ieee.org/document/8673071
     - name: Makhataeva et al.
@@ -38,8 +38,9 @@ views:
     disabled: false
     fancy_chart: false
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -64,8 +65,9 @@ views:
     disabled: false
     fancy_chart: true
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -93,8 +95,9 @@ views:
     disabled: false
     fancy_chart: true
     input_file:
-      filename: path/to/spreadsheet
-      active_worksheet: main
+      filename: data/slug.xlsx
+      active_worksheet: Master List
+      relative: true
     papers_list:
       key_map:
         slug: 0
@@ -121,9 +124,10 @@ views:
   disabled: false
 - name: Network
   files_directory:
-    location: /path/to/PDFs
+    location: data/pdfs
+    relative: true
   match_threshold: 0.25
   disabled: false
 - name: Insights
-  disabled: false
+  disabled: true
 

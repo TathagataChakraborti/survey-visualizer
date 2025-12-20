@@ -1,64 +1,58 @@
 .text-blue {
-  color: #0f62fe;
+    color: #0f62fe;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: none;
+    text-decoration: none;
 }
 
-.sidebar {
-}
-
-.bx--grid--full-width {
-  padding: 0;
-}
-
-.bx--container {
-  padding: 20px;
+.cds--container {
+    padding: 20px;
 }
 
 .footer {
-  position: fixed;
-  bottom: 0;
-  font-size: smaller;
+    position: fixed;
+    bottom: 0;
+    font-size: smaller;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 999;
 }
 
 .bonus-link {
-  box-shadow: none !important;
-  width: fit-content !important;
+    box-shadow: none !important;
+    width: fit-content !important;
 }
 
 .bonus-link path {
-  fill: #0f62fe !important;
+    fill: #0f62fe !important;
 }
 
 .buttonset {
-  box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 .tertiary-danger {
-  border-color: red;
-  color: red;
+    border-color: red;
+    color: red;
 }
 
 .tertiary-danger:hover {
-  background-color: red;
+    background-color: red;
 }
 
 .tertiary-secondary {
-  border-color: black;
-  color: black;
+    border-color: black;
+    color: black;
 }
 
 .tertiary-secondary:hover {
-  background-color: black;
+    background-color: black;
 }
 
-.see-also-accordion .bx--accordion__content {
-  padding: 0;
-  margin: 0;
+.see-also .cds--contained-list__header,
+.see-also .cds--contained-list-item__content {
 }

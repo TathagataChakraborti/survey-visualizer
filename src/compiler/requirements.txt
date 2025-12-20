@@ -1,0 +1,14 @@
+openpyxl
+pdfplumber
+transformers
+sentence_transformers
+python-Levenshtein
+scikit-learn
+torch
+ics
+black
+nnf
+flask
+flask_cors
+pydantic
+pyyaml
