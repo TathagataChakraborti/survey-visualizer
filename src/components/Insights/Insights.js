@@ -14,7 +14,6 @@ import {
 import {
     Grid,
     Column,
-    Theme,
     Tag,
     Link,
     Accordion,
