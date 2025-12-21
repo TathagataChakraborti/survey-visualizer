@@ -98,8 +98,8 @@ const NoPaperList = props => {
             kind="on-page"
             label="Tags with no papers"
             size="sm">
-            {tags_with_no_papers.map(tag => (
-                <ContainedListItem>{tag}</ContainedListItem>
+            {tags_with_no_papers.map((tag, index) => (
+                <ContainedListItem key={index}>{tag}</ContainedListItem>
             ))}
 
             {tags_with_no_papers.length === 0 && (
@@ -131,8 +131,8 @@ const PopularTags = props => {
             kind="on-page"
             label={slice_to + ' Most Popular Tags'}
             size="sm">
-            {tag_map_list.slice(0, slice_to).map(item => (
-                <ContainedListItem>
+            {tag_map_list.slice(0, slice_to).map((item, index) => (
+                <ContainedListItem key={index}>
                     <div
                         style={{
                             display: 'flex',
@@ -142,7 +142,7 @@ const PopularTags = props => {
                         <div>
                             <Tag
                                 className="flattened_tags"
-                                title={item.number}
+                                title={`item.number`}
                                 type={
                                     props.direction === 'decreasing'
                                         ? 'blue'

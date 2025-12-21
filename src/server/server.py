@@ -22,9 +22,9 @@ CORS(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 
 
-@app.route("/")
-def hello_world():
-    return "<p>Survey Visualizer</p>"
+@app.route("/hello", methods=["GET"])
+def hello():
+    return jsonify({"status": True})
 
 
 @app.route("/embeddings", methods=["POST"])
@@ -32,10 +32,12 @@ def embeddings() -> List[Embedding]:
     payload = EmbeddingRequest.model_validate(
         json.loads(request.get_data().decode("utf-8"))
     )
+
+    list_of_embeddings: List[Embedding] = []
     new_paper_data = payload.imagination
 
     neighbor_pos = [
-        list(filter(lambda e: e.UID == neighbor.UID, embeddings))[0]
+        list(filter(lambda e: e.UID == neighbor.UID, list_of_embeddings))[0]
         for neighbor in new_paper_data.neighbors
     ]
 
@@ -43,14 +45,15 @@ def embeddings() -> List[Embedding]:
     for pos in neighbor_pos:
         x, y = pos["x"] / len(neighbor_pos), pos["y"] / len(neighbor_pos)
 
-    embeddings.append(Embedding(UID=0, x=x, y=y))
-    return jsonify(embeddings)
+    list_of_embeddings.append(Embedding(UID=0, x=x, y=y))
+    return list_of_embeddings
 
 
 @app.route("/imagine", methods=["POST"])
-def imagine() -> NewPaperData:
+def imagine() -> List[NewPaperData]:
     data = RequestData.model_validate(json.loads(request.get_data().decode("utf-8")))
-    domain = Domain.map_to_value(data.domain)
+    domain = Domain(data.domain).value.lower()
+
     caller = str(request.remote_addr).replace(".", "_")
 
     approach2uid = {}
@@ -60,7 +63,7 @@ def imagine() -> NewPaperData:
     imagine_paper = importlib.import_module(f"{domain}_encoded")
     result = imagine_paper.find_k_new_papers(data.num_papers, caller)
 
-    new_result = []
+    new_result: List[NewPaperData] = []
     for res in result:
         keymap = []
         for i, digit in enumerate(res["entry"].split(",")):
@@ -81,7 +84,7 @@ def imagine() -> NewPaperData:
             )
         )
 
-    return jsonify(new_result)
+    return new_result
 
 
 if __name__ == "__main__":

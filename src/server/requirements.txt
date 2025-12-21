@@ -1,3 +1,4 @@
+pydantic
 nnf
 flask
 flask-cors
