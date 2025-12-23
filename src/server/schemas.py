@@ -3,6 +3,10 @@ from typing import List, Union, Optional
 from enum import StrEnum, auto
 
 
+class ServerStatus(BaseModel):
+    status: bool
+
+
 class Domain(StrEnum):
     @staticmethod
     def _generate_next_value_(name, *args):

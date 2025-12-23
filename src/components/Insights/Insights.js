@@ -1,10 +1,11 @@
 import React from 'react';
+import { Paper } from '../../components/Info';
+import { Edge, ShapeNode } from '@carbon/charts-react';
 import {
     ArrowRight,
     DotMark,
     IbmCloudVirtualServerVpc,
 } from '@carbon/icons-react';
-import { Paper } from '../../components/Info';
 import {
     computeTagChains,
     computeAllTagChains,
@@ -33,9 +34,10 @@ import {
     Loading,
     ActionableNotification,
     InlineLoading,
+    Theme,
 } from '@carbon/react';
 
-import { Edge, ShapeNode } from '@carbon/charts-react';
+import '@carbon/charts/styles.css';
 
 let config = require('../../config.json');
 let embeddings = require('../../compiler/data/Insights.json');
@@ -191,8 +193,12 @@ class Insight extends React.Component {
             }
         );
 
+        const selected_paper_content =
+            id === 0 ? null : this.state.paper_data.find(p => p.UID === id);
+
         this.setState({
             ...this.state,
+            selected_paper_content: selected_paper_content,
             imagination: {
                 ...this.state.imagination,
                 neighbors: new_neighbors,
@@ -210,12 +216,13 @@ class Insight extends React.Component {
                 <foreignObject
                     key={idx}
                     style={{ overflow: 'visible' }}
+                    onClick={this.selectNode.bind(this, paper.UID)}
                     transform={`translate(${paper.x}, ${paper.y})`}>
                     <ShapeNode
                         id={paper.UID}
                         size={ShapeNodeSize}
-                        onClick={this.selectNode.bind(this, paper.UID)}
                         renderIcon={<DotMark />}
+                        title=""
                         className={
                             this.state.imagination.neighbors
                                 .map(p => p.UID)
@@ -232,16 +239,17 @@ class Insight extends React.Component {
                     <foreignObject
                         key={0}
                         style={{ overflow: 'visible' }}
-                        transform={`translate(${this.state.new_paper.x}, ${this.state.new_paper.y})`}>
+                        transform={`translate(${this.state.new_paper.x}, ${this.state.new_paper.y})`}
+                        onClick={this.selectNode.bind(
+                            this,
+                            this.state.new_paper.UID
+                        )}>
                         <ShapeNode
                             id={0}
                             size={SpecialShapeNodeSize}
-                            onClick={this.selectNode.bind(
-                                this,
-                                this.state.new_paper.UID
-                            )}
                             renderIcon={<DotMark />}
                             className="special-circle"
+                            title=""
                         />
                     </foreignObject>
                 );
@@ -296,8 +304,9 @@ class Insight extends React.Component {
                     {this.state.imagination.key_map.map((item, idx) => {
                         const new_item = item.split(' > ');
                         const render_item = new_item.map((tag, i) => (
-                            <div key={i}>
+                            <div style={{ display: 'inline' }} key={i}>
                                 <Tag
+                                    className="topic-tag"
                                     size="sm"
                                     type={
                                         i === new_item.length - 1
@@ -315,11 +324,13 @@ class Insight extends React.Component {
 
                         return <div key={idx}>{render_item}</div>;
                     })}
-                    <br />
-                    <br />
 
                     {this.state.loading && (
-                        <InlineLoading description="Loading new paper embeddings..." />
+                        <>
+                            <br />
+                            <br />
+                            <InlineLoading description="Loading new paper embeddings..." />
+                        </>
                     )}
 
                     {this.state.error && (
@@ -347,7 +358,7 @@ class Insight extends React.Component {
                         </>
                     )}
 
-                    <div ref={this.ref} style={{ height: '30vh' }}>
+                    <div ref={this.ref} style={{ height: '500px' }}>
                         {!this.state.loading && !this.state.error && (
                             <svg height="100%" width="100%">
                                 {edges}
@@ -356,50 +367,58 @@ class Insight extends React.Component {
                             </svg>
                         )}
                     </div>
+
+                    {this.state.selected_paper_content && (
+                        <Paper paper={this.state.selected_paper_content} />
+                    )}
                 </Column>
 
-                <StructuredListWrapper ariaLabel="Neighboring Papers">
-                    <StructuredListHead>
-                        <StructuredListRow>
-                            <StructuredListCell head>
-                                Neighboring Papers
-                            </StructuredListCell>
-                        </StructuredListRow>
-                    </StructuredListHead>
-                    <StructuredListBody>
-                        <StructuredListRow>
-                            <StructuredListCell>
-                                To get to this new paper, our AI thinks you
-                                should be looking at the following papers known
-                                to our system as the state of the art that
-                                immediately makes the new work possible. Each
-                                paper is tagged with features that need
-                                relaxation or extension to get to the new paper.
-                                {this.state.paper_data.length > 0 && (
-                                    <StructuredListBody>
-                                        {this.state.imagination.neighbors.map(
-                                            (paper, idx) => (
-                                                <StructuredListRow
-                                                    key={idx}
+                <Column lg={16} md={8} sm={4}>
+                    <br />
+                    <StructuredListWrapper ariaLabel="Neighboring Papers">
+                        <StructuredListHead>
+                            <StructuredListRow>
+                                <StructuredListCell head>
+                                    Neighboring Papers
+                                </StructuredListCell>
+                            </StructuredListRow>
+                        </StructuredListHead>
+                        <StructuredListBody>
+                            <StructuredListRow>
+                                <StructuredListCell>
+                                    To get to this new paper, our AI thinks you
+                                    should be looking at the following papers
+                                    known to our system as the state of the art
+                                    that immediately makes the new work
+                                    possible. Each paper is tagged with features
+                                    that need relaxation or extension to get to
+                                    the new paper.
+                                </StructuredListCell>
+                            </StructuredListRow>
+                            {this.state.paper_data.length > 0 && (
+                                <>
+                                    {this.state.imagination.neighbors.map(
+                                        (paper, idx) => (
+                                            <StructuredListRow
+                                                key={idx}
+                                                className={
+                                                    idx ===
+                                                    this.state.imagination
+                                                        .neighbors.length -
+                                                        1
+                                                        ? 'no-bottom-border'
+                                                        : ''
+                                                }>
+                                                <StructuredListCell
                                                     className={
-                                                        idx ===
-                                                        this.state.imagination
-                                                            .neighbors.length -
-                                                            1
-                                                            ? 'no-bottom-border'
+                                                        Boolean(paper.selected)
+                                                            ? 'text-blue'
                                                             : ''
-                                                    }>
-                                                    <StructuredListCell
-                                                        className={
-                                                            Boolean(
-                                                                paper.selected
-                                                            )
-                                                                ? 'text-blue'
-                                                                : ''
-                                                        }
-                                                        style={{
-                                                            width: '20%',
-                                                        }}>
+                                                    }
+                                                    style={{
+                                                        width: '20%',
+                                                    }}>
+                                                    <Theme theme="g10">
                                                         <Paper
                                                             paper={
                                                                 this.state.paper_data.filter(
@@ -412,75 +431,67 @@ class Insight extends React.Component {
                                                                 )[0]
                                                             }
                                                         />
-                                                    </StructuredListCell>
-                                                    <StructuredListCell
-                                                        style={{
-                                                            width: '80%',
-                                                        }}>
-                                                        {paper.transforms.map(
-                                                            (t, i) => {
-                                                                const key_split = t.key.split(
-                                                                    ' > '
-                                                                );
-                                                                const render_keys = key_split.map(
-                                                                    (
-                                                                        t_item,
-                                                                        ti
-                                                                    ) => (
-                                                                        <BreadcrumbItem
-                                                                            key={
-                                                                                ti
-                                                                            }
-                                                                            isCurrentPage={
-                                                                                !paper.selected
-                                                                            }>
-                                                                            {
-                                                                                t_item
-                                                                            }
-                                                                        </BreadcrumbItem>
-                                                                    )
-                                                                );
+                                                    </Theme>
+                                                    <br />
+                                                    {paper.transforms.map(
+                                                        (t, i) => {
+                                                            const key_split = t.key.split(
+                                                                ' > '
+                                                            );
+                                                            const render_keys = key_split.map(
+                                                                (
+                                                                    t_item,
+                                                                    ti
+                                                                ) => (
+                                                                    <BreadcrumbItem
+                                                                        key={ti}
+                                                                        isCurrentPage={
+                                                                            !paper.selected
+                                                                        }>
+                                                                        {t_item}
+                                                                    </BreadcrumbItem>
+                                                                )
+                                                            );
 
-                                                                return (
-                                                                    <Breadcrumb
-                                                                        style={{
-                                                                            marginBottom:
-                                                                                '5px',
-                                                                        }}
-                                                                        key={i}
-                                                                        noTrailingSlash>
-                                                                        {
-                                                                            render_keys
-                                                                        }
-                                                                        <BreadcrumbItem>
-                                                                            {t.value ? (
-                                                                                <span className="text-blue">
-                                                                                    True
-                                                                                </span>
-                                                                            ) : (
-                                                                                <span
-                                                                                    style={{
-                                                                                        color:
-                                                                                            'red',
-                                                                                    }}>
-                                                                                    False
-                                                                                </span>
-                                                                            )}
-                                                                        </BreadcrumbItem>
-                                                                    </Breadcrumb>
-                                                                );
-                                                            }
-                                                        )}
-                                                    </StructuredListCell>
-                                                </StructuredListRow>
-                                            )
-                                        )}
-                                    </StructuredListBody>
-                                )}
-                            </StructuredListCell>
-                        </StructuredListRow>
-                    </StructuredListBody>
-                </StructuredListWrapper>
+                                                            return (
+                                                                <Breadcrumb
+                                                                    style={{
+                                                                        marginBottom:
+                                                                            '5px',
+                                                                    }}
+                                                                    key={i}
+                                                                    noTrailingSlash>
+                                                                    {
+                                                                        render_keys
+                                                                    }
+                                                                    <BreadcrumbItem>
+                                                                        {t.value ? (
+                                                                            <span className="text-blue">
+                                                                                True
+                                                                            </span>
+                                                                        ) : (
+                                                                            <span
+                                                                                style={{
+                                                                                    color:
+                                                                                        'red',
+                                                                                }}>
+                                                                                False
+                                                                            </span>
+                                                                        )}
+                                                                    </BreadcrumbItem>
+                                                                </Breadcrumb>
+                                                            );
+                                                        }
+                                                    )}
+                                                </StructuredListCell>
+                                            </StructuredListRow>
+                                        )
+                                    )}
+                                </>
+                            )}
+                        </StructuredListBody>
+                    </StructuredListWrapper>
+                </Column>
             </Grid>
         );
     }
