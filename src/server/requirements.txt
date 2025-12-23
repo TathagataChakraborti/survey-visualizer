@@ -1,4 +1,4 @@
 pydantic
 nnf
-flask
-flask-cors
+fastapi[standard]
+uvicorn
