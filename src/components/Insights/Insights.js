@@ -528,10 +528,10 @@ class Insights extends React.Component {
             });
     }
 
-    changeNumePapers = e => {
+    changeNumPapers = (e, value) => {
         this.setState({
             ...this.state,
-            num_papers: parseInt(e.imaginaryTarget.value),
+            num_papers: value.value,
         });
     };
 
@@ -841,7 +841,7 @@ class Insights extends React.Component {
                                     min={1}
                                     step={1}
                                     value={this.state.num_papers}
-                                    onChange={this.changeNumePapers.bind(this)}
+                                    onChange={this.changeNumPapers.bind(this)}
                                     size="sm"
                                 />
                             </Column>
